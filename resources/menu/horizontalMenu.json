@@ -1,0 +1,80 @@
+{
+  "menu": [
+    {
+      "name": "Users",
+      "icon": "menu-icon tf-icons ti ti-smart-home",
+      "slug": "users",
+      "submenu": [
+        {
+          "url": "/users",
+          "icon": "menu-icon tf-icons ti ti-chart-pie-2",
+          "name": "List",
+          "slug": "users-list"
+        },
+        {
+          "url": "/users/add",
+          "icon": "menu-icon tf-icons ti ti-chart-pie-2",
+          "name": "Add",
+          "slug": "users-add"
+        }
+      ]
+    },
+    {
+      "name": "Committees",
+      "icon": "menu-icon tf-icons ti ti-smart-home",
+      "slug": "committees",
+      "submenu": [
+        {
+          "url": "/committees",
+          "icon": "menu-icon tf-icons ti ti-chart-pie-2",
+          "name": "List",
+          "slug": "committees-list"
+        },
+        {
+          "url": "/committees/add",
+          "icon": "menu-icon tf-icons ti ti-chart-pie-2",
+          "name": "Add",
+          "slug": "committees-add"
+        }
+      ]
+    },
+    {
+      "name": "Colleges",
+      "icon": "menu-icon tf-icons ti ti-smart-home",
+      "slug": "colleges",
+      "submenu": [
+        {
+          "url": "/colleges",
+          "icon": "menu-icon tf-icons ti ti-chart-pie-2",
+          "name": "List",
+          "slug": "colleges-list"
+        },
+        {
+          "url": "/colleges/add",
+          "icon": "menu-icon tf-icons ti ti-chart-pie-2",
+          "name": "Add",
+          "slug": "colleges-add"
+        }
+      ]
+    },
+    {
+      "name": "Departments",
+      "icon": "menu-icon tf-icons ti ti-smart-home",
+      "slug": "departments",
+      "submenu": [
+        {
+          "url": "/departments",
+          "icon": "menu-icon tf-icons ti ti-chart-pie-2",
+          "name": "List",
+          "slug": "departments-list"
+        },
+        {
+          "url": "/departments/add",
+          "icon": "menu-icon tf-icons ti ti-chart-pie-2",
+          "name": "Add",
+          "slug": "departments-add"
+        }
+      ]
+    }
+  ]
+}
