@@ -22,6 +22,7 @@ use App\Http\Controllers\authentications\RegisterBasic;
 // Main Page Route
 Route::get('/', [User::class, 'index'])->name('users');
 Route::get('/users', [User::class, 'index'])->name('users-list');
+Route::get('/users/add', [User::class, 'addForm'])->name('users-add');
 
 Route::get('/colleges', [College::class, 'index'])->name('colleges-list');
 

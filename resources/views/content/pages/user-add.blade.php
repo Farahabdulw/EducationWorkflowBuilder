@@ -26,21 +26,18 @@ $configData = Helper::appClasses();
 @endsection
 
 @section('content')
-<div class="card">
-     <table class="datatables-users table">
-     	
-        <thead class="table-light" id="users-head">
-            <tr>
-            	<th class="shrink"></th>
-                <th>USERNAME</th>
-                <th>Age</th>
-<!--                 <th>COMMITTEES</th> -->
-<!--                 <th>COLLEGES</th> -->
-<!--                 <th>DEPARMENTS</th> -->
-<!--                 <th>CENTERS</th> -->
-                <th>Actions</th>
-            </tr>
-        </thead>
-    </table>
+<div class="card px-5 p-3">
+     <div class="col d-flex flex-column">
+    	 <div class="row d-flex flex-row">
+    	 	<div class="col-md-6 col-lg-6 col-sm-12">
+                  <label for="username" class="form-label">Name</label>
+                  <input type="text" class="form-control" id="username" placeholder="John Doe">
+		    </div>
+    	 	<div class="col-md-6 col-lg-6 col-sm-12">
+                  <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+		    </div>
+	     </div>
+     </div>
 </div>
 @endsection
