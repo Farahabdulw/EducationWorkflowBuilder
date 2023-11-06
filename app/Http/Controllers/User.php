@@ -18,11 +18,12 @@ class User extends Controller
         return view('content.pages.user-add');
     }
     
-    public function addUser(Request $request)
+    public function createUser(Request $request)
     {
         // Validate and add the user to the database
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'fname' => 'required',
+            'lname' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8|confirmed',
             'permissions' => 'json',
@@ -38,7 +39,8 @@ class User extends Controller
         
         // Create a new user record in the database
         User::create([
-            'name' => $request->input('name'),
+            'fname' => $request->input('fname'),
+            'lname' => $request->input('lname'),
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password')),
             'permissions' => $request->input('permissions'),

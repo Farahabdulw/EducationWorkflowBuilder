@@ -27,20 +27,25 @@ $configData = Helper::appClasses();
 
 @section('content')
 <div class="card">
-     <table class="datatables-users table">
-     	
-        <thead class="table-light" id="users-head">
-            <tr>
-            	<th class="shrink"></th>
-                <th>USERNAME</th>
-                <th>Age</th>
-<!--                 <th>COMMITTEES</th> -->
-<!--                 <th>COLLEGES</th> -->
-<!--                 <th>DEPARMENTS</th> -->
-<!--                 <th>CENTERS</th> -->
-                <th>Actions</th>
-            </tr>
-        </thead>
-    </table>
+	<div class="card-header">
+		<h5>Users list</h5>
+	</div>
+    <div class="table-responsive text-nowrap mb-3">
+         <table class="datatables-users table">
+         	
+            <thead class="table-light" id="users-head">
+                <tr>
+                	<th class="shrink"></th>
+                    <th>USERNAME</th>
+                    <th>Age</th>
+    <!--                 <th>COMMITTEES</th> -->
+    <!--                 <th>COLLEGES</th> -->
+    <!--                 <th>DEPARMENTS</th> -->
+    <!--                 <th>CENTERS</th> -->
+                    <th>Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 </div>
 @endsection

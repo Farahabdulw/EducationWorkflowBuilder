@@ -44,10 +44,10 @@ $customizerHidden = 'customizer-hide';
           <h4 class="mb-1 pt-2">Welcome to {{config('variables.templateName')}}! 👋</h4>
           <p class="mb-4">Please sign-in to your account and start the adventure</p>
 
-          <form id="formAuthentication" class="mb-3" action="{{url('/')}}" method="GET">
+          <form id="formAuthentication" class="mb-3" action="{{url('/')}}" method="POST">
             <div class="mb-3">
-              <label for="email" class="form-label">Email or Username</label>
-              <input type="text" class="form-control" id="email" name="email-username" placeholder="Enter your email or username" autofocus>
+              <label for="email" class="form-label">Email</label>
+              <input type="text" class="form-control" id="email" name="email" placeholder="example@mail.com" autofocus>
             </div>
             <div class="mb-3 form-password-toggle">
               <div class="d-flex justify-content-between">
@@ -74,29 +74,29 @@ $customizerHidden = 'customizer-hide';
             </div>
           </form>
 
-          <p class="text-center">
-            <span>New on our platform?</span>
-            <a href="{{url('auth/register-basic')}}">
-              <span>Create an account</span>
-            </a>
-          </p>
+<!--           <p class="text-center"> -->
+<!--             <span>New on our platform?</span> -->
+<!--             <a href="{{url('auth/register-basic')}}"> -->
+<!--               <span>Create an account</span> -->
+<!--             </a> -->
+<!--           </p> -->
 
-          <div class="divider my-4">
-            <div class="divider-text">or</div>
-          </div>
+<!--           <div class="divider my-4"> -->
+<!--             <div class="divider-text">or</div> -->
+<!--           </div> -->
 
-          <div class="d-flex justify-content-center">
-            <a href="javascript:;" class="btn btn-icon btn-label-facebook me-3">
-              <i class="tf-icons fa-brands fa-facebook-f fs-5"></i>
-            </a>
+<!--           <div class="d-flex justify-content-center"> -->
+<!--             <a href="javascript:;" class="btn btn-icon btn-label-facebook me-3"> -->
+<!--               <i class="tf-icons fa-brands fa-facebook-f fs-5"></i> -->
+<!--             </a> -->
 
-            <a href="javascript:;" class="btn btn-icon btn-label-google-plus me-3">
-              <i class="tf-icons fa-brands fa-google fs-5"></i>
-            </a>
+<!--             <a href="javascript:;" class="btn btn-icon btn-label-google-plus me-3"> -->
+<!--               <i class="tf-icons fa-brands fa-google fs-5"></i> -->
+<!--             </a> -->
 
-            <a href="javascript:;" class="btn btn-icon btn-label-twitter">
-              <i class="tf-icons fa-brands fa-twitter fs-5"></i>
-            </a>
+<!--             <a href="javascript:;" class="btn btn-icon btn-label-twitter"> -->
+<!--               <i class="tf-icons fa-brands fa-twitter fs-5"></i> -->
+<!--             </a> -->
           </div>
         </div>
       </div>

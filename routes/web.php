@@ -18,17 +18,18 @@ use App\Http\Controllers\authentications\RegisterBasic;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+// Route::middleware(['auth'])->group(function () {
+    // Main Page Route
+    Route::get('/', [User::class, 'index'])->name('users');
+    Route::get('/users', [User::class, 'index'])->name('users-list');
+    Route::get('/users/add', [User::class, 'addForm'])->name('user-add');
+    Route::post('/user/add', [User::class, 'createUser'])->name('user-create');
+    
+    Route::get('/colleges', [College::class, 'index'])->name('colleges-list');
+    
+    Route::get('/committees', [Committe::class, 'index'])->name('committees-list');
 
-// Main Page Route
-Route::get('/', [User::class, 'index'])->name('users');
-Route::get('/users', [User::class, 'index'])->name('users-list');
-Route::get('/users/add', [User::class, 'addForm'])->name('users-add');
+// });
 
-Route::get('/colleges', [College::class, 'index'])->name('colleges-list');
-
-Route::get('/committees', [Committe::class, 'index'])->name('committees-list');
-
-
-
-Route::get('/auth/login-basic', [LoginBasic::class, 'index'])->name('auth-login-basic');
-Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('auth-register-basic');
+Route::get('/login', [LoginBasic::class, 'index'])->name('login');
+Route::get('/register', [RegisterBasic::class, 'index'])->name('register');
