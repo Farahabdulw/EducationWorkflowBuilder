@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\User;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\College;
 use App\Http\Controllers\Committe;
 
@@ -20,14 +20,23 @@ use App\Http\Controllers\authentications\RegisterBasic;
 */
 // Route::middleware(['auth'])->group(function () {
     // Main Page Route
-    Route::get('/', [User::class, 'index'])->name('users');
-    Route::get('/users', [User::class, 'index'])->name('users-list');
-    Route::get('/users/add', [User::class, 'addForm'])->name('user-add');
-    Route::post('/user/add', [User::class, 'createUser'])->name('user-create');
+    Route::get('/', [UserController::class, 'index'])->name('users');
+    Route::get('/users', [UserController::class, 'index'])->name('users-list');
+    Route::get('/users/add', [UserController::class, 'addForm'])->name('user-add');
+    Route::post('/user/add', [UserController::class, 'createUser'])->name('user-create');
+
+
+    Route::post('/users', [UserController::class, 'get_users'])->name('users-get');
+    Route::get('/user/{id}', [UserController::class, 'get_user'])->name('user-get');
+    Route::post('/user/edit', [UserController::class, 'edit_user'])->name('user-edit');
+    Route::post('/user/edit/permissions', [UserController::class, 'edit_user_permissions'])->name('user-edit-permissions');
     
+
     Route::get('/colleges', [College::class, 'index'])->name('colleges-list');
     
     Route::get('/committees', [Committe::class, 'index'])->name('committees-list');
+    Route::get('/committees/add', [Committe::class, 'add'])->name('committees-add');
+    Route::post('/committees/add', [Committe::class, 'addCom'])->name('committees-addCom');
 
 // });
 

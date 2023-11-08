@@ -11,4 +11,15 @@ class Committe extends Controller
     {
         return view('content.pages.committees');
     }
+    
+    public function add()
+    {
+        return view('content.pages.committees-add');
+    }
+    
+    public function addCom()
+    {
+        return view('content.pages.committees');
+    }
+    
 }
