@@ -3,7 +3,7 @@ $configData = Helper::appClasses();
 @endphp
 @extends('layouts/layoutMaster')
 
-@section('title', 'Committees')
+@section('title', 'Colleges')
 
 @section('vendor-style')
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css')}}" />
@@ -21,18 +21,18 @@ $configData = Helper::appClasses();
 @endsection
 
 @section('page-script')
-<script src="{{asset('assets/js/committees.js')}}"></script>
+<script src="{{asset('assets/js/departments/index.js')}}"></script>
 @endsection
 
 @section('content')
 <div class="card">
-     <table class="datatables-committees table">
+     <table class="datatables-departments table">
         <thead class="table-light">
             <tr>
                 <th></th>
-                <th>COMMITTE NAME</th>
-                <th>CHAIRPERSON</th>
-                <th>MEMBERS</th>
+                <th>DEPARTMENT NAME</th>
+                <th>COLLEGE NAME</th>
+                <th>MEMEBERS</th>
                 <th>ACTIONS</th>
             </tr>
         </thead>

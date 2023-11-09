@@ -24,20 +24,20 @@
 @endsection
 
 @section('page-script')
-    <script src="{{ asset('assets/js/committee-add.js') }}"></script>
+    <script src="{{ asset('assets/js/colleges/create.js') }}"></script>
 @endsection
 
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h5>Add a new Committee</h5>
+            <h5>Add a new College</h5>
         </div>
         <form id="add-form" method="post" action=""
             class="card-body col d-flex flex-column gap-3 browser-default-validation">
             @csrf
             <div class="d-flex flex-row gap-2 col-md-7 col-lg-7 col-sm-12">
                 <div class="input-group">
-                    <span class="input-group-text">Committee Name*</span>
+                    <span class="input-group-text">College Name*</span>
                     <input type="text" id="cname" aria-label="Committee Name" class="form-control" required>
 
                 </div>
@@ -45,10 +45,12 @@
 
             
             <div class="col-md-7 col-lg-7 col-sm-12">
-                <label for="emial" class="form-label">Chairperson*</label>
+                <label for="emial" class="form-label">Committee*</label>
                 <select class="js-example-basic-single" name="state">
-                    <option value="WY">John doe</option>
-                    <option value="AL">Steve</option>
+                    <option>Select a committee</option>
+                    <option value="WY">audit committee</option>
+                    <option value="AL">elections committee</option>
+                    <option value="AL">fundraising committee</option>
                 </select>
             </div>
 
@@ -61,7 +63,7 @@
 
 
             <div class="d-flex flex-row gap-2 col-md-7 col-lg-7 col-sm-12">
-                <button type="submit" class="btn btn-primary waves-effect waves-light">Add Committee</button>
+                <button type="submit" class="btn btn-primary waves-effect waves-light">Add College</button>
             </div>
         </form>
 

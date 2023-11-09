@@ -132,13 +132,24 @@ class UserController extends Controller
                 'success' => false,
                 'errors' => $validator->errors(),
             ], 422);
-        };
+        }
+        ;
         $user->permissions = $request->permissions;
         $user->save();
 
         return response()->json(['success' => true, 'message' => 'User permissions updated successfully'], 200);
     }
+    public function delete(Request $request)
+    {
+        $user = User::find($request->id);
 
+        if (!$user) {
+            return response()->json(['error' => "User not found $request->id "], 404);
+        }
+        $user->delete();
+
+        return response()->json(['success' => true, 'message' => 'User soft deleted successfully'], 200);
+    }
 
 }
 

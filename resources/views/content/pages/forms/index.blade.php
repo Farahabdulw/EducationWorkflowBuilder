@@ -14,7 +14,7 @@
 @section('page-style')
     <!-- Page -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/cards-advance.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/users.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/forms/forms.css') }}">
 @endsection
 
 @section('vendor-script')
@@ -22,24 +22,25 @@
 @endsection
 
 @section('page-script')
-    <script src="{{ asset('assets/js/users.js') }}"></script>
+
+    <script src="{{ asset('assets/js/forms/forms.js') }}"></script>
 @endsection
 
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h5>Users list</h5>
+            <h5>Forms list</h5>
         </div>
         <div class="table-responsive text-nowrap mb-3">
-            <table class="datatables-users table">
+            <table class="datatables-forms table">
 
-                <thead class="table-light" id="users-head">
+                <thead class="table-light" id="forms-head">
                     <tr>
                         <th class="shrink"></th>
-                        <th>FULL NAME</th>
-                        <th>EMAIL</th>
-                        <th>Age</th>
-                        <th>Actions</th>
+                        <th>TITILE</th>
+                        <th>TYPE</th>
+                        <th>DATE</th>
+                        <th>ACTIONS</th>
                     </tr>
                 </thead>
             </table>
@@ -115,11 +116,11 @@
                                 <h3 class="mb-2">Confirm User Delete</h3>
                             </div>
                             <form id="deleteUserForm" class="col-6 col-sm-12">
-                            <div class="col-12 text-center">
+                                <div class="col-12 text-center">
                                     <button type="submit"
-                                    class="btn btn-primary me-sm-3 me-1 waves-effect waves-light">Confirm</button>
+                                        class="btn btn-primary me-sm-3 me-1 waves-effect waves-light">Confirm</button>
                                     <button type="reset" class="btn btn-label-secondary waves-effect"
-                                    data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                                        data-bs-dismiss="modal" aria-label="Close">Cancel</button>
                                 </div>
                             </form>
                         </div>

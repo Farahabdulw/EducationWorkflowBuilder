@@ -24,34 +24,49 @@
 @endsection
 
 @section('page-script')
-    <script src="{{ asset('assets/js/committee-add.js') }}"></script>
+    <script src="{{ asset('assets/js/departments/create.js') }}"></script>
 @endsection
 
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h5>Add a new Committee</h5>
+            <h5>Add a new Department</h5>
         </div>
         <form id="add-form" method="post" action=""
             class="card-body col d-flex flex-column gap-3 browser-default-validation">
             @csrf
             <div class="d-flex flex-row gap-2 col-md-7 col-lg-7 col-sm-12">
                 <div class="input-group">
-                    <span class="input-group-text">Committee Name*</span>
+                    <span class="input-group-text">Department Name*</span>
                     <input type="text" id="cname" aria-label="Committee Name" class="form-control" required>
 
                 </div>
             </div>
 
-            
-            <div class="col-md-7 col-lg-7 col-sm-12">
-                <label for="emial" class="form-label">Chairperson*</label>
-                <select class="js-example-basic-single" name="state">
-                    <option value="WY">John doe</option>
-                    <option value="AL">Steve</option>
+            <div class="col-md-7 col-lg-7 col-sm-12 position-relative">
+                <label for="emial" class="form-label">College*</label>
+                <select class="select2-hidden-accessible" name="state">
+                    <option>Select a College</option>
+                    <option value="WY">College A</option>
+                    <option value="WY">College B</option>
+                    <option value="WY">College C</option>
+                    <option value="WY">College D</option>
                 </select>
             </div>
 
+            <div class="col-md-7 col-lg-7 col-sm-12">
+                <label for="headDp" class="form-label">Head of Department*</label>
+                <div class="position-relative">
+                    <select class="select2-hidden-accessible" id="headDp">
+                        <option>Select Head Department</option>
+                        <option value="WY">John doe</option>
+                        <option value="WY">Maria doe</option>
+                        <option value="WY">Loren doe</option>
+                        <option value="WY">John doe</option>
+                    </select>
+                </div>
+            </div>
+            
 
             <div class="col-md-7 col-lg-7 col-sm-12">
                 <label for="emial" class="form-label">Description*</label>
@@ -61,9 +76,10 @@
 
 
             <div class="d-flex flex-row gap-2 col-md-7 col-lg-7 col-sm-12">
-                <button type="submit" class="btn btn-primary waves-effect waves-light">Add Committee</button>
+                <button type="submit" class="btn btn-primary waves-effect waves-light">Add Department</button>
             </div>
         </form>
+        <span class="select2 select2-container select2-container--default select2-container--below">
 
     </div>
 @endsection

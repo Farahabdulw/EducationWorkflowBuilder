@@ -34,21 +34,22 @@
             <h5>Create a new user</h5>
         </div>
         {{-- Hidden input to store the Permissions in to send to the back-end  --}}
-        
+
         <form id="add-form" class="card-body col d-flex flex-column gap-3 browser-default-validation">
             <input type="json" hidden id="permissions">
             <div class="d-flex flex-row gap-2 col-md-7 col-lg-7 col-sm-12">
                 <div class="input-group">
                     <span class="input-group-text">First and last name*</span>
                     <input type="text" id="fname" aria-label="First name" class="form-control" placeholder="John"
-                        required value="testing-name">
+                        required >
                     <input type="text" id="lname" aria-label="Last name" class="form-control" placeholder="Doe"
-                        required value="testing-name">
+                        required >
                 </div>
             </div>
             <div class="col-md-7 col-lg-7 col-sm-12">
                 <label for="email" class="form-label">Email address*</label>
-                <input type="email" class="form-control" id="email" value="testing@email.com" placeholder="name@example.com" required>
+                <input type="email" class="form-control" id="email"
+                    placeholder="name@example.com" required>
             </div>
             <div class="col-md-7 col-lg-7 col-sm-12">
                 <label class="form-label" for="birthdate">Birth Date</label>
@@ -348,7 +349,7 @@
                     <div class="input-group input-group-merge">
                         <input type="password" class="form-control" id="password1"
                             placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                            aria-describedby="password1" required value="testing-password">
+                            aria-describedby="password1" required >
                         <span class="input-group-text cursor-pointer" id="password1"><i class="ti ti-eye-off"></i></span>
                     </div>
                 </div>
@@ -356,7 +357,7 @@
                 <div class="col">
                     <label for="password2">Confirmation password*</label>
                     <div class="input-group input-group-merge">
-                        <input type="password" class="form-control" id="password2" value="testing-password"
+                        <input type="password" class="form-control" id="password2"
                             placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                             aria-describedby="password2" required>
                         <span class="input-group-text cursor-pointer" id="password2"><i class="ti ti-eye-off"></i></span>

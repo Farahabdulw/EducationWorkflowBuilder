@@ -2,7 +2,7 @@
   "menu": [
     {
       "name": "Users",
-      "icon": "menu-icon tf-icons ti ti-smart-home",
+      "icon": "menu-icon tf-icons ti ti-users",
       "slug": "users",
       "submenu": [
         {
@@ -21,7 +21,7 @@
     },
     {
       "name": "Committees",
-      "icon": "menu-icon tf-icons ti ti-smart-home",
+      "icon": "menu-icon tf-icons ti ti-users-group",
       "slug": "committees",
       "submenu": [
         {
@@ -40,7 +40,7 @@
     },
     {
       "name": "Colleges",
-      "icon": "menu-icon tf-icons ti ti-smart-home",
+      "icon": "menu-icon tf-icons ti ti-school",
       "slug": "colleges",
       "submenu": [
         {
@@ -59,7 +59,7 @@
     },
     {
       "name": "Departments",
-      "icon": "menu-icon tf-icons ti ti-smart-home",
+      "icon": "menu-icon tf-icons ti ti-building",
       "slug": "departments",
       "submenu": [
         {
@@ -73,6 +73,25 @@
           "icon": "menu-icon tf-icons ti ti-chart-pie-2",
           "name": "Add",
           "slug": "departments-add"
+        }
+      ]
+    },
+    {
+      "name": "Forms",
+      "icon": "menu-icon tf-icons ti ti-clipboard-text",
+      "slug": "forms",
+      "submenu": [
+        {
+          "url": "/forms",
+          "icon": "menu-icon tf-icons ti ti-chart-pie-2",
+          "name": "List",
+          "slug": "form-list"
+        },
+        {
+          "url": "/forms/add",
+          "icon": "menu-icon tf-icons ti ti-apps-filled",
+          "name": "Add",
+          "slug": "forms-add"
         }
       ]
     }

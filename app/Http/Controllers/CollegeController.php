@@ -9,6 +9,9 @@ class CollegeController extends Controller
 {
     public function index()
     {
-        return view('content.pages.colleges.colleges');
+        return view('content.pages.colleges.index');
+    }
+    public function create(){
+        return view('content.pages.colleges.create');
     }
 }
