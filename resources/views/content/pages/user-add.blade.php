@@ -41,15 +41,14 @@
                 <div class="input-group">
                     <span class="input-group-text">First and last name*</span>
                     <input type="text" id="fname" aria-label="First name" class="form-control" placeholder="John"
-                        required >
+                        required>
                     <input type="text" id="lname" aria-label="Last name" class="form-control" placeholder="Doe"
-                        required >
+                        required>
                 </div>
             </div>
             <div class="col-md-7 col-lg-7 col-sm-12">
                 <label for="email" class="form-label">Email address*</label>
-                <input type="email" class="form-control" id="email"
-                    placeholder="name@example.com" required>
+                <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
             </div>
             <div class="col-md-7 col-lg-7 col-sm-12">
                 <label class="form-label" for="birthdate">Birth Date</label>
@@ -65,6 +64,7 @@
                         <th>Colleges</th>
                         <th>Departments</th>
                         <th>Centers</th>
+                        <th>Forms</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -135,9 +135,21 @@
                                 </span>
                             </label>
                         </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" data-type="forms-view">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
                     </tr>
                     <tr>
-
                         <th scope="row">Add</th>
                         <td>
                             <label class="switch">
@@ -194,6 +206,19 @@
                         <td>
                             <label class="switch">
                                 <input type="checkbox" class="switch-input" data-type="centers-add">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" data-type="forms-add">
                                 <span class="switch-toggle-slider">
                                     <span class="switch-on">
                                         <i class="ti ti-check"></i>
@@ -272,6 +297,19 @@
                                 </span>
                             </label>
                         </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" data-type="forms-edit">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
                     </tr>
                     <tr>
                         <th scope="row">delete</th>
@@ -340,6 +378,19 @@
                                 </span>
                             </label>
                         </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" data-type="forms-delete">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -349,7 +400,7 @@
                     <div class="input-group input-group-merge">
                         <input type="password" class="form-control" id="password1"
                             placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                            aria-describedby="password1" required >
+                            aria-describedby="password1" required>
                         <span class="input-group-text cursor-pointer" id="password1"><i class="ti ti-eye-off"></i></span>
                     </div>
                 </div>

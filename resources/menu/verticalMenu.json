@@ -31,7 +31,7 @@
           "slug": "committees-list"
         },
         {
-          "url": "/committees/add",
+          "url": "/committee/add",
           "icon": "menu-icon tf-icons ti ti-chart-pie-2",
           "name": "Add",
           "slug": "committees-add"
@@ -73,6 +73,25 @@
           "icon": "menu-icon tf-icons ti ti-chart-pie-2",
           "name": "Add",
           "slug": "departments-add"
+        }
+      ]
+    },
+    {
+      "name": "Centers",
+      "icon": "menu-icon tf-icons ti ti-building-fortress",
+      "slug": "centers",
+      "submenu": [
+        {
+          "url": "/centers",
+          "icon": "menu-icon tf-icons ti ti-chart-pie-2",
+          "name": "List",
+          "slug": "centers-list"
+        },
+        {
+          "url": "/centers/add",
+          "icon": "menu-icon tf-icons ti ti-chart-pie-2",
+          "name": "Add",
+          "slug": "centers-add"
         }
       ]
     },

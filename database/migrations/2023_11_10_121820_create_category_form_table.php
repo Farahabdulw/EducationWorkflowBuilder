@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('forms', function (Blueprint $table) {
+        Schema::create('category_form', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->json('content');
+            $table->foreignId('form_id')->constrained();
+            $table->foreignId('category_id')->constrained();
             $table->timestamps();
-            $table->timestamp('deleted_at')->nullable();
-
         });
     }
 
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('forms');
+        Schema::dropIfExists('category_form');
     }
 };

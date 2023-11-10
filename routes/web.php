@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\Committe;
+use App\Http\Controllers\CenterController;
+use App\Http\Controllers\CommitteController;
 
 use App\Http\Controllers\authentications\LoginBasic;
 use App\Http\Controllers\authentications\RegisterBasic;
@@ -22,6 +23,8 @@ use App\Http\Controllers\authentications\RegisterBasic;
 */
 // Route::middleware(['auth'])->group(function () {
     // Main Page Route
+
+    // Users UI Routes
     Route::get('/', [UserController::class, 'index'])->name('users');
     Route::get('/users', [UserController::class, 'index'])->name('users-list');
     Route::get('/users/add', [UserController::class, 'addForm'])->name('user-add');
@@ -35,18 +38,25 @@ use App\Http\Controllers\authentications\RegisterBasic;
     Route::post('/user/delete', [UserController::class, 'delete'])->name('user-delete');
     //END of functionality of users
     
-
+    // Colleges UI Routes
     Route::get('/colleges', [CollegeController::class, 'index'])->name('colleges-list');
     Route::get('/colleges/add', [CollegeController::class, 'create'])->name('colleges-add');
     
-    Route::get('/committees', [Committe::class, 'index'])->name('committees-list');
-    Route::get('/committees/add', [Committe::class, 'add'])->name('committees-add');
-    Route::post('/committees/add', [Committe::class, 'addCom'])->name('committees-addCom');
+    // Committees UI Routes
+    Route::get('/committees', [CommitteController::class, 'index'])->name('committees-list');
+    Route::get('/committee/add', [CommitteController::class, 'add'])->name('committees-add');
+    Route::post('/committee/add', [CommitteController::class, 'addCom'])->name('committees-addCom');
 
+    // Departments UI Routes
     Route::get('/departments', [DepartmentController::class, 'index'])->name('departments-list');
     Route::get('/departments/add', [DepartmentController::class, 'create'])->name('departments-add');
 
+    // Centers UI Routes
+    Route::get('/centers', [CenterController::class, 'index'])->name('centers-list');
+    Route::get('/centers/add', [CenterController::class, 'create'])->name('centers-add');
 
+
+    // Forms UI Routes
     Route::get('/forms', [FormsController::class, 'index'])->name('forms');
     Route::get('/forms/add', [FormsController::class, 'create'])->name('forms-add');
     Route::post('/form/edit', [FormsController::class, 'edit_form'])->name('form-edit');

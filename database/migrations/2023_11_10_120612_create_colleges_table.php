@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('forms', function (Blueprint $table) {
+        Schema::create('colleges', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->json('content');
+            $table->string("name");
+            $table->integer('committee_id');
+            $table->text("description");
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
-
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('forms');
+        Schema::dropIfExists('colleges');
     }
 };
