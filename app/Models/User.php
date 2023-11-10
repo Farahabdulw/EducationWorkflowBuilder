@@ -6,6 +6,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\Committe;
+use App\Models\Department;
 
 class User extends Authenticatable
 {
@@ -45,5 +48,12 @@ class User extends Authenticatable
         'password' => 'hashed',
         'permissions' => 'array',
     ];
-    
+    public function committe() : HasMany
+    {
+        return $this->hasMany(Committe::class);
+    }
+    public function department(): HasOne
+    {
+        return $this->hasOne(Department::class, 'chairperson', 'id');
+    }
 }

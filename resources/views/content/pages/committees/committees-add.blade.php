@@ -41,21 +41,21 @@
                 <div class="input-group">
                     <span class="input-group-text">Committee Name*</span>
                     <input type="text" id="cname" aria-label="Committee Name" class="form-control" required>
-
                 </div>
             </div>
 
             <div class="col-md-7 col-lg-7 col-sm-12">
-                <label for="chairperson" class="form-label">Chairperson*</label>
-                <select class="js-example-basic-single" id="chairperson" name="state">
-                </select>
+                <div class="postion-relative">
+                    <label for="chairperson" class="form-label">Chairperson*</label>
+                    <select class="js-example-basic-single" id="chairperson" name="state">
+                    </select>
+                </div>
             </div>
 
             <div class="col-md-7 col-lg-7 col-sm-12">
-                <label for="emial" class="form-label">Description*</label>
+                <label for="description" class="form-label">Description*</label>
                 <textarea class="form-control" id="description" placeholder="Committee Description" required></textarea>
             </div>
-
 
 
             <div class="d-flex flex-row gap-2 col-md-7 col-lg-7 col-sm-12">
