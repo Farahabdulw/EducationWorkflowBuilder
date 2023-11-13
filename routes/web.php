@@ -98,10 +98,17 @@ Route::post('/center/delete', [CenterController::class, 'delete'])->name('center
 
 // Forms UI Routes
 Route::get('/forms', [FormsController::class, 'index'])->name('forms');
-Route::get('/forms/add', [FormsController::class, 'create'])->name('forms-add');
+Route::post('/forms', [FormsController::class, 'get_forms'])->name('forms-get');
+Route::get('/forms/create', [FormsController::class, 'create'])->name('forms-create');
 Route::post('/form/edit', [FormsController::class, 'edit_form'])->name('form-edit');
 Route::post('/form/edit/permissions', [FormsController::class, 'edit_form_permissions'])->name('form-edit-permissions');
 Route::post('/form/delete', [FormsController::class, 'delete'])->name('form-delete');
+
+Route::get('/forms/categories', [FormsController::class, 'get_category'])->name('forms-get-category');
+Route::get('/forms/add/category', [FormsController::class, 'create_category'])->name('forms-create-category');
+Route::post('/forms/add/category', [FormsController::class, 'add_category'])->name('forms-add-category');
+
+Route::post('/forms/add', [FormsController::class, 'add'])->name('forms-add');
 
 
 

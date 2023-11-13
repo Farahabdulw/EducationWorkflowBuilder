@@ -107,7 +107,7 @@
           "slug": "form-list"
         },
         {
-          "url": "/forms/add",
+          "url": "/forms/create",
           "icon": "menu-icon tf-icons ti ti-apps-filled",
           "name": "Add",
           "slug": "forms-add"

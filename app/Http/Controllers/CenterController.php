@@ -54,20 +54,15 @@ class CenterController extends Controller
     {
         $centers = Center::with('departments')->get();
 
-        $centers->each(function ($center) {
-            $center->DeptName = $center->departments->name;
-        });
-
         return response()->json($centers, 200);
     }
     public function get_center($id)
     {
-        $center = Center::find($id);
+        $center = Center::with('departments')->find($id);
 
         if (!$center) {
             return response()->json(['error' => 'center not found'], 404);
         }
-
         return response()->json($center, 200);
     }
 
@@ -81,7 +76,7 @@ class CenterController extends Controller
         $center->delete();
 
         return response()->json(['success' => true, 'message' => 'Center soft deleted successfully'], 200);
-    }
+    }    
     public function edit_center(Request $request)
     {
         $center = Center::find($request->id);
@@ -90,7 +85,7 @@ class CenterController extends Controller
             return response()->json(['error' => 'center not found'], 404);
 
         $center->name = $request->name;
-        $center->department_id = $request->department;
+        $center->department_id = $request->department_id;
         $center->description = $request->description;
         $center->save();
 

@@ -50,6 +50,8 @@
                 <label for="colleges" class="form-label">College*</label>
                 <select id="colleges" class="select2-hidden-accessible" name="state">
                 </select>
+                <span class="select2 select2-container select2-container--default select2-container--below">
+
             </div>
 
             <div class="col-md-7 col-lg-7 col-sm-12">
@@ -57,9 +59,11 @@
                 <div class="position-relative">
                     <select class="select2-hidden-accessible" id="headDep">
                     </select>
+                    <span class="select2 select2-container select2-container--default select2-container--below">
+
                 </div>
             </div>
-            
+
 
             <div class="col-md-7 col-lg-7 col-sm-12">
                 <label for="description" class="form-label">Description*</label>
@@ -71,7 +75,6 @@
             </div>
         </form>
 
-        <span class="select2 select2-container select2-container--default select2-container--below">
 
     </div>
 @endsection
