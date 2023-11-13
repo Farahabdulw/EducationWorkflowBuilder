@@ -26,9 +26,36 @@
 @endsection
 
 @section('content')
+
+
     <div class="card">
-        <div class="card-header">
-            <h5>Users list</h5>
+        <div class="card-header d-flex justify-content-between">
+            <div class="head-label text-center">
+                <h5 class="card-title mb-0">Users Table</h5>
+            </div>
+            <div class="dt-action-buttons d-flex text-end pt-3 pt-md-0">
+                <div class="dt-buttons"> <a href="/users/add" class="dt-button create-new btn btn-primary" tabindex="0"
+                        aria-controls="DataTables_Table_0" type="button">
+                        <span>
+                            <i class="ti ti-plus me-sm-1"></i>
+                            <span class="d-none d-sm-inline-block">Add New
+                                User
+                            </span>
+                        </span>
+                    </a>
+                </div>
+
+                <div class="dt-buttons ms-3 "> <a href="/users/add/groups" class="dt-button create-new btn btn-primary" tabindex="0"
+                        aria-controls="DataTables_Table_0" type="button">
+                        <span>
+                            <i class="ti ti-plus me-sm-1"></i>
+                            <span class="d-none d-sm-inline-block">Add New
+                                User Group
+                            </span>
+                        </span>
+                    </a>
+                </div>
+            </div>
         </div>
         <div class="table-responsive text-nowrap mb-3">
             <table class="datatables-users table">
@@ -110,16 +137,17 @@
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="modal-body">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                             <div class="text-center mb-4">
                                 <h3 class="mb-2">Confirm User Delete</h3>
                             </div>
                             <form id="deleteUserForm" class="col-6 col-sm-12">
-                            <div class="col-12 text-center">
+                                <div class="col-12 text-center">
                                     <button type="submit"
-                                    class="btn btn-primary me-sm-3 me-1 waves-effect waves-light">Confirm</button>
+                                        class="btn btn-primary me-sm-3 me-1 waves-effect waves-light">Confirm</button>
                                     <button type="reset" class="btn btn-label-secondary waves-effect"
-                                    data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                                        data-bs-dismiss="modal" aria-label="Close">Cancel</button>
                                 </div>
                             </form>
                         </div>

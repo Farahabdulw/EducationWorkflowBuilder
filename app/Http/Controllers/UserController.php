@@ -21,6 +21,11 @@ class UserController extends Controller
         // Display the HTML form for adding a user
         return view('content.pages.user-add');
     }
+    public function createUserGroup()
+    {
+        // Display the HTML form for adding a user
+        return view('content.pages.user.add-user-groups');
+    }
 
     public function createUser(Request $request)
     {

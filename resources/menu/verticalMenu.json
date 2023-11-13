@@ -4,20 +4,8 @@
       "name": "Users",
       "icon": "menu-icon tf-icons ti ti-users",
       "slug": "users",
-      "submenu": [
-        {
-          "url": "/users",
-          "icon": "menu-icon tf-icons ti ti-chart-pie-2",
-          "name": "List",
-          "slug": "users-list"
-        },
-        {
-          "url": "/users/add",
-          "icon": "menu-icon tf-icons ti ti-chart-pie-2",
-          "name": "Add",
-          "slug": "users-add"
-        }
-      ]
+      "url" : "/users"
+      
     },
     {
       "name": "Committees",

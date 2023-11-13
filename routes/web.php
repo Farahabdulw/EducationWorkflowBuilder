@@ -36,6 +36,9 @@ Route::get('/user/{id}', [UserController::class, 'get_user'])->name('user-get');
 Route::post('/user/edit', [UserController::class, 'edit_user'])->name('user-edit');
 Route::post('/user/edit/permissions', [UserController::class, 'edit_user_permissions'])->name('user-edit-permissions');
 Route::post('/user/delete', [UserController::class, 'delete'])->name('user-delete');
+
+
+Route::get('/users/add/groups', [UserController::class, 'createUserGroup'])->name('user-create-group');
 // END of functionality of users
 
 // Committees UI Routes
