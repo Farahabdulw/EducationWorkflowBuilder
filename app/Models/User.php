@@ -7,8 +7,11 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Models\Committe;
 use App\Models\Department;
+use App\Models\Groups;
+
 
 class User extends Authenticatable
 {
@@ -25,7 +28,6 @@ class User extends Authenticatable
         'email',
         'password',
         'birthdate',
-        'permissions',
     ];
     
     /**
@@ -46,7 +48,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'permissions' => 'array',
     ];
     public function committe() : HasMany
     {
@@ -55,5 +56,9 @@ class User extends Authenticatable
     public function department(): HasOne
     {
         return $this->hasOne(Department::class, 'chairperson', 'id');
+    }
+    public function groups() : BelongsToMany
+    {
+        return $this->belongsToMany(Groups::class, 'groups-users');
     }
 }

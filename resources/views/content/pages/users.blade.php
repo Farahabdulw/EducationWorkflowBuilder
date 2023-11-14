@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+
 @endsection
 
 @section('page-style')
@@ -19,14 +21,16 @@
 
 @section('vendor-script')
     <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+
 @endsection
 
 @section('page-script')
     <script src="{{ asset('assets/js/users.js') }}"></script>
+    <script src="{{ asset('assets/js/userGroups/index.js') }}"></script>
 @endsection
 
 @section('content')
-
 
     <div class="card">
         <div class="card-header d-flex justify-content-between">
@@ -34,27 +38,7 @@
                 <h5 class="card-title mb-0">Users Table</h5>
             </div>
             <div class="dt-action-buttons d-flex text-end pt-3 pt-md-0">
-                <div class="dt-buttons"> <a href="/users/add" class="dt-button create-new btn btn-primary" tabindex="0"
-                        aria-controls="DataTables_Table_0" type="button">
-                        <span>
-                            <i class="ti ti-plus me-sm-1"></i>
-                            <span class="d-none d-sm-inline-block">Add New
-                                User
-                            </span>
-                        </span>
-                    </a>
-                </div>
 
-                <div class="dt-buttons ms-3 "> <a href="/users/add/groups" class="dt-button create-new btn btn-primary" tabindex="0"
-                        aria-controls="DataTables_Table_0" type="button">
-                        <span>
-                            <i class="ti ti-plus me-sm-1"></i>
-                            <span class="d-none d-sm-inline-block">Add New
-                                User Group
-                            </span>
-                        </span>
-                    </a>
-                </div>
             </div>
         </div>
         <div class="table-responsive text-nowrap mb-3">
@@ -72,7 +56,26 @@
             </table>
         </div>
     </div>
+    <div class="card mt-5">
+        <div class="card-header d-flex justify-content-between">
+            <div class="head-label text-center">
+                <h5 class="card-title mb-0">Users Groups Table</h5>
+            </div>
+        </div>
+        <div class="table-responsive text-nowrap mb-3">
+            <table class="datatables-users-groups table">
 
+                <thead class="table-light" id="users-head">
+                    <tr>
+                        <th class="shrink"></th>
+                        <th>GROUP NAME</th>
+                        <th>GROUP'S AFFILIATION</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="edit-user" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">

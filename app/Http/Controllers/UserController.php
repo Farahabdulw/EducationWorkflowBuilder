@@ -8,6 +8,7 @@ use Carbon\Carbon;
 
 use App\Models\User;
 
+
 class UserController extends Controller
 {
     public function index()
@@ -15,18 +16,11 @@ class UserController extends Controller
         return view('content.pages.users');
     }
 
-
     public function addForm()
     {
         // Display the HTML form for adding a user
         return view('content.pages.user-add');
     }
-    public function createUserGroup()
-    {
-        // Display the HTML form for adding a user
-        return view('content.pages.user.add-user-groups');
-    }
-
     public function createUser(Request $request)
     {
         // Validate and add the user to the database
@@ -36,7 +30,7 @@ class UserController extends Controller
             'birthdate' => 'required|date',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
-            'permissions' => 'json',
+            'groups' => 'array',
         ]);
 
 
@@ -55,10 +49,12 @@ class UserController extends Controller
             'email' => $request->get('email'),
             'password' => bcrypt($request->get('password')),
             'birthdate' => $request->get('birthdate'),
-            'permissions' => $request->get('permissions'),
         ]);
+        // add the newly created user to the each group 
 
-        // Return a success response
+        if (isset($request->groups)) {
+            $user->groups()->attach($request->groups);
+        }
         if ($user)
             return response()->json(['success' => true, 'message' => 'User added successfully'], 200);
         else
@@ -105,6 +101,7 @@ class UserController extends Controller
 
         return response()->json($formattedUser, 200);
     }
+
     public function edit_user(Request $request)
     {
         $user = User::find($request->id);
@@ -120,30 +117,7 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User updated successfully'], 200);
     }
-    public function edit_user_permissions(Request $request)
-    {
-        $user = User::find($request->id);
 
-        if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'permissions' => 'required|json',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors(),
-            ], 422);
-        }
-        ;
-        $user->permissions = $request->permissions;
-        $user->save();
-
-        return response()->json(['success' => true, 'message' => 'User permissions updated successfully'], 200);
-    }
     public function delete(Request $request)
     {
         $user = User::find($request->id);

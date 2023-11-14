@@ -53,7 +53,7 @@
             </div>
 
             <div class="col-md-2 col-sm-12 mb-4">
-                <a href="add/category" class="btn btn-primary waves-effect waves-light">New Category</a>
+                <a href="/forms/add/category" class="btn btn-primary waves-effect waves-light">New Category</a>
             </div>
         </div>
 

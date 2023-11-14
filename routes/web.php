@@ -6,7 +6,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\CenterController;
+use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\CommitteController;
+use App\Http\Controllers\OfficeController;
 
 use App\Http\Controllers\authentications\LoginBasic;
 use App\Http\Controllers\authentications\RegisterBasic;
@@ -34,11 +36,15 @@ Route::post('/user/add', [UserController::class, 'createUser'])->name('user-crea
 Route::post('/users', [UserController::class, 'get_users'])->name('users-get');
 Route::get('/user/{id}', [UserController::class, 'get_user'])->name('user-get');
 Route::post('/user/edit', [UserController::class, 'edit_user'])->name('user-edit');
-Route::post('/user/edit/permissions', [UserController::class, 'edit_user_permissions'])->name('user-edit-permissions');
 Route::post('/user/delete', [UserController::class, 'delete'])->name('user-delete');
 
 
-Route::get('/users/add/groups', [UserController::class, 'createUserGroup'])->name('user-create-group');
+Route::get('/add/users/groups', [GroupsController::class, 'createUserGroup'])->name('user-create-group');
+Route::post('/add/users/groups', [GroupsController::class, 'addUsersGroup'])->name('user-add-group');
+Route::post('/get/group_affiliation', [GroupsController::class, 'get_affiliations'])->name('get-group-affiliation');
+Route::post('/user/groups/edit/permissions', [GroupsController::class, 'edit_groups_permissions'])->name('user-groups-permissions');
+
+Route::post('/users/groups', [GroupsController::class, 'get_groups'])->name('get-groups');
 // END of functionality of users
 
 // Committees UI Routes
@@ -54,12 +60,19 @@ Route::post('/committee/edit', [CommitteController::class, 'edit_committee'])->n
 Route::post('/committee/delete', [CommitteController::class, 'delete'])->name('committee-delete');
 // END of functionality of Committees
 
-
-
+// Offices UI Routes
+Route::get('/offices', [OfficeController::class, 'index'])->name('offices-list');
+Route::post('/offices', [OfficeController::class, 'get'])->name('offices-get');
+Route::get('/office/add', [OfficeController::class, 'create'])->name('offices-create');
+Route::post('/office/add', [OfficeController::class, 'add'])->name('offices-add');
+Route::get('/office/{id}', [OfficeController::class, 'office'])->name('office-get');
+Route::post('/office/edit', [OfficeController::class, 'edit'])->name('office-edit');
+Route::post('/office/delete', [OfficeController::class, 'delete'])->name('office-delete');
+// END Offices UI Routes
 
 // Colleges UI Routes
 Route::get('/colleges', [CollegeController::class, 'index'])->name('colleges-list');
-Route::get('/colleges/add', [CollegeController::class, 'create'])->name('colleges-add');
+Route::get('/college/add', [CollegeController::class, 'create'])->name('colleges-add');
 // END Colleges UI Routes
 
 // functionality of Colleges
@@ -73,7 +86,7 @@ Route::post('/college/delete', [CollegeController::class, 'delete'])->name('coll
 
 // Departments UI Routes
 Route::get('/departments', [DepartmentController::class, 'index'])->name('departments-list');
-Route::get('/departments/add', [DepartmentController::class, 'create'])->name('departments-add');
+Route::get('/department/add', [DepartmentController::class, 'create'])->name('departments-add');
 // END Departments UI Routes
 
 // functionality of Departments
@@ -87,7 +100,7 @@ Route::post('/department/delete', [DepartmentController::class, 'delete'])->name
 
 // Centers UI Routes
 Route::get('/centers', [CenterController::class, 'index'])->name('centers-list');
-Route::get('/centers/add', [CenterController::class, 'create'])->name('centers-add');
+Route::get('/center/add', [CenterController::class, 'create'])->name('centers-add');
 // END Departments UI Routes
 
 // functionality of Departments
@@ -102,7 +115,7 @@ Route::post('/center/delete', [CenterController::class, 'delete'])->name('center
 // Forms UI Routes
 Route::get('/forms', [FormsController::class, 'index'])->name('forms');
 Route::post('/forms', [FormsController::class, 'get_forms'])->name('forms-get');
-Route::get('/forms/create', [FormsController::class, 'create'])->name('forms-create');
+Route::get('/form/add', [FormsController::class, 'create'])->name('forms-create');
 Route::post('/form/edit', [FormsController::class, 'edit_form'])->name('form-edit');
 Route::post('/form/edit/permissions', [FormsController::class, 'edit_form_permissions'])->name('form-edit-permissions');
 Route::post('/form/delete', [FormsController::class, 'delete'])->name('form-delete');

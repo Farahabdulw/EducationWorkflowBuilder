@@ -23,14 +23,14 @@
 
 @section('vendor-script')
     <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}" />
+    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
 
 
 @endsection
 
 @section('page-script')
-    <script src="{{ asset('assets/js/user-add.js') }}"></script>
+    <script src="{{ asset('assets/js/userGroups/create.js') }}"></script>
 @endsection
 
 @section('content')
@@ -45,52 +45,34 @@
             <div class="d-flex flex-row gap-2 col-md-7 col-lg-7 col-sm-12">
                 <div class="input-group">
                     <span class="input-group-text">Group name</span>
-                    <input type="text" id="fname" aria-label="First name" class="form-control" placeholder="John"
+                    <input type="text" id="name" aria-label="First name" class="form-control" placeholder=""
                         required>
                 </div>
             </div>
 
-            <div class="col-md-5 col-sm-12 mb-4" data-select2-id="45">
-                <label for="affiliation" class="form-label">Group Affiliation*</label>
+            <div class="col-md-7 col-sm-12 " data-select2-id="45">
+                <label for="affiliation" class="form-label">Group Affiliation</label>
                 <select class="js-example-basic-multiple" id="affiliation" multiple="multiple">
-                    <optgroup label="Committees">
-                        <option value="1">Academic Committee</option>
-                        <option value="2">Sports Committee</option>
-                        <option value="3">Cultural Committee</option>
-                    </optgroup>
-                    <optgroup label="Departments">
-                        <option value="1">Computer Science</option>
-                        <option value="2">Physics</option>
-                        <option value="3">History</option>
-                    </optgroup>
-                    <optgroup label="Offices">
-                        <option value="1">Administration</option>
-                        <option value="2">Student Affairs</option>
-                        <option value="3">Employee's Affairs</option>
-                    </optgroup>
-                    <optgroup label="Centers">
-                        <option value="1">Research Center</option>
-                        <option value="2">Language Center</option>
-                        <option value="3">Health Center</option>
-                    </optgroup>
-                    <optgroup label="Colleges">
-                        <option value="1">Engineering College</option>
-                        <option value="2">Business College</option>
-                        <option value="3">Arts College</option>
-                    </optgroup>
+
+                </select>
+            </div>
+            <div class="col-md-7 col-sm-12 mb-4" data-select2-id="45">
+                <label for="users" class="form-label">Groups Users</label>
+                <select class="js-example-basic-multiple" id="users" multiple="multiple">
+
                 </select>
             </div>
 
-            <table class="w-100 permissions-table" data-user=${user_id}>
+            <table class="w-100 permissions-table">
                 <thead>
                     <tr>
                         <th>Permissions</th>
                         <th>Users</th>
+                        <th>Forms</th>
                         <th>Committees</th>
                         <th>Colleges</th>
                         <th>Departments</th>
                         <th>Centers</th>
-                        <th>Forms</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -111,59 +93,59 @@
                         </td>
                         <td>
                             <label class="switch">
-                                <input type="checkbox" class="switch-input" data-type="committees-view">
-                                <span class="switch-toggle-slider">
-                                    <span class="switch-on">
-                                        <i class="ti ti-check"></i>
-                                    </span>
-                                    <span class="switch-off">
-                                        <i class="ti ti-x"></i>
-                                    </span>
-                                </span>
-                            </label>
-                        </td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox" class="switch-input" data-type="colleges-view">
-                                <span class="switch-toggle-slider">
-                                    <span class="switch-on">
-                                        <i class="ti ti-check"></i>
-                                    </span>
-                                    <span class="switch-off">
-                                        <i class="ti ti-x"></i>
-                                    </span>
-                                </span>
-                            </label>
-                        </td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox" class="switch-input" data-type="departments-view">
-                                <span class="switch-toggle-slider">
-                                    <span class="switch-on">
-                                        <i class="ti ti-check"></i>
-                                    </span>
-                                    <span class="switch-off">
-                                        <i class="ti ti-x"></i>
-                                    </span>
-                                </span>
-                            </label>
-                        </td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox" class="switch-input" data-type="centers-view">
-                                <span class="switch-toggle-slider">
-                                    <span class="switch-on">
-                                        <i class="ti ti-check"></i>
-                                    </span>
-                                    <span class="switch-off">
-                                        <i class="ti ti-x"></i>
-                                    </span>
-                                </span>
-                            </label>
-                        </td>
-                        <td>
-                            <label class="switch">
                                 <input type="checkbox" class="switch-input" data-type="forms-view">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" disabled data-type="committees-view">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" disabled data-type="colleges-view">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" disabled data-type="departments-view">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" disabled data-type="centers-view">
                                 <span class="switch-toggle-slider">
                                     <span class="switch-on">
                                         <i class="ti ti-check"></i>
@@ -192,59 +174,59 @@
                         </td>
                         <td>
                             <label class="switch">
-                                <input type="checkbox" class="switch-input" data-type="committees-add">
-                                <span class="switch-toggle-slider">
-                                    <span class="switch-on">
-                                        <i class="ti ti-check"></i>
-                                    </span>
-                                    <span class="switch-off">
-                                        <i class="ti ti-x"></i>
-                                    </span>
-                                </span>
-                            </label>
-                        </td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox" class="switch-input" data-type="colleges-add">
-                                <span class="switch-toggle-slider">
-                                    <span class="switch-on">
-                                        <i class="ti ti-check"></i>
-                                    </span>
-                                    <span class="switch-off">
-                                        <i class="ti ti-x"></i>
-                                    </span>
-                                </span>
-                            </label>
-                        </td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox" class="switch-input" data-type="departments-add">
-                                <span class="switch-toggle-slider">
-                                    <span class="switch-on">
-                                        <i class="ti ti-check"></i>
-                                    </span>
-                                    <span class="switch-off">
-                                        <i class="ti ti-x"></i>
-                                    </span>
-                                </span>
-                            </label>
-                        </td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox" class="switch-input" data-type="centers-add">
-                                <span class="switch-toggle-slider">
-                                    <span class="switch-on">
-                                        <i class="ti ti-check"></i>
-                                    </span>
-                                    <span class="switch-off">
-                                        <i class="ti ti-x"></i>
-                                    </span>
-                                </span>
-                            </label>
-                        </td>
-                        <td>
-                            <label class="switch">
                                 <input type="checkbox" class="switch-input" data-type="forms-add">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" disabled data-type="committees-add">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" disabled data-type="colleges-add">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" disabled data-type="departments-add">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" disabled data-type="centers-add">
                                 <span class="switch-toggle-slider">
                                     <span class="switch-on">
                                         <i class="ti ti-check"></i>
@@ -273,59 +255,59 @@
                         </td>
                         <td>
                             <label class="switch">
-                                <input type="checkbox" class="switch-input" data-type="committees-edit">
-                                <span class="switch-toggle-slider">
-                                    <span class="switch-on">
-                                        <i class="ti ti-check"></i>
-                                    </span>
-                                    <span class="switch-off">
-                                        <i class="ti ti-x"></i>
-                                    </span>
-                                </span>
-                            </label>
-                        </td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox" class="switch-input" data-type="colleges-edit">
-                                <span class="switch-toggle-slider">
-                                    <span class="switch-on">
-                                        <i class="ti ti-check"></i>
-                                    </span>
-                                    <span class="switch-off">
-                                        <i class="ti ti-x"></i>
-                                    </span>
-                                </span>
-                            </label>
-                        </td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox" class="switch-input" data-type="departments-edit">
-                                <span class="switch-toggle-slider">
-                                    <span class="switch-on">
-                                        <i class="ti ti-check"></i>
-                                    </span>
-                                    <span class="switch-off">
-                                        <i class="ti ti-x"></i>
-                                    </span>
-                                </span>
-                            </label>
-                        </td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox" class="switch-input" data-type="centers-edit">
-                                <span class="switch-toggle-slider">
-                                    <span class="switch-on">
-                                        <i class="ti ti-check"></i>
-                                    </span>
-                                    <span class="switch-off">
-                                        <i class="ti ti-x"></i>
-                                    </span>
-                                </span>
-                            </label>
-                        </td>
-                        <td>
-                            <label class="switch">
                                 <input type="checkbox" class="switch-input" data-type="forms-edit">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" disabled data-type="committees-edit">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" disabled data-type="colleges-edit">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" disabled data-type="departments-edit">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" disabled data-type="centers-edit">
                                 <span class="switch-toggle-slider">
                                     <span class="switch-on">
                                         <i class="ti ti-check"></i>
@@ -354,59 +336,59 @@
                         </td>
                         <td>
                             <label class="switch">
-                                <input type="checkbox" class="switch-input" data-type="committees-delete">
-                                <span class="switch-toggle-slider">
-                                    <span class="switch-on">
-                                        <i class="ti ti-check"></i>
-                                    </span>
-                                    <span class="switch-off">
-                                        <i class="ti ti-x"></i>
-                                    </span>
-                                </span>
-                            </label>
-                        </td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox" class="switch-input" data-type="colleges-delete">
-                                <span class="switch-toggle-slider">
-                                    <span class="switch-on">
-                                        <i class="ti ti-check"></i>
-                                    </span>
-                                    <span class="switch-off">
-                                        <i class="ti ti-x"></i>
-                                    </span>
-                                </span>
-                            </label>
-                        </td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox" class="switch-input" data-type="departments-delete">
-                                <span class="switch-toggle-slider">
-                                    <span class="switch-on">
-                                        <i class="ti ti-check"></i>
-                                    </span>
-                                    <span class="switch-off">
-                                        <i class="ti ti-x"></i>
-                                    </span>
-                                </span>
-                            </label>
-                        </td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox" class="switch-input" data-type="centers-delete">
-                                <span class="switch-toggle-slider">
-                                    <span class="switch-on">
-                                        <i class="ti ti-check"></i>
-                                    </span>
-                                    <span class="switch-off">
-                                        <i class="ti ti-x"></i>
-                                    </span>
-                                </span>
-                            </label>
-                        </td>
-                        <td>
-                            <label class="switch">
                                 <input type="checkbox" class="switch-input" data-type="forms-delete">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" disabled data-type="committees-delete">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" disabled data-type="colleges-delete">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" disabled data-type="departments-delete">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on">
+                                        <i class="ti ti-check"></i>
+                                    </span>
+                                    <span class="switch-off">
+                                        <i class="ti ti-x"></i>
+                                    </span>
+                                </span>
+                            </label>
+                        </td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="switch-input" disabled data-type="centers-delete">
                                 <span class="switch-toggle-slider">
                                     <span class="switch-on">
                                         <i class="ti ti-check"></i>

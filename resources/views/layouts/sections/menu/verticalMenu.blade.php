@@ -26,6 +26,7 @@
 
     <ul class="menu-inner py-1">
         @foreach ($menuData[0]->menu as $menu)
+        {{-- {{dd($menuData)}} --}}
             {{-- adding active and open class if child is active --}}
 
             {{-- menu headers --}}
@@ -39,7 +40,7 @@
                     $activeClass = null;
                     $currentRouteName = Route::currentRouteName();
 
-                    if ($currentRouteName === $menu->slug) {
+                    if (Str::contains($currentRouteName, $menu->slug)) {
                         $activeClass = 'active';
                     } elseif (isset($menu->submenu)) {
                         if (gettype($menu->slug) === 'array') {
