@@ -72,13 +72,15 @@ class FormsController extends Controller
         ]);
 
         $categories = $request->get('categories');
-        $form->categories()->attach($categories);
+        $form->categories()->sync($categories);
 
         // Return a success response
         return response()->json(['success' => true, 'message' => 'Form added successfully'], 200);
     }
     public function get_forms(Request $request)
     {
-        
+        $forms = Forms::with('categories')->get();
+        return response()->json($forms, 200);
+
     }
 }

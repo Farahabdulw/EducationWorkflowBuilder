@@ -56,6 +56,6 @@
                 <a href="/forms/add/category" class="btn btn-primary waves-effect waves-light">New Category</a>
             </div>
         </div>
-
         <div id="fb-editor" class="px-4 p-b-4 pt-0"></div>
+        
     @endsection

@@ -31,7 +31,6 @@
 @endsection
 
 @section('content')
-
     <div class="card">
         <div class="card-header d-flex justify-content-between">
             <div class="head-label text-center">

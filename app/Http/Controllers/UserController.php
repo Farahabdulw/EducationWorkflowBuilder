@@ -13,7 +13,23 @@ class UserController extends Controller
 {
     public function index()
     {
-        return view('content.pages.users');
+        $user = auth()->user();
+        $usersGroups = $user->groups;
+        $permissions = [];
+        foreach ($usersGroups as $group) {
+            $groupPermissions = json_decode($group->permissions, true);
+
+            foreach ($groupPermissions as $resource => $actions) {
+                if (!isset($permissions[$resource])) {
+                    $permissions[$resource] = [];
+                }
+
+                // Merge actions without duplicates
+                $permissions[$resource] = array_unique(array_merge($permissions[$resource], $actions));
+            }
+        }
+
+        return view('content.pages.users', compact('permissions', 'usersGroups'));
     }
 
     public function addForm()
@@ -53,7 +69,7 @@ class UserController extends Controller
         // add the newly created user to the each group 
 
         if (isset($request->groups)) {
-            $user->groups()->attach($request->groups);
+            $user->groups()->sync($request->groups);
         }
         if ($user)
             return response()->json(['success' => true, 'message' => 'User added successfully'], 200);
@@ -77,7 +93,6 @@ class UserController extends Controller
                 'email' => $user->email,
                 'lname' => $user->last_name,
                 'age' => $age,
-                'permissions' => $user->permissions,
             ];
             $formattedUsers[] = $formattedUser;
         }

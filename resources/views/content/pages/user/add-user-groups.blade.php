@@ -31,6 +31,9 @@
 
 @section('page-script')
     <script src="{{ asset('assets/js/userGroups/create.js') }}"></script>
+    @if (request()->is('edit/users/groups*'))
+        <script defer src="{{ asset('assets/js/userGroups/edit.js') }}"></script>
+    @endif
 @endsection
 
 @section('content')

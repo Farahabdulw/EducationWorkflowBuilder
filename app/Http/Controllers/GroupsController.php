@@ -36,7 +36,15 @@ class GroupsController extends Controller
         $groups = Groups::get();
         return response()->json($groups, 200);
     }
+    public function get_group($id)
+    {
+        $group = Groups::with('users')->find($id);
+        if ($group) {
+            return response()->json($group, 200);
+        } else
+            return response()->json('group not found', 404);
 
+    }
     public function addUsersGroup(Request $request)
     {
         // Validate and add the user to the database
@@ -64,7 +72,7 @@ class GroupsController extends Controller
         ]);
 
         if ($group && $request->has('users'))
-            $group->users()->attach($request->input('users'));
+            $group->users()->sync($request->input('users'));
 
         // Return a success response
         if ($group)
@@ -75,6 +83,43 @@ class GroupsController extends Controller
                 'error' => $group,
             ], 422);
     }
+    public function editUsersGroup($id)
+    {
+        return view('content.pages.user.add-user-groups');
+    }
+    public function updateUsersGroup(Request $request)
+    {
+        $group = Groups::find($request->id);
+
+        if (!$group)
+            return response()->json(['error' => 'Group not found'], 404);
+
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'users' => 'array',
+            'affiliation' => 'required|json',
+        ]);
+
+        if ($validator->fails())
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+
+        if ($group && $request->has('users'))
+            $group->users()->sync($request->input('users'));
+
+        $group->name = $request->name;
+        $group->affiliations = $request->affiliation;
+
+        $group->save();
+
+        return response()->json(['success' => true, 'message' => 'Group has been updated successfully'], 200);
+
+    }
+
+
     public function edit_groups_permissions(Request $request)
     {
         $group = Groups::find($request->id);
