@@ -36,9 +36,6 @@
             <div class="head-label text-center">
                 <h5 class="card-title mb-0">Users Table</h5>
             </div>
-            <div class="dt-action-buttons d-flex text-end pt-3 pt-md-0">
-
-            </div>
         </div>
         <div class="table-responsive text-nowrap mb-3">
             <table class="datatables-users table">
@@ -69,7 +66,7 @@
                         <th class="shrink"></th>
                         <th>GROUP NAME</th>
                         <th>GROUP'S AFFILIATION</th>
-                        <th>Actions</th>
+                        <th></th>
                     </tr>
                 </thead>
             </table>
@@ -145,6 +142,33 @@
                                 <h3 class="mb-2">Confirm User Delete</h3>
                             </div>
                             <form id="deleteUserForm" class="col-6 col-sm-12">
+                                <div class="col-12 text-center">
+                                    <button type="submit"
+                                        class="btn btn-primary me-sm-3 me-1 waves-effect waves-light">Confirm</button>
+                                    <button type="reset" class="btn btn-label-secondary waves-effect"
+                                        data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="delete-group-modal" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="modal-body">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                            <div class="text-center mb-4">
+                                <h3 class="mb-2">Confirm Group Delete</h3>
+                                <p class="mb-2">Deleting the group will result in removing all groups users</p>
+                            </div>
+                            <form id="deleteUseGrouprForm" class="col-6 col-sm-12">
                                 <div class="col-12 text-center">
                                     <button type="submit"
                                         class="btn btn-primary me-sm-3 me-1 waves-effect waves-light">Confirm</button>

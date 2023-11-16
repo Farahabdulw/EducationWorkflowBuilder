@@ -118,9 +118,12 @@ Route::middleware(['auth'])->group(function () {
     // Forms UI Routes
     Route::get('/forms', [FormsController::class, 'index'])->name('forms');
     Route::post('/forms', [FormsController::class, 'get_forms'])->name('forms-get');
+    Route::post('/forms/form/{id}', [FormsController::class, 'get_form'])->name('forms-get');
     Route::get('/form/add', [FormsController::class, 'create'])->name('forms-create');
-    Route::post('/form/edit', [FormsController::class, 'edit_form'])->name('form-edit');
-    Route::post('/form/edit/permissions', [FormsController::class, 'edit_form_permissions'])->name('form-edit-permissions');
+    Route::post('/form/content/{id}', [FormsController::class, 'get_content'])->name('forms-get-conetent');
+
+    Route::get('/form/edit/{id}', [FormsController::class, 'edit'])->name('form-edit');
+    Route::post('/form/update', [FormsController::class, 'update'])->name('form-update');
     Route::post('/form/delete', [FormsController::class, 'delete'])->name('form-delete');
 
     Route::get('/forms/categories', [FormsController::class, 'get_category'])->name('forms-get-category');
