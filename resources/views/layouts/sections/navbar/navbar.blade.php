@@ -68,6 +68,41 @@
 
     <ul class="navbar-nav flex-row align-items-center ms-auto">
 
+        <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1">
+            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown"
+                data-bs-auto-close="outside" aria-expanded="false">
+                <i class="ti ti-bell ti-md"></i>
+                <span class="badge bg-danger rounded-pill badge-notifications">5</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end py-0">
+                <li class="dropdown-menu-header border-bottom">
+                    <div class="dropdown-header d-flex align-items-center py-3">
+                        <h5 class="text-body mb-0 me-auto">Notification</h5>
+                    </div>
+                    <span class="badge bg-danger rounded-pill badge-notifications">5</span>
+
+                </li>
+                <li class="dropdown-notifications-list scrollable-container ps">
+                    <ul class="list-group list-group-flush">
+
+                    </ul>
+                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+                        <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                    </div>
+                    <div class="ps__rail-y" style="top: 0px; right: 0px;">
+                        <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div>
+                    </div>
+                </li>
+                <li class="dropdown-menu-footer border-top">
+                    <a href="javascript:void(0);"
+                        class="dropdown-item d-flex justify-content-center text-primary p-2 h-px-40 mb-1 align-items-center">
+                        View all notifications
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
         <!-- User -->
         <li class="nav-item navbar-dropdown dropdown-user dropdown">
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">

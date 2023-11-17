@@ -8,6 +8,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Permission\Traits\HasRoles;
 use App\Models\Committe;
 use App\Models\Department;
 use App\Models\Groups;
@@ -15,7 +16,8 @@ use App\Models\Groups;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable ,SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable ,SoftDeletes , HasRoles;
+    
     
     /**
      * The attributes that are mass assignable.

@@ -9,6 +9,7 @@ use App\Http\Controllers\CenterController;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\CommitteController;
 use App\Http\Controllers\OfficeController;
+use App\Http\Controllers\WorkflowController;
 
 use App\Http\Controllers\authentications\LoginBasic;
 use App\Http\Controllers\authentications\RegisterBasic;
@@ -35,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/user/add', [UserController::class, 'createUser'])->name('user-create');
     Route::post('/users', [UserController::class, 'get_users'])->name('users-get');
     Route::get('/user/{id}', [UserController::class, 'get_user'])->name('user-get');
+    Route::get('/currnt_user', [UserController::class, 'get_current_user'])->name('user-current-get');
     Route::post('/user/edit', [UserController::class, 'edit_user'])->name('user-edit');
     Route::post('/user/delete', [UserController::class, 'delete'])->name('user-delete');
 
@@ -125,12 +127,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/form/edit/{id}', [FormsController::class, 'edit'])->name('form-edit');
     Route::post('/form/update', [FormsController::class, 'update'])->name('form-update');
     Route::post('/form/delete', [FormsController::class, 'delete'])->name('form-delete');
-
     Route::get('/forms/categories', [FormsController::class, 'get_category'])->name('forms-get-category');
     Route::get('/forms/add/category', [FormsController::class, 'create_category'])->name('forms-create-category');
     Route::post('/forms/add/category', [FormsController::class, 'add_category'])->name('forms-add-category');
-
+    Route::post('/forms/users', [FormsController::class, 'get_forms_users'])->name('forms-get-users');
     Route::post('/forms/add', [FormsController::class, 'add'])->name('forms-add');
+
+    Route::post('/workflow/create', [WorkflowController::class, 'create'])->name('workflow-create');
+
+
 
 });
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');

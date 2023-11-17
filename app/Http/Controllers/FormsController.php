@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Forms;
+use App\Models\User;
 
 class FormsController extends Controller
 {
@@ -77,9 +78,8 @@ class FormsController extends Controller
 
         $categories = $request->get('categories');
         $form->categories()->sync($categories);
-
         // Return a success response
-        return response()->json(['success' => true, 'message' => 'Form added successfully'], 200);
+        return response()->json(['success' => true, 'message' => 'Form added successfully', 'id' => $form->id], 200);
     }
     public function get_forms(Request $request)
     {
@@ -119,6 +119,30 @@ class FormsController extends Controller
             return response()->json(['success' => true, 'message' => 'Form updated successfully'], 200);
         } else
             return response()->json(['success' => FALSE, 'message' => 'Form not found'], 404);
+
+    }
+    public function get_forms_users()
+    {
+        $user = auth()->user();
+        if ($user->hasRole('super admin')) {
+            $users = User::get();
+            return response()->json($users, 200);
+        }
+        $roles = $user->roles;
+
+        $uniqueUserIds = [];
+        foreach ($roles as $role) {
+            $usersInRole = $role->users;
+            foreach ($usersInRole as $userInRole) {
+                if (!in_array($userInRole->id, $uniqueUserIds)) {
+                    $uniqueUserIds[] = $userInRole->id;
+                }
+            }
+        }
+
+        $uniqueUsers = User::whereIn('id', $uniqueUserIds)->get();
+
+        return response()->json($uniqueUsers, 200);
 
     }
 }

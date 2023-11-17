@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('form_documents', function (Blueprint $table) {
+        Schema::create('workflows', function (Blueprint $table) {
             $table->id();
-            $table->integer('form_id');
-            $table->pdf('document');
             $table->timestamps();
         });
     }
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('form_documents');
+        Schema::dropIfExists('workflows');
     }
 };

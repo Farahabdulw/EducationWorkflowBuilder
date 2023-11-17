@@ -10,6 +10,8 @@ use App\Models\College;
 use App\Models\Committe;
 use App\Models\User;
 use App\Models\Groups;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class GroupsController extends Controller
 {
@@ -70,9 +72,33 @@ class GroupsController extends Controller
             'affiliations' => $request->get('affiliation'),
             'permissions' => $request->get('permissions'),
         ]);
+        $role = Role::create(['name' => $group->name]);
+        $permissions = json_decode($request->permissions, true);
 
-        if ($group && $request->has('users'))
+        foreach ($permissions as $entity => $actions) {
+            foreach ($actions as $action) {
+                $permissionName = $entity . '_' . $action;
+
+                // Check if the permission already exists
+                $existingPermission = Permission::where('name', $permissionName)->first();
+
+                // Create the permission if it doesn't exist
+                if (!$existingPermission) {
+                    $existingPermission = Permission::create(['name' => $permissionName]);
+                }
+
+                // Attach the permission to the role without duplicating
+                $role->givePermissionTo($existingPermission);
+            }
+        }
+
+        if ($group && $request->has('users')) {
+            foreach ($request->input('users') as $id) {
+                $user = User::find($id);
+                $user->roles()->syncWithoutDetaching([$role->id]);
+            }
             $group->users()->sync($request->input('users'));
+        }
 
         // Return a success response
         if ($group)
@@ -83,6 +109,7 @@ class GroupsController extends Controller
                 'error' => $group,
             ], 422);
     }
+
     public function editUsersGroup($id)
     {
         return view('content.pages.user.add-user-groups');
@@ -107,18 +134,27 @@ class GroupsController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
 
-        if ($group && $request->has('users'))
+
+        if ($group && $request->has('users')) {
             $group->users()->sync($request->input('users'));
+        }
 
         $group->name = $request->name;
         $group->affiliations = $request->affiliation;
 
         $group->save();
 
+        $role = Role::where('name', $group->name)->first();
+
+        if ($role) {
+            $role->users()->sync([]);
+            foreach ($request->users as $userId) {
+                $user = User::find($userId);
+                $user->roles()->syncWithoutDetaching([$role->id]);
+            }
+        }
         return response()->json(['success' => true, 'message' => 'Group has been updated successfully'], 200);
-
     }
-
 
     public function edit_groups_permissions(Request $request)
     {
@@ -138,11 +174,38 @@ class GroupsController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         }
-        ;
+
         $group->permissions = $request->permissions;
         $group->save();
 
+        $role = Role::where('name', $group->name)->first();
+
+        if ($role) {
+            // Detach existing permissions
+            $role->permissions()->detach();
+
+            // Attach new permissions
+            $permissions = json_decode($request->permissions, true);
+            foreach ($permissions as $entity => $actions) {
+                foreach ($actions as $action) {
+                    $permissionName = $entity . '_' . $action;
+
+                    // Check if the permission already exists
+                    $existingPermission = Permission::where('name', $permissionName)->first();
+
+                    // Create the permission if it doesn't exist
+                    if (!$existingPermission) {
+                        $existingPermission = Permission::create(['name' => $permissionName]);
+                    }
+
+                    // Attach the permission to the role
+                    $role->givePermissionTo($existingPermission);
+                }
+            }
+        }
+
         return response()->json(['success' => true, 'message' => 'Groups permissions updated successfully'], 200);
     }
+
 
 }

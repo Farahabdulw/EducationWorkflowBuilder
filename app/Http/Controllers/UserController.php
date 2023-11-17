@@ -144,6 +144,10 @@ class UserController extends Controller
 
         return response()->json(['success' => true, 'message' => 'User soft deleted successfully'], 200);
     }
+    public function get_current_user()
+    {
+        return response()->json(auth()->user()->id, 200);
 
+    }
 }
 

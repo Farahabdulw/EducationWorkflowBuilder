@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/tagify/tagify.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery.repeater@1.2.1/dist/repeater.css">
 
 
 @endsection
@@ -23,14 +23,15 @@
 @endsection
 
 @section('vendor-script')
+    {{-- <script src="https://unpkg.com/@yaireo/tagify@4.17.9/dist/tagify.min.js" /> --}}
+
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+
     <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}" />
     </script>
-    <script src="{{ asset('assets/vendor/libs/jquery-repeater/jquery-repeater.js') }}" />
-    </script>
-
-
 @endsection
 
 @section('page-script')
@@ -43,7 +44,7 @@
 @endsection
 
 @section('content')
-    <div class="card">
+    <div class="card collapse show " id="savedForm">
         <div class="card-header">
             <h5>Create a new Form</h5>
         </div>
@@ -64,46 +65,40 @@
                 <a href="/forms/add/category" class="btn btn-primary waves-effect waves-light">New Category</a>
             </div>
         </div>
-        <div id="fb-editor" class="px-4 pt-0">
+        <div id="fb-editor" class="px-4 pb-5 pt-0">
 
-        </div>
-        <div class="ms-4 col-lg-4 col-md-6 col-sm-12 mb-4">
-            <button class="btn btn-primary waves-effect waves-light" data-bs-target="#uploadFileModel"
-                data-bs-toggle="modal">Import Word document</button>
         </div>
     </div>
-    <div class="card">
-        <h5 class="card-header">WorkFlow</h5>
-        <div class="card-body">
-            <form class="form-repeater">
-                <div data-repeater-list="group-a">
-                    <div data-repeater-item>
-                        <div class="row">
-                            <div class="col-md-7 col-sm-12 mb-4 postion-relative" data-select2-id="45">
-                                <label for="users" class="form-label">Users</label>
-                                <select class="js-example-basic-multiple workflow-users">
-                                    <option value="a">asd</option>
-                                    <option value="a">sdfsdf</option>
-                                </select>
-                            </div>
-                            <div class="mb-3 col-lg-12 col-xl-2 col-12 d-flex align-items-center mb-0">
-                                <button type="button" class="btn btn-label-danger mt-4 waves-effect" data-repeater-delete>
-                                    <i class="ti ti-x ti-xs me-1"></i>
-                                    <span class="align-middle">Delete</span>
-                                </button>
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
+
+    <div class="card collapse" id="workflowSection">
+
+        <div class="bg-lighter rounded p-3 position-relative mb-3">
+            <div class="row">
+                <div class="col-8">
+                    <h4 class="mb-0 me-3 formTitle"></h4>
                 </div>
-                <div class="mb-0">
-                    <button type="button" class="btn btn-primary waves-effect waves-light" data-repeater-create>
-                        <i class="ti ti-plus me-1"></i>
-                        <span class="align-middle">Add</span>
+                <div class="col-4 d-flex justify-content-end">
+                    <button class="btn btn-primary me-1 waves-effect waves-light" id="editSavedForm" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#savedForm" aria-expanded="true"
+                        aria-controls="savedForm">
+                        Edit
                     </button>
                 </div>
-            </form>
+            </div>
 
+        </div>
+
+        <h5 class="card-header">WorkFlow</h5>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-6 col-sm-12 mb-4">
+                    <label for="TagifyUserList" class="form-label">Users List</label>
+                    <input name='tags' id="TagifyUserList" class='form-control'>
+                </div>
+                <div class="col-6 col-sm-12">
+                    <button type="submit" class="btn btn-primary waves-effect waves-light" id="WorkflowUsers">Start the Workflow</button>
+                </div>
+            </div>
         </div>
     </div>
     <div class="modal fade" id="uploadFileModel" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"
