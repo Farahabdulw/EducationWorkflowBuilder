@@ -10,10 +10,14 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('workflows', function (Blueprint $table) {
+        Schema::create('steps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('forms_id')->constrained();
+            $table->foreignId('workflows_id')->constrained();
+            $table->foreignId('user_id')->constrained();
+            $table->unsignedInteger('step');
+            $table->text('review')->nullable();
             $table->tinyInteger('status');
+            $table->unsignedInteger('forwarded_from')->nullable();
             $table->timestamps();
         });
     }
@@ -23,6 +27,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('workflows');
+        Schema::dropIfExists('steps');
     }
 };

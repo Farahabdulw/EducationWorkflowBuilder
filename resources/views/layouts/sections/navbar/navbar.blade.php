@@ -72,16 +72,42 @@
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown"
                 data-bs-auto-close="outside" aria-expanded="false">
                 <i class="ti ti-bell ti-md"></i>
-                <span class="badge bg-danger rounded-pill badge-notifications">5</span>
+                @if (count(auth()->user()->notifications) > 0)
+                    <span
+                        class="badge bg-danger rounded-pill badge-notifications">{{ count(auth()->user()->notifications) }}</span>
+                @endif
             </a>
-            <ul class="dropdown-menu dropdown-menu-end py-0">
+            <ul class="dropdown-menu dropdown-menu-end py-0 px-2">
                 <li class="dropdown-menu-header border-bottom">
                     <div class="dropdown-header d-flex align-items-center py-3">
                         <h5 class="text-body mb-0 me-auto">Notification</h5>
                     </div>
-                    <span class="badge bg-danger rounded-pill badge-notifications">5</span>
-
                 </li>
+                @forelse (auth()->user()->notifications as $notification)
+                    <li class="list-group-item list-group-item-action dropdown-notifications-item py-1">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">{{ $notification->data['header'] }}</h6>
+                                <p class="mb-0">{{ $notification->data['body'] }}</p>
+                                <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                            </div>
+                            <div class="flex-shrink-0 dropdown-notifications-actions">
+                                <a href="javascript:void(0)" class="dropdown-notifications-read"><span
+                                        class="badge badge-dot"></span></a>
+                                <a href="javascript:void(0)" class="dropdown-notifications-archive"><span
+                                        class="ti ti-x"></span></a>
+                            </div>
+                        </div>
+                    </li>
+                @empty
+                    <li class="list-group-item list-group-item-action dropdown-notifications-item py-1">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="mb-0">No new notifications so show</p>
+                            </div>
+                        </div>
+                    </li>
+                @endforelse
                 <li class="dropdown-notifications-list scrollable-container ps">
                     <ul class="list-group list-group-flush">
 

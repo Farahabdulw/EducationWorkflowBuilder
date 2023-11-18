@@ -124,7 +124,7 @@ class FormsController extends Controller
     public function get_forms_users()
     {
         $user = auth()->user();
-        if ($user->hasRole('super admin')) {
+        if ($user->hasRole('super-admin')) {
             $users = User::get();
             return response()->json($users, 200);
         }

@@ -6,17 +6,23 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Crypt;
 
 class FormReceived extends Notification implements ShouldQueue
 {
     use Queueable;
-    public $formurl;
+    public $sender_id;
+    public $message;
+    public $formUrl;
     /**
      * Create a new notification instance.
      */
-    public function __construct($formUrl)
+    public function __construct($sender_id, $message, $form_id, $step_id)
     {
-        $this->formurl = $formUrl;
+        $this->sender_id = $sender_id;
+        $this->message = $message;
+        $step_id = Crypt::encryptString($step_id);
+        $this->formUrl = "http://18.204.18.221/forms/review/form/{$form_id}/{$step_id}";
     }
 
     /**
@@ -26,7 +32,7 @@ class FormReceived extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return $notifiable->prefers_mail ? ['mail'] : ['mail', 'database'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -35,10 +41,10 @@ class FormReceived extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->from('workflow@example.com', 'Hello')
+            ->from('workflow@example.com')
             ->subject('Form arrival mail.')
-            ->greeting(sprintf('Hello %s!', $notifiable->name))
-            ->line('You received a form that need your action')
+            ->greeting(sprintf('Hello !', $notifiable->first_name))
+            ->line($this->message)
             ->action('check the form at', $this->formurl);
     }
 
@@ -50,7 +56,11 @@ class FormReceived extends Notification implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'sender_id' =>$notifiable->id,
+            'Sname' =>$notifiable->first_name ." ".$notifiable->last_name,
+            'body' =>$this->message,
+            'header'=>"Form Received",
+            'url' =>$this->formUrl,
         ];
     }
 }
