@@ -7,6 +7,10 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Forms;
 use App\Models\User;
+use App\Models\Step;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
+
 
 class FormsController extends Controller
 {
@@ -25,6 +29,24 @@ class FormsController extends Controller
     public function create_category()
     {
         return view('content.pages.forms.category');
+    }
+    public function review_form($id, $step_id)
+    {
+
+        try {
+            $step_id = Crypt::decryptString($step_id);
+        } catch (DecryptException $e) {
+            return view('404');
+        }
+
+        $step = Step::find($step_id);
+        $form_id = $step->workflow->forms_id;
+        if ($step)
+            if ($step->user->id === auth()->user()->id)
+                return view('content.pages.forms.review' ,compact('form_id'));
+            else
+                return view('403');
+
     }
     public function get_category()
     {
@@ -73,6 +95,7 @@ class FormsController extends Controller
         // Insert form data into the forms table
         $form = Forms::create([
             'name' => $request->get('title'),
+            'created_by' => auth()->user()->id,
             'content' => $request->get('formData'),
         ]);
 
@@ -88,7 +111,7 @@ class FormsController extends Controller
     }
     public function get_form(Request $request, $id)
     {
-        $form = Forms::with('categories')->find($id);
+        $form = Forms::with('categories' , 'creator')->find($id);
         if ($form)
             return response()->json($form, 200);
         else

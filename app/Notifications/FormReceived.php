@@ -45,7 +45,7 @@ class FormReceived extends Notification implements ShouldQueue
             ->subject('Form arrival mail.')
             ->greeting(sprintf('Hello !', $notifiable->first_name))
             ->line($this->message)
-            ->action('check the form at', $this->formurl);
+            ->action('check the form at', $this->formUrl);
     }
 
     /**
@@ -56,11 +56,11 @@ class FormReceived extends Notification implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         return [
-            'sender_id' =>$notifiable->id,
-            'Sname' =>$notifiable->first_name ." ".$notifiable->last_name,
-            'body' =>$this->message,
-            'header'=>"Form Received",
-            'url' =>$this->formUrl,
+            'sender_id' => $notifiable->id,
+            'Sname' => $notifiable->first_name . " " . $notifiable->last_name,
+            'body' => $this->message,
+            'header' => "Form Received",
+            'url' => $this->formUrl,
         ];
     }
 }

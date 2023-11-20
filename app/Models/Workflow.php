@@ -13,7 +13,8 @@ class Workflow extends Model
     use HasFactory;
 
     protected $fillable = [
-        'form_id',
+        'forms_id',
+        'status',
     ];
     public function form()
     {

@@ -29,7 +29,7 @@ class LoginBasic extends Controller
       // Authentication successful
       return response()->json([
         'success' => true,
-        'route' => 'users',
+        'route' => session('url.intended'),
       ], 200);
     } else {
       // Authentication failed

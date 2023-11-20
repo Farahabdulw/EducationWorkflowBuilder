@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('steps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('workflows_id')->constrained();
+            $table->foreignId('workflow_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->unsignedInteger('step');
             $table->text('review')->nullable();

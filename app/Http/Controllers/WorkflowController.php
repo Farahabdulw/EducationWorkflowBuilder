@@ -13,10 +13,10 @@ class WorkflowController extends Controller
     public function create(Request $request)
     {
         $users = $request->users;
-        $form_id = $request->id;
+        $form_id = $request->form;
         $sender_id = $request->sender_id;
         $workflow = Workflow::create([
-            "form_id" => $form_id,
+            "forms_id" => $form_id,
             "status" => 0, // 0 => pending , 1 => in progress , 2 => completed/over
         ]);
 
@@ -29,13 +29,15 @@ class WorkflowController extends Controller
                 'status' => 0, // 0 => pending , 1 => aproved , 2 => rejected , 3 => forwarded
             ]);
         }
-        lunchWorkflow($workflow, $sender_id ,$form_id);
+        $this->lunchWorkflow($workflow, $sender_id ,$form_id);
+        return response()->json("succsful", 200);
+
     }
     public function lunchWorkflow(Workflow $workflow, int $sender_id , $form_id)
     {
         $workflow->status = 1;
         $workflow->save();
-        $firstStep = $workflow->steps()->orderBy('steps')->first();
+        $firstStep = $workflow->steps()->orderBy('step')->first();
 
         $sender = User::find($sender_id);
         $recipient = User::find($firstStep->user_id);

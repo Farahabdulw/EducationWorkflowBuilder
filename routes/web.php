@@ -166,6 +166,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/forms', [FormsController::class, 'index'])->name('forms');
         Route::post('/forms', [FormsController::class, 'get_forms'])->name('forms-get');
         Route::get('/forms/categories', [FormsController::class, 'get_category'])->name('forms-get-category');
+        Route::get('/forms/review/form/{id}/{step_id}', [FormsController::class, 'review_form'])->name('review-form');
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_add']], function () {
         Route::get('/form/add', [FormsController::class, 'create'])->name('forms-create');
