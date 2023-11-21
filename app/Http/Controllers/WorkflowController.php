@@ -26,7 +26,7 @@ class WorkflowController extends Controller
                 'workflow_id' => $workflow->id,
                 'user_id' => $user['id'],
                 'step' => $index + 1,
-                'status' => 0, // 0 => pending , 1 => aproved , 2 => rejected , 3 => forwarded
+                'status' => 0, // 0 => pending , 1 => inProgress , 2 => approved , 3 => rejected , 4 => forwarded
             ]);
         }
         $this->lunchWorkflow($workflow, $sender_id ,$form_id);
@@ -38,7 +38,9 @@ class WorkflowController extends Controller
         $workflow->status = 1;
         $workflow->save();
         $firstStep = $workflow->steps()->orderBy('step')->first();
-
+        Step::find($firstStep->id)->update([
+            'status'=>1
+        ]);
         $sender = User::find($sender_id);
         $recipient = User::find($firstStep->user_id);
 

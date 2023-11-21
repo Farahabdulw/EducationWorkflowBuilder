@@ -10,6 +10,7 @@ use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\CommitteController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\WorkflowController;
+use App\Http\Controllers\NotificationController;
 
 use App\Http\Controllers\authentications\LoginBasic;
 use App\Http\Controllers\authentications\RegisterBasic;
@@ -46,6 +47,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/get/group/{id}', [GroupsController::class, 'get_group'])->name('get-group-group');
         Route::post('/get/group_affiliation', [GroupsController::class, 'get_affiliations'])->name('get-group-affiliation');
         Route::post('/users/groups', [GroupsController::class, 'get_groups'])->name('get-groups');
+        Route::post('/groups/users', [GroupsController::class, 'get_groups_members'])->name('groups-members');
+
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|users_edit']], function () {
         Route::post('/user/edit', [UserController::class, 'edit_user'])->name('user-edit');
@@ -53,7 +56,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/edit/users/groups/{id}', [GroupsController::class, 'editUsersGroup'])->name('user-edit-group');
         Route::post('/edit/users/groups', [GroupsController::class, 'updateUsersGroup'])->name('user-edit-group');
         Route::post('/user/groups/edit/permissions', [GroupsController::class, 'edit_groups_permissions'])->name('user-groups-permissions');
-
 
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|users_delete']], function () {
@@ -167,6 +169,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/forms', [FormsController::class, 'get_forms'])->name('forms-get');
         Route::get('/forms/categories', [FormsController::class, 'get_category'])->name('forms-get-category');
         Route::get('/forms/review/form/{id}/{step_id}', [FormsController::class, 'review_form'])->name('review-form');
+        Route::post('/forms/review/progress/{id}', [FormsController::class, 'review_form_progress'])->name('progress-review-form');
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_add']], function () {
         Route::get('/form/add', [FormsController::class, 'create'])->name('forms-create');
@@ -180,11 +183,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/forms/users', [FormsController::class, 'get_forms_users'])->name('forms-get-users');
 
         Route::post('/workflow/create', [WorkflowController::class, 'create'])->name('workflow-create');
-
-
-
-
-        
+    
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_edit']], function () {
         Route::get('/form/edit/{id}', [FormsController::class, 'edit'])->name('form-edit');
@@ -195,6 +194,11 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_delete']], function () {
         Route::post('/form/delete', [FormsController::class, 'delete'])->name('form-delete');
     });
+
+    Route::post('/notification/read/{notif_id}', [NotificationController::class, 'read'])->name('read-notification');
+
+
+
 });
 
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');

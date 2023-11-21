@@ -32,7 +32,6 @@ class FormsController extends Controller
     }
     public function review_form($id, $step_id)
     {
-
         try {
             $step_id = Crypt::decryptString($step_id);
         } catch (DecryptException $e) {
@@ -43,10 +42,54 @@ class FormsController extends Controller
         $form_id = $step->workflow->forms_id;
         if ($step)
             if ($step->user->id === auth()->user()->id)
-                return view('content.pages.forms.review' ,compact('form_id'));
+                return view('content.pages.forms.review', compact('form_id'));
             else
                 return view('403');
 
+    }
+    public function review_form_progress(int $id, Request $request)
+    {
+        try {
+            $step_id = Crypt::decryptString($request->step_key);
+        } catch (DecryptException $e) {
+            return response()->json(404);
+        }
+
+        $step = Step::find($step_id);
+        if ($step) {
+            $workflow = $step->workflow;
+            // Retrieve all steps with status 1 or 2 for the same workflow
+            $steps = Step::with(['workflow.form.creator', 'user'])
+                ->where('workflow_id', $workflow->id)
+                ->whereIn('status', [1, 2])
+                ->get();
+            $progress = $steps->map(function ($step) {
+                return [
+                    'id' => $step->id,
+                    'created_at' => $step->created_at,
+                    'workflow_id' => $step->workflow_id,
+                    'user' => [
+                        'id' => $step->user->id,
+                        'first_name' => $step->user->first_name,
+                        'last_name' => $step->user->last_name,
+                    ],
+                    'workflow' => [
+                        'id' => $step->workflow->id,
+                        'form' => [
+                            'id' => $step->workflow->form->id,
+                            'creator' => [
+                                'id' => $step->workflow->form->creator->id,
+                                'first_name' => $step->workflow->form->creator->first_name,
+                                'last_name' => $step->workflow->form->creator->last_name,
+                            ],
+                        ],
+                    ],
+                ];
+            });
+            return response()->json($progress, 200);
+        } else
+            // If the step doesn't exist, return an appropriate response
+            return response()->json(['error' => 'Step not found'], 404);
     }
     public function get_category()
     {
@@ -111,7 +154,7 @@ class FormsController extends Controller
     }
     public function get_form(Request $request, $id)
     {
-        $form = Forms::with('categories' , 'creator')->find($id);
+        $form = Forms::with('categories', 'creator')->find($id);
         if ($form)
             return response()->json($form, 200);
         else

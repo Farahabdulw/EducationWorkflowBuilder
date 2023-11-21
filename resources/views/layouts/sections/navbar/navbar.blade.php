@@ -74,7 +74,7 @@
                 <i class="ti ti-bell ti-md"></i>
                 @if (count(auth()->user()->unreadnotifications) > 0)
                     <span
-                        class="badge bg-danger rounded-pill badge-notifications">{{ count(auth()->user()->notifications) }}</span>
+                        class="badge bg-danger rounded-pill badge-notifications">{{ count(auth()->user()->unreadnotifications) }}</span>
                 @endif
             </a>
             <ul class="dropdown-menu dropdown-menu-end py-0 px-2">
@@ -83,10 +83,11 @@
                         <h5 class="text-body mb-0 me-auto">Notification</h5>
                     </div>
                 </li>
+                {{-- notification reading functiolity is in assets/js/config --}}
                 @forelse (auth()->user()->unreadnotifications as $notification)
                     <li class="list-group-item list-group-item-action dropdown-notifications-item py-1">
                         <div class="d-flex p-2">
-                            <a href="{{ $notification->data['url'] }}">
+                            <button class="notification-anchor btn text-start" data-href={{ $notification->data['url'] }} data-notfiid ={{$notification->id}}>
                                 <div class="flex-grow-1">
                                     <h6 class="mb-1">{{ $notification->data['header'] }}</h6>
                                     <p class="mb-0">{{ $notification->data['body'] }}</p>
@@ -98,7 +99,7 @@
                                     <a href="javascript:void(0)" class="dropdown-notifications-archive"><span
                                             class="ti ti-x"></span></a>
                                 </div>
-                            </a>
+                            </button>
                         </div>
                     </li>
                 @empty

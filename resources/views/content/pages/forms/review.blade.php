@@ -19,7 +19,7 @@
 @section('page-style')
     <!-- Page -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/cards-advance.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/forms/create.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/forms/review.css') }}">
 @endsection
 
 @section('vendor-script')
@@ -36,7 +36,7 @@
 @endsection
 
 @section('content')
-<input type="text" name="form" id="form_id" hidden value="{{$form_id}}">
+    <input type="text" name="form" id="form_id" hidden value="{{ $form_id }}">
     <div class="row invoice-preview">
         <!-- Invoice -->
         <div class="col-xl-9 col-md-8 col-12 mb-md-0 mb-4">
@@ -47,7 +47,7 @@
                         <div class="mb-xl-0 mb-4">
                             <div class="d-flex svg-illustration mb-2 gap-2 align-items-center">
                                 <span class="form-title fw-bold fs-4">
-                                    
+
                                 </span>
                             </div>
                             <p class="mb-0 form-creator"></p>
@@ -70,46 +70,6 @@
 
                     <div id="fb-editor"></div>
 
-
-                </div>
-            </div>
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title m-0">Shipping activity</h5>
-                </div>
-                <div class="card-body">
-                    <ul class="timeline pb-0 mb-0">
-                        <li class="timeline-item timeline-item-transparent border-primary">
-                            <span class="timeline-point timeline-point-primary"></span>
-                            <div class="timeline-event">
-                                <div class="timeline-header">
-                                    <h6 class="mb-0">Order was placed (Order ID: #32543)</h6>
-                                    <span class="text-muted">Tuesday 11:29 AM</span>
-                                </div>
-                                <p class="mt-2">Your order has been placed successfully</p>
-                            </div>
-                        </li>
-
-                        <li class="timeline-item timeline-item-transparent border-left-dashed">
-                            <span class="timeline-point timeline-point-primary"></span>
-                            <div class="timeline-event">
-                                <div class="timeline-header">
-                                    <h6 class="mb-0">Dispatched for delivery</h6>
-                                    <span class="text-muted">Today 14:12 PM</span>
-                                </div>
-                                <p class="mt-2">Package has left an Amazon facility, NY</p>
-                            </div>
-                        </li>
-                        <li class="timeline-item timeline-item-transparent border-transparent pb-0">
-                            <span class="timeline-point timeline-point-secondary"></span>
-                            <div class="timeline-event pb-0">
-                                <div class="timeline-header">
-                                    <h6 class="mb-0">Delivery</h6>
-                                </div>
-                                <p class="mt-2 mb-0">Package will be delivered by tomorrow</p>
-                            </div>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -124,8 +84,8 @@
                         <span class="d-flex align-items-center justify-content-center text-nowrap"><i
                                 class="ti ti-circle-check ti-xs me-2"></i>Approve</span>
                     </button>
-                    <button class="btn btn-label-secondary d-grid w-100 mb-2 waves-effect waves-light"
-                        data-bs-toggle="offcanvas" data-bs-target="#sendInvoiceOffcanvas">
+                    <button class="btn btn-danger d-grid w-100 mb-2 waves-effect waves-light" data-bs-toggle="offcanvas"
+                        data-bs-target="#sendInvoiceOffcanvas">
                         <span class="d-flex align-items-center justify-content-center text-nowrap"><i
                                 class="ti ti-ban ti-xs me-2"></i>Reject</span>
                     </button>
@@ -137,13 +97,26 @@
                     <button class="btn btn-label-secondary d-grid w-100 mb-2 waves-effect waves-light"
                         data-bs-toggle="offcanvas" data-bs-target="#sendInvoiceOffcanvas">
                         <span class="d-flex align-items-center justify-content-center text-nowrap"><i
-                                class="ti ti-arrow-back-up ti-xs me-2"></i>Cancel</span>
+                                class="ti ti-arrow-back-up ti-xs me-2"></i>Return</span>
                     </button>
 
 
                 </div>
             </div>
         </div>
+        <div class="col-xl-9 col-md-8 col-12 mb-md-0 mb-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title m-0">Forms Progress</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="timeline pb-0 mb-0">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
         <!-- /Invoice Actions -->
+
     </div>
 @endsection

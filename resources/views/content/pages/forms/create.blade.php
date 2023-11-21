@@ -92,6 +92,10 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-6 col-sm-12 mb-4">
+                    <label for="TagifyGroupsList" class="form-label">Groups List</label>
+                    <input name='tags' id="TagifyGroupsList" class='form-control'>
+                </div>
+                <div class="col-6 col-sm-12 mb-4">
                     <label for="TagifyUserList" class="form-label">Users List</label>
                     <input name='tags' id="TagifyUserList" class='form-control'>
                 </div>

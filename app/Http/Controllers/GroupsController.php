@@ -35,8 +35,31 @@ class GroupsController extends Controller
     }
     public function get_groups()
     {
-        $groups = Groups::get();
-        return response()->json($groups, 200);
+        $user = auth()->user();
+        if ($user->hasRole('super-admin')) {
+            $groups = Groups::get();
+            return response()->json($groups, 200);
+
+        } else {
+            $userRoles = $user->roles->pluck('name')->toArray();
+            $groups = Groups::whereIn('name', $userRoles)->get();
+
+            // Return the groups as JSON response
+            return response()->json($groups, 200);
+        }
+    }
+    public function get_groups_members(Request $request)
+    {
+        $groupIds = $request->groupsIDs;
+        if (!$groupIds)
+            return response()->json([], 200);
+
+
+        $users = User::whereHas('groups', function ($query) use ($groupIds) {
+            $query->whereIn('groups.id', $groupIds);
+        })->get();
+
+        return response()->json($users, 200);
     }
     public function get_group($id)
     {

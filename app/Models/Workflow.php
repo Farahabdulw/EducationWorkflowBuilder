@@ -18,7 +18,7 @@ class Workflow extends Model
     ];
     public function form()
     {
-        return $this->belongsTo(Forms::class);
+        return $this->belongsTo(Forms::class , 'forms_id');
     }
 
     public function steps()
