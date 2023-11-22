@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('workflows', function (Blueprint $table) {
             $table->id();
             $table->foreignId('forms_id')->constrained();
+            $table->integer('created_by');
             $table->tinyInteger('status');
             $table->timestamps();
         });

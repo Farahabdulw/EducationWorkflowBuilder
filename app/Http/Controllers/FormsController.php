@@ -47,6 +47,22 @@ class FormsController extends Controller
                 return view('403');
 
     }
+    public function get_form_single($id)
+    {
+        $form = Forms::find($id);
+
+        if (!$form) {
+            return view('404');
+        }
+
+        $userRoles = auth()->user()->roles->pluck('name')->toArray();
+
+        if (auth()->user()->hasRole($userRoles)) {
+            return view('content.pages.forms.view', ['form' => $form]);
+        } else {
+            return view('403');
+        }
+    }
     public function review_form_progress(int $id, Request $request)
     {
         try {
