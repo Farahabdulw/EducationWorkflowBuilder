@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 use App\Notifications\FormReceived;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -19,7 +21,7 @@ class WorkflowController extends Controller
         $workflow = Workflow::create([
             "forms_id" => $form_id,
             "status" => 0, // 0 => pending , 1 => in progress , 2 => completed/over
-            "created_by" => $sender_id, 
+            "created_by" => $sender_id,
         ]);
 
         foreach ($users as $index => $user) {
@@ -66,7 +68,7 @@ class WorkflowController extends Controller
             $workflows = Workflow::query()
                 ->with([
                     'creator' => function ($query) {
-                        $query->select('id', 'first_name' , 'last_name');
+                        $query->select('id', 'first_name', 'last_name');
                     }
                 ])->where('forms_id', $form->id)->get();
             return response()->json($workflows, 200);
@@ -77,12 +79,12 @@ class WorkflowController extends Controller
     public function getWorkflowProgress(Request $request)
     {
         $workflow = Workflow::find($request->id);
-    
+
         if ($workflow) {
             $steps = Step::with(['workflow.form.creator', 'user'])
                 ->where('workflow_id', $workflow->id)
                 ->get();
-    
+
             $progress = $steps->map(function ($step) {
                 return [
                     'id' => $step->id,
@@ -107,11 +109,19 @@ class WorkflowController extends Controller
                     ],
                 ];
             });
-    
+
             return response()->json($progress, 200);
         } else {
             return response()->json(['error' => 'Workflow not found'], 404);
         }
     }
-    
+    public function approveStep(Request $request)
+    {
+        try {
+            $step_id = Crypt::decryptString($request->step_key);
+        } catch (DecryptException $e) {
+            return response()->json(404);
+        }
+    }
+
 }

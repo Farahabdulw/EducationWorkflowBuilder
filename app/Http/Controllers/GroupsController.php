@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Department;
 use App\Models\Center;
 use App\Models\College;
+use App\Models\Office;
 use App\Models\Committe;
 use App\Models\User;
 use App\Models\Groups;
@@ -23,13 +24,20 @@ class GroupsController extends Controller
     public function get_affiliations()
     {
         $data = new \stdClass();
-        $data->users = User::select('id', 'first_name', 'last_name')->get();
+        $authUser = auth()->user();
+        $authUserRoles = $authUser->roles;
+        if ($authUser->hasRole('super-admin'))
+            $data->users = User::select('id', 'first_name', 'last_name')->get();
+        else
+            $data->users = User::role($authUserRoles)->get();
+
         $data->affiliations = new \stdClass();
 
         $data->affiliations->committees = Committe::select('id', 'name')->get();
         $data->affiliations->centers = Center::select('id', 'name')->get();
         $data->affiliations->departments = Department::select('id', 'name')->get();
         $data->affiliations->colleges = College::select('id', 'name')->get();
+        $data->affiliations->offices = Office::select('id', 'name')->get();
 
         return response()->json($data, 200);
     }
@@ -38,15 +46,26 @@ class GroupsController extends Controller
         $user = auth()->user();
         if ($user->hasRole('super-admin')) {
             $groups = Groups::get();
-            return response()->json($groups, 200);
-
+            $canEdit = true;
+            $canDelete = true;
+            $canAdd = true;
         } else {
             $userRoles = $user->roles->pluck('name')->toArray();
             $groups = Groups::whereIn('name', $userRoles)->get();
-
-            // Return the groups as JSON response
-            return response()->json($groups, 200);
+            $canEdit = $user->can('groups_edit');
+            $canDelete = $user->can('groups_delete');
+            $canAdd = $user->can('groups_add');
         }
+
+        $responseObject = [
+            'groups' => $groups,
+            'canEdit' => $canEdit,
+            'canDelete' => $canDelete,
+            'canAdd' => $canAdd,
+        ];
+        // Return the groups as JSON response
+        return response()->json($responseObject, 200);
+
     }
     public function get_groups_members(Request $request)
     {
@@ -168,7 +187,6 @@ class GroupsController extends Controller
         $group->save();
 
         $role = Role::where('name', $group->name)->first();
-
         if ($role) {
             $role->users()->sync([]);
             foreach ($request->users as $userId) {
@@ -229,6 +247,4 @@ class GroupsController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Groups permissions updated successfully'], 200);
     }
-
-
 }

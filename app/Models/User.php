@@ -51,6 +51,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function hasPermission($permission)
+    {
+        // dd($this->roles->pluck('name'));
+        
+        return $this->roles->flatMap->permissions->pluck('name')->contains($permission) || $this->hasRole('super-admin');
+    }
     public function committe() : HasMany
     {
         return $this->hasMany(Committe::class);
@@ -62,5 +68,9 @@ class User extends Authenticatable
     public function groups() : BelongsToMany
     {
         return $this->belongsToMany(Groups::class, 'groups-users');
+    }
+    public function forms() 
+    {
+        return $this->hasMany(Forms::class,'created_by');
     }
 }

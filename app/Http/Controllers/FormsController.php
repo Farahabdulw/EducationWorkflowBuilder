@@ -165,8 +165,34 @@ class FormsController extends Controller
     }
     public function get_forms(Request $request)
     {
-        $forms = Forms::with('categories')->get();
-        return response()->json($forms, 200);
+
+        if (auth()->user()->hasRole('super-admin')) {
+            $canEdit = true;
+            $canDelete = true;
+            $canAdd = true;
+            $forms = Forms::get();
+        } else {
+            $authUser = auth()->user();
+            $canEdit = auth()->user()->can('forms_edit');
+            $canDelete = auth()->user()->can('forms_delete');
+            $canAdd = auth()->user()->can('forms_add');
+
+            $authUserRoles = $authUser->getRoleNames();
+            $users = User::role($authUserRoles)->get();
+            $formIds = $users->flatMap(function ($user) {
+                return $user->forms->pluck('id');
+            })->unique()->toArray();
+
+            $forms = Forms::whereIn('id', $formIds)->with('categories')->get();
+        }
+        $responseObject = [
+            'forms' => $forms,
+            'canEdit' => $canEdit,
+            'canDelete' => $canDelete,
+            'canAdd' => $canAdd,
+        ];
+        return response()->json($responseObject, 200);
+
     }
     public function get_form(Request $request, $id)
     {

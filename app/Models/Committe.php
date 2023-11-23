@@ -19,6 +19,7 @@ class Committe extends Model
         'chairperson',
         'description',
     ];
+    protected $table = 'committes';
     public function chairpersonUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'chairperson', 'id');

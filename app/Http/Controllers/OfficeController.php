@@ -18,9 +18,33 @@ class OfficeController extends Controller
     }
     public function get()
     {
-        $office = Office::all();
 
-        return response()->json($office, 200);
+        if (auth()->user()->hasRole('super-admin')) {
+            $canEdit = true;
+            $canDelete = true;
+            $canAdd = true;
+            $offices = Office::get();
+        } else {
+            $authUser = auth()->user();
+            $canEdit = auth()->user()->can('offices_edit');
+            $canDelete = auth()->user()->can('offices_delete');
+            $canAdd = auth()->user()->can('offices_add');
+
+            $groupsAff = $authUser->groups->pluck('affiliations')->map(function ($affiliations) {
+                $affiliationsArray = json_decode($affiliations, true);
+                return $affiliationsArray['offices'] ?? [];
+            })->flatten();
+
+            // Assuming $offices is the collection of all offices
+            $offices = Office::whereIn('id', $groupsAff->toArray())->get();
+        }
+        $responseObject = [
+            'offices' => $offices,
+            'canEdit' => $canEdit,
+            'canDelete' => $canDelete,
+            'canAdd' => $canAdd,
+        ];
+        return response()->json($responseObject, 200);
     }
 
     public function add(Request $request)
@@ -53,8 +77,6 @@ class OfficeController extends Controller
                 'error' => $office,
             ], 422);
     }
-
-
     public function office($id)
     {
         $office = Office::find($id);

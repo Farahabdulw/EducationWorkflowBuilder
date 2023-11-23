@@ -52,27 +52,28 @@
             </table>
         </div>
     </div>
-    <div class="card mt-5">
-        <div class="card-header d-flex justify-content-between">
-            <div class="head-label text-center">
-                <h5 class="card-title mb-0">Users Groups Table</h5>
+    @if (auth()->user()->can('groups_view') ||auth()->user()->hasRole('super-admin') )
+        <div class="card mt-5">
+            <div class="card-header d-flex justify-content-between">
+                <div class="head-label text-center">
+                    <h5 class="card-title mb-0">Users Groups Table</h5>
+                </div>
+            </div>
+            <div class="table-responsive text-nowrap mb-3">
+                <table class="datatables-users-groups table">
+
+                    <thead class="table-light" id="users-head">
+                        <tr>
+                            <th class="shrink"></th>
+                            <th>GROUP NAME</th>
+                            <th>GROUP'S AFFILIATION</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
         </div>
-        <div class="table-responsive text-nowrap mb-3">
-            <table class="datatables-users-groups table">
-
-                <thead class="table-light" id="users-head">
-                    <tr>
-                        <th class="shrink"></th>
-                        <th>GROUP NAME</th>
-                        <th>GROUP'S AFFILIATION</th>
-                        <th></th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-    </div>
-
+    @endif
     <!-- Modal -->
     <div class="modal fade" id="edit-user" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
         <div class="modal-dialog" role="document">

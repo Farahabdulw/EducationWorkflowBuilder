@@ -52,13 +52,36 @@ class CollegeController extends Controller
     }
     public function get_colleges()
     {
-        $colleges = College::with('committee')->get();
+        if (auth()->user()->hasRole('super-admin')) {
+            $canEdit = true;
+            $canDelete = true;
+            $canAdd = true;
+            $colleges = College::get();
+        } else {
+            $authUser = auth()->user();
+            $canEdit = auth()->user()->can('colleges_edit');
+            $canDelete = auth()->user()->can('colleges_delete');
+            $canAdd = auth()->user()->can('colleges_add');
 
-        $colleges->each(function ($college) {
-            $college->comName =  $college->committee->name;
-        });
+            $groupsAff = $authUser->groups->pluck('affiliations')->map(function ($affiliations) {
+                $affiliationsArray = json_decode($affiliations, true);
+                return $affiliationsArray['colleges'] ?? [];
+            })->flatten();
 
-        return response()->json($colleges, 200);
+            // Assuming $colleges is the collection of all colleges
+            $colleges = College::whereIn('id', $groupsAff->toArray())->with([
+                'committee' => function ($query) {
+                    $query->select('id', 'name');
+                }
+            ])->get();
+        }
+        $responseObject = [
+            'colleges' => $colleges,
+            'canEdit' => $canEdit,
+            'canDelete' => $canDelete,
+            'canAdd' => $canAdd,
+        ];
+        return response()->json($responseObject, 200);
     }
     public function get_college($id)
     {

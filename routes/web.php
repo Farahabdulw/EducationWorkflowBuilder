@@ -27,7 +27,7 @@ use App\Http\Controllers\authentications\RegisterBasic;
 */
 Route::middleware(['auth'])->group(function () {
     // Main Page Route
-    Route::get('/', [UserController::class, 'landingPage'])->name('users');
+    Route::get('/', [UserController::class, 'index'])->name('users');
     Route::get('/currnt_user', [UserController::class, 'get_current_user'])->name('user-current-get');
 
     // Users UI Routes
@@ -38,28 +38,35 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => ['role_or_permission:super-admin|users_add']], function () {
         Route::get('/users/add', [UserController::class, 'addForm'])->name('user-add');
         Route::post('/user/add', [UserController::class, 'createUser'])->name('user-create');
-
-        Route::get('/add/users/groups', [GroupsController::class, 'createUserGroup'])->name('user-create-group');
-        Route::post('/add/users/groups', [GroupsController::class, 'addUsersGroup'])->name('user-add-group');
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|users_edit|users_view']], function () {
         Route::get('/user/{id}', [UserController::class, 'get_user'])->name('user-get');
+    });
+    Route::group(['middleware' => ['role_or_permission:super-admin|users_edit']], function () {
+        Route::post('/user/edit', [UserController::class, 'edit_user'])->name('user-edit');
+    });
+    Route::group(['middleware' => ['role_or_permission:super-admin|users_delete']], function () {
+        Route::post('/user/delete', [UserController::class, 'delete'])->name('user-delete');
+    });
+
+    // Groups routes
+    Route::group(['middleware' => ['role_or_permission:super-admin|groups_add']], function () {
+        Route::get('/add/users/groups', [GroupsController::class, 'createUserGroup'])->name('user-create-group');
+        Route::post('/add/users/groups', [GroupsController::class, 'addUsersGroup'])->name('user-add-group');
+    });
+    Route::group(['middleware' => ['role_or_permission:super-admin|groups_edit|groups_view']], function () {
         Route::post('/get/group/{id}', [GroupsController::class, 'get_group'])->name('get-group-group');
         Route::post('/get/group_affiliation', [GroupsController::class, 'get_affiliations'])->name('get-group-affiliation');
         Route::post('/users/groups', [GroupsController::class, 'get_groups'])->name('get-groups');
         Route::post('/groups/users', [GroupsController::class, 'get_groups_members'])->name('groups-members');
-
     });
-    Route::group(['middleware' => ['role_or_permission:super-admin|users_edit']], function () {
-        Route::post('/user/edit', [UserController::class, 'edit_user'])->name('user-edit');
-
+    Route::group(['middleware' => ['role_or_permission:super-admin|groups_edit']], function () {
         Route::get('/edit/users/groups/{id}', [GroupsController::class, 'editUsersGroup'])->name('user-edit-group');
-        Route::post('/edit/users/groups', [GroupsController::class, 'updateUsersGroup'])->name('user-edit-group');
+        Route::post('/edit/users/groups', [GroupsController::class, 'updateUsersGroup']);
         Route::post('/user/groups/edit/permissions', [GroupsController::class, 'edit_groups_permissions'])->name('user-groups-permissions');
-
     });
-    Route::group(['middleware' => ['role_or_permission:super-admin|users_delete']], function () {
-        Route::post('/user/delete', [UserController::class, 'delete'])->name('user-delete');
+    Route::group(['middleware' => ['role_or_permission:super-admin|groups_delete']], function () {
+        Route::post('delete/users/groups', [GroupsController::class, 'delete'])->name('groups-delete');
     });
 
     // Committees routes
@@ -179,14 +186,14 @@ Route::middleware(['auth'])->group(function () {
 
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_edit|forms_view']], function () {
-        Route::post('/forms/form/{id}', [FormsController::class, 'get_form'])->name('forms-get');
+        Route::post('/forms/form/{id}', [FormsController::class, 'get_form']);
         Route::post('/form/content/{id}', [FormsController::class, 'get_content'])->name('forms-get-conetent');
         Route::post('/forms/users', [FormsController::class, 'get_forms_users'])->name('forms-get-users');
 
         Route::post('/workflow/create', [WorkflowController::class, 'create'])->name('workflow-create');
         Route::post('/forms/form/{id}/workflows', [WorkflowController::class, 'get'])->name('workflow-get');
         Route::post('/workflows/workflow/progress', [WorkflowController::class, 'getWorkflowProgress'])->name('workflow-get-progress');
-    
+
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_edit']], function () {
         Route::get('/form/edit/{id}', [FormsController::class, 'edit'])->name('form-edit');

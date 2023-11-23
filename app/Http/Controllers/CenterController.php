@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Center;
+
 class CenterController extends Controller
 {
     public function index()
@@ -52,9 +54,36 @@ class CenterController extends Controller
     }
     public function get_centers()
     {
-        $centers = Center::with('departments')->get();
+        if (auth()->user()->hasRole('super-admin')) {
+            $canEdit = true;
+            $canDelete = true;
+            $canAdd = true;
+            $centers = Center::get();
+        } else {
+            $authUser = auth()->user();
+            $canEdit = auth()->user()->can('centers_edit');
+            $canDelete = auth()->user()->can('centers_delete');
+            $canAdd = auth()->user()->can('centers_add');
 
-        return response()->json($centers, 200);
+            $groupsAff = $authUser->groups->pluck('affiliations')->map(function ($affiliations) {
+                $affiliationsArray = json_decode($affiliations, true);
+                return $affiliationsArray['centers'] ?? [];
+            })->flatten();
+
+            // Assuming $centers is the collection of all centers
+            $centers = Center::whereIn('id', $groupsAff->toArray())->with([
+                'departments' => function ($query) {
+                    $query->select('id', 'name');
+                }
+            ])->get();
+        }
+        $responseObject = [
+            'centers' => $centers,
+            'canEdit' => $canEdit,
+            'canDelete' => $canDelete,
+            'canAdd' => $canAdd,
+        ];
+        return response()->json($responseObject, 200);
     }
     public function get_center($id)
     {
@@ -76,7 +105,7 @@ class CenterController extends Controller
         $center->delete();
 
         return response()->json(['success' => true, 'message' => 'Center soft deleted successfully'], 200);
-    }    
+    }
     public function edit_center(Request $request)
     {
         $center = Center::find($request->id);

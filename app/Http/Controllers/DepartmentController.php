@@ -54,13 +54,35 @@ class DepartmentController extends Controller
     }
     public function get_departments()
     {
-        $departments = Department::with('colleges')->get();
+        if (auth()->user()->hasRole('super-admin')) {
+            $canEdit = true;
+            $canDelete = true;
+            $canAdd = true;
+            $departments = Department::get();
+        } else {
+            $authUser = auth()->user();
+            $canEdit = auth()->user()->can('departments_edit');
+            $canDelete = auth()->user()->can('departments_delete');
+            $canAdd = auth()->user()->can('departments_add');
 
-        $departments->each(function ($department) {
-            $department->comName = $department->colleges->name;
-        });
+            $groupsAff = $authUser->groups->pluck('affiliations')->map(function ($affiliations) {
+                $affiliationsArray = json_decode($affiliations, true);
+                return $affiliationsArray['departments'] ?? [];
+            })->flatten();
 
-        return response()->json($departments, 200);
+            $departments = Department::whereIn('id', $groupsAff->toArray())->with([
+                'colleges' => function ($query) {
+                    $query->select('id', 'name');
+                }
+            ])->get();
+        }
+        $responseObject = [
+            'departments' => $departments,
+            'canEdit' => $canEdit,
+            'canDelete' => $canDelete,
+            'canAdd' => $canAdd,
+        ];
+        return response()->json($responseObject, 200);
     }
     public function get_department($id)
     {

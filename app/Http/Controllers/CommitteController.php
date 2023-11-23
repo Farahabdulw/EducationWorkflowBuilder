@@ -55,18 +55,42 @@ class CommitteController extends Controller
     }
     public function get_committees()
     {
-        $committees = DB::table('committes')
-            ->join('users', 'committes.chairperson', '=', 'users.id')
-            ->select('committes.*', 'users.first_name', 'users.last_name')
-            ->whereNull('committes.deleted_at')
-            ->get();
-            
+        if (auth()->user()->hasRole('super-admin')) {
+            $canEdit = true;
+            $canDelete = true;
+            $canAdd = true;
+            $committees = Committe::query()
+                ->with([
+                    'chairpersonUser' => function ($query) {
+                        $query->select('id', 'first_name', 'last_name');
+                    }
+                ])->get();
+        } else {
+            $authUser = auth()->user();
+            $authUserRoles = $authUser->roles;
+            $canEdit = auth()->user()->can('committees_edit');
+            $canDelete = auth()->user()->can('committees_delete');
+            $canAdd = auth()->user()->can('committees_add');
 
-        foreach ($committees as $committee) {
-            $committee->chairpersonName = $committee->first_name . " " . $committee->last_name;
+            $groupsAff = $authUser->groups->pluck('affiliations')->map(function ($affiliations) {
+                $affiliationsArray = json_decode($affiliations, true);
+                return $affiliationsArray['committees'] ?? [];
+            })->flatten();
+
+            // Assuming $committees is the collection of all committees
+            $committees = Committe::whereIn('id', $groupsAff->toArray())->with([
+                'chairpersonUser' => function ($query) {
+                    $query->select('id', 'first_name', 'last_name');
+                }
+            ])->get();
         }
-
-        return response()->json($committees, 200);
+        $responseObject = [
+            'committees' => $committees,
+            'canEdit' => $canEdit,
+            'canDelete' => $canDelete,
+            'canAdd' => $canAdd,
+        ];
+        return response()->json($responseObject, 200);
     }
     public function get_committee($id)
     {

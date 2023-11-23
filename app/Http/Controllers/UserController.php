@@ -13,29 +13,20 @@ class UserController extends Controller
 {
     public function index()
     {
-        $user = auth()->user();
-        $usersGroups = $user->groups;
-        $permissions = [];
-        foreach ($usersGroups as $group) {
-            $groupPermissions = json_decode($group->permissions, true);
-
-            foreach ($groupPermissions as $resource => $actions) {
-                if (!isset($permissions[$resource])) {
-                    $permissions[$resource] = [];
-                }
-
-                // Merge actions without duplicates
-                $permissions[$resource] = array_unique(array_merge($permissions[$resource], $actions));
-            }
-        }
-
-        return view('content.pages.users', compact('permissions', 'usersGroups'));
+        if (auth()->user()->can('users_view'))
+            return view('content.pages.users');
+        else
+            return view('403');
     }
 
     public function addForm()
     {
+
         // Display the HTML form for adding a user
-        return view('content.pages.user-add');
+        if (auth()->user()->can('users_add'))
+            return view('content.pages.user-add');
+        else
+            return view('403');
     }
     public function createUser(Request $request)
     {
@@ -81,22 +72,80 @@ class UserController extends Controller
     }
     public function get_users()
     {
-        $users = User::all();
-
+        // $user = auth()->user()->roles;
+        $canEdit = false;
+        $canDelete = false;
+        $canAdd = false;
         $formattedUsers = [];
-        foreach ($users as $user) {
-            $birthdate = Carbon::parse($user->birthdate);
-            $age = $birthdate->age;
-            $formattedUser = [
-                'id' => $user->id,
-                'fname' => $user->first_name,
-                'email' => $user->email,
-                'lname' => $user->last_name,
-                'age' => $age,
-            ];
-            $formattedUsers[] = $formattedUser;
+        if (auth()->user()->hasRole('super-admin')) {
+            $canEdit = true;
+            $canDelete = true;
+            $canAdd = true;
+            $users = User::all();
+            foreach ($users as $user) {
+                $birthdate = Carbon::parse($user->birthdate);
+                $age = $birthdate->age;
+                $formattedUser = [
+                    'id' => $user->id,
+                    'fname' => $user->first_name,
+                    'email' => $user->email,
+                    'lname' => $user->last_name,
+                    'age' => $age,
+                    'can-edit' => true,
+                    'delete-edit' => true,
+                ];
+                $formattedUsers[] = $formattedUser;
+            }
+        } else {
+            // Get authenticated user's roles
+            $authUser = auth()->user();
+            $authUserRoles = $authUser->roles;
+            $canEdit = $authUserRoles->contains(function ($role) {
+                return $role->hasPermissionTo('users_edit');
+            });
+
+            $canDelete = $authUserRoles->contains(function ($role) {
+                return $role->hasPermissionTo('users_delete');
+            });
+
+            $canAdd = $authUserRoles->contains(function ($role) {
+                return $role->hasPermissionTo('users_add');
+            });
+
+            $users = User::role($authUserRoles)->get();
+
+            // Exclude the authenticated user from the list
+            $users = $users->reject(function ($user) use ($authUser) {
+                return $user->id === $authUser->id;
+            });
+
+
+            // Iterate through each user
+            foreach ($users as $user) {
+                // Calculate age using Carbon
+                $birthdate = Carbon::parse($user->birthdate);
+                $age = $birthdate->age;
+
+                // Build user information array
+                $userInfo = [
+                    'id' => $user->id,
+                    'fname' => $user->first_name,
+                    'email' => $user->email,
+                    'lname' => $user->last_name,
+                    'age' => $age,
+                ];
+
+                // Add user information to the formattedUsers array
+                $formattedUsers[] = $userInfo;
+            }
         }
-        return response()->json($formattedUsers, 200);
+        $responseObject = [
+            'users' => $formattedUsers,
+            'canEdit' => $canEdit,
+            'canDelete' => $canDelete,
+            'canAdd' => $canAdd,
+        ];
+        return response()->json($responseObject, 200);
     }
     public function get_user($id)
     {
