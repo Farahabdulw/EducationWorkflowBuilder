@@ -8,21 +8,21 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Crypt;
 
-class FormReceived extends Notification implements ShouldQueue
+class FormCompletion extends Notification implements ShouldQueue
 {
     use Queueable;
-    public $sender_id;
+    public $workflow;
     public $message;
-    public $formUrl;
+    public $workflowUrl;
     /**
      * Create a new notification instance.
      */
-    public function __construct($sender_id, $message, $form_id, $step_id)
+    public function __construct($workflow, $message)
     {
-        $this->sender_id = $sender_id;
+        $this->workflow = $workflow;
         $this->message = $message;
-        $encryptedStepId = Crypt::encryptString($step_id);
-        $this->formUrl = route('review-form', ['id' => $form_id, 'step_id' => $encryptedStepId]);
+        $this->workflowUrl = route('form-get', ['id' => $workflow->form->id]);
+        
     }
 
     /**
@@ -42,10 +42,10 @@ class FormReceived extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->from('workflow@example.com')
-            ->subject('Form arrival mail.')
-            ->greeting(sprintf('Hello !', $notifiable->first_name))
+            ->subject('Worlflow Completion mail.')
+            ->greeting('Hello ! Mr.'. $notifiable->last_name)
             ->line($this->message)
-            ->action('check the form at', $this->formUrl);
+            ->action('check its log and progress at', $this->workflowUrl);
     }
 
     /**
@@ -56,11 +56,10 @@ class FormReceived extends Notification implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         return [
-            'sender_id' => $this->sender_id,
-            'Sname' => $notifiable->first_name . " " . $notifiable->last_name,
-            'url' => $this->formUrl,
+            'Sname' => 'System',
             'body' => $this->message,
-            'header' => "Form Received",
+            'header' => "Workflow Over",
+            'url' => $this->workflowUrl,
         ];
     }
 }

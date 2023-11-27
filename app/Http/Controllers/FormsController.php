@@ -41,9 +41,48 @@ class FormsController extends Controller
         $step = Step::find($step_id);
         $form_id = $step->workflow->forms_id;
         if ($step)
-            if ($step->user->id === auth()->user()->id)
-                return view('content.pages.forms.review', compact('form_id'));
-            else
+            if ($step->user->id === auth()->user()->id) {
+                $status = 0; // Default status
+                switch ($step->status) {
+                    case 0:
+                    case 2:
+                    case 3:
+                        $status = 1;
+                        break;
+                    case 1:
+                        $status = 0;
+                        break;
+                    case 4:
+                        $nextStep = $step->workflow->steps()->where('step', '>', $step->step)->orderBy('step')->first();
+
+                        if ($nextStep && in_array($nextStep->status, [0, 1, 3])) {
+                            $status = 1;
+                        }
+                        break;
+                }
+                $forwarded = $step->forwarded_from ? true : false;
+                $firstStep = $step->workflow->steps()
+                    ->orderBy('step')
+                    ->first();
+                $isFirstStep = ($step->id === $firstStep->id);
+
+
+                $returnReason = null;
+
+                $prevSteps = Step::where('workflow_id', $step->workflow_id)
+                    ->where('step', $step->step - 1)
+                    ->where('status', 5)
+                    ->get();
+
+                if ($prevSteps->count() > 0) {
+                    // Get the return reason from the latest returned step for the same user
+                    $returnReason = $prevSteps->last()->review;
+                }
+
+
+                return view('content.pages.forms.review', compact('form_id', 'status', 'forwarded', 'isFirstStep', 'returnReason'));
+
+            } else
                 return view('403');
 
     }
@@ -72,38 +111,44 @@ class FormsController extends Controller
         }
 
         $step = Step::find($step_id);
-        if ($step) {
-            $workflow = $step->workflow;
-            // Retrieve all steps with status 1 or 2 for the same workflow
-            $steps = Step::with(['workflow.form.creator', 'user'])
-                ->where('workflow_id', $workflow->id)
-                ->whereIn('status', [1, 2])
-                ->get();
-            $progress = $steps->map(function ($step) {
-                return [
-                    'id' => $step->id,
-                    'created_at' => $step->created_at,
-                    'workflow_id' => $step->workflow_id,
-                    'user' => [
-                        'id' => $step->user->id,
-                        'first_name' => $step->user->first_name,
-                        'last_name' => $step->user->last_name,
-                    ],
-                    'workflow' => [
-                        'id' => $step->workflow->id,
-                        'form' => [
-                            'id' => $step->workflow->form->id,
-                            'creator' => [
-                                'id' => $step->workflow->form->creator->id,
-                                'first_name' => $step->workflow->form->creator->first_name,
-                                'last_name' => $step->workflow->form->creator->last_name,
+        if ($step)
+            if ($step->user->id === auth()->user()->id) {
+                $workflow = $step->workflow;
+                $steps = Step::with(['workflow.form.creator', 'user'])
+                    ->where('workflow_id', $workflow->id)
+                    ->whereIn('status', [1, 2])
+                    ->orderBy('step')
+                    ->get();
+                $progress = $steps->map(function ($step) {
+                    return [
+                        'id' => $step->id,
+                        'status' => $step->status,
+                        'review' => $step->review,
+                        'forwarded_from' => $step->forwarded_from,
+                        'created_at' => $step->created_at,
+                        'workflow_id' => $step->workflow_id,
+                        'user' => [
+                            'id' => $step->user->id,
+                            'first_name' => $step->user->first_name,
+                            'last_name' => $step->user->last_name,
+                        ],
+                        'workflow' => [
+                            'id' => $step->workflow->id,
+                            'form' => [
+                                'id' => $step->workflow->form->id,
+                                'creator' => [
+                                    'id' => $step->workflow->form->creator->id,
+                                    'first_name' => $step->workflow->form->creator->first_name,
+                                    'last_name' => $step->workflow->form->creator->last_name,
+                                ],
                             ],
                         ],
-                    ],
-                ];
-            });
-            return response()->json($progress, 200);
-        } else
+                    ];
+                });
+                return response()->json($progress, 200);
+            } else
+                return view('403');
+        else
             // If the step doesn't exist, return an appropriate response
             return response()->json(['error' => 'Step not found'], 404);
     }
@@ -170,7 +215,7 @@ class FormsController extends Controller
             $canEdit = true;
             $canDelete = true;
             $canAdd = true;
-            $forms = Forms::get();
+            $forms = Forms::with('categories')->get();
         } else {
             $authUser = auth()->user();
             $canEdit = auth()->user()->can('forms_edit');

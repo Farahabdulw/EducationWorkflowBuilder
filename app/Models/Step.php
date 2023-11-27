@@ -14,6 +14,7 @@ class Step extends Model
         'workflow_id',
         'user_id',
         'step',
+        'isReturened',
         'status',
         'review',
         'forwarded_from',

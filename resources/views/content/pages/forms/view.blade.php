@@ -66,6 +66,7 @@
             <table class="datatables-workflows table">
                 <thead class="table-light" id="forms-head">
                     <tr>
+                        <th >id</th>
                         <th class="shrink"></th>
                         <th>Created By</th>
                         <th>Created At</th>

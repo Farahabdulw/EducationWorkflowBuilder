@@ -87,11 +87,13 @@
                 @forelse (auth()->user()->unreadnotifications as $notification)
                     <li class="list-group-item list-group-item-action dropdown-notifications-item py-1">
                         <div class="d-flex p-2">
-                            <button class="notification-anchor btn text-start" data-href={{ $notification->data['url'] }} data-notfiid ={{$notification->id}}>
+                            <button class="notification-anchor btn text-start"
+                                data-href={{ $notification->data['url'] }} data-notfiid={{ $notification->id }}>
                                 <div class="flex-grow-1">
                                     <h6 class="mb-1">{{ $notification->data['header'] }}</h6>
                                     <p class="mb-0">{{ $notification->data['body'] }}</p>
-                                    <small class="text-muted ms-1">{{ $notification->created_at->diffForHumans() }}</small>
+                                    <small
+                                        class="text-muted ms-1">{{ $notification->created_at->diffForHumans() }}</small>
                                 </div>
                                 <div class="flex-shrink-0 dropdown-notifications-actions">
                                     <a href="javascript:void(0)" class="dropdown-notifications-read"><span
@@ -153,10 +155,8 @@
                             </div>
                             <div class="flex-grow-1">
                                 <span class="fw-medium d-block">
-                                    @if (Auth::check())
-                                        {{ Auth::user()->name }}
-                                    @else
-                                        John Doe
+                                    @if (auth())
+                                        {{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}
                                     @endif
                                 </span>
                                 <small class="text-muted">Admin</small>
@@ -164,16 +164,16 @@
                         </div>
                     </a>
                 </li>
-                <li>
+                {{-- <li>
                     <div class="dropdown-divider"></div>
-                </li>
-                <li>
+                </li> --}}
+                {{-- <li>
                     <a class="dropdown-item"
                         href="{{ Route::has('profile.show') ? route('profile.show') : 'javascript:void(0);' }}">
                         <i class="ti ti-user-check me-2 ti-sm"></i>
                         <span class="align-middle">My Profile</span>
                     </a>
-                </li>
+                </li> --}}
                 {{-- @if (Auth::check() && Laravel\Jetstream\Jetstream::hasApiFeatures())
                     <li>
                         <a class="dropdown-item" href="{{ route('api-tokens.index') }}">
@@ -182,16 +182,7 @@
                         </a>
                     </li>
                 @endif --}}
-                <li>
-                    <a class="dropdown-item" href="javascript:void(0);">
-                        <span class="d-flex align-items-center align-middle">
-                            <i class="flex-shrink-0 ti ti-credit-card me-2 ti-sm"></i>
-                            <span class="flex-grow-1 align-middle">Billing</span>
-                            <span
-                                class="flex-shrink-0 badge badge-center rounded-pill bg-label-danger w-px-20 h-px-20">2</span>
-                        </span>
-                    </a>
-                </li>
+
                 {{-- @if (Auth::User() && Laravel\Jetstream\Jetstream::hasTeamFeatures())
                     <li>
                         <div class="dropdown-divider"></div>

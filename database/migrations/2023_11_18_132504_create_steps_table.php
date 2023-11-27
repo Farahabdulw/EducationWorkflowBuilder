@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->unsignedInteger('step');
             $table->text('review')->nullable();
             $table->tinyInteger('status');
+            $table->tinyInteger('isReturened');
             $table->unsignedInteger('forwarded_from')->nullable();
             $table->timestamps();
         });

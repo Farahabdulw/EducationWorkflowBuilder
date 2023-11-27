@@ -178,6 +178,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/forms/categories', [FormsController::class, 'get_category'])->name('forms-get-category');
         Route::get('/forms/review/form/{id}/{step_id}', [FormsController::class, 'review_form'])->name('review-form');
         Route::post('/forms/review/progress/{id}', [FormsController::class, 'review_form_progress'])->name('progress-review-form');
+
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_add']], function () {
         Route::get('/form/add', [FormsController::class, 'create'])->name('forms-create');
@@ -193,7 +194,13 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/workflow/create', [WorkflowController::class, 'create'])->name('workflow-create');
         Route::post('/forms/form/{id}/workflows', [WorkflowController::class, 'get'])->name('workflow-get');
         Route::post('/workflows/workflow/progress', [WorkflowController::class, 'getWorkflowProgress'])->name('workflow-get-progress');
-
+        Route::post('workflows/members', [WorkflowController::class, 'getWorkflowMembers'])->name('workflow-get-members');
+        Route::post('/forms/review/approve', [WorkflowController::class, 'form_approve'])->name('form-approve');
+        Route::post('/forms/review/reject', [WorkflowController::class, 'form_reject'])->name('form-reject');
+        Route::post('/forms/review/forward', [WorkflowController::class, 'form_forward'])->name('form-forward');
+        Route::post('/forms/review/return', [WorkflowController::class, 'form_return'])->name('form-return');
+        Route::post('/forms/form/workflow/{id}', [WorkflowController::class, 'get_workflow'])->name('form-workflow');
+        // forms/review/approve /forms/form/workflow/{$workflow->id}
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_edit']], function () {
         Route::get('/form/edit/{id}', [FormsController::class, 'edit'])->name('form-edit');
