@@ -40,6 +40,17 @@
 @endsection
 
 @section('content')
+    <nav aria-label="breadcrumb">
+        @if (Str::contains(url()->previous(), 'edit'))
+            @php
+                preg_match('/edit\/(\d+)/', url()->previous(), $matches);
+                $formId = isset($matches[1]) ? $matches[1] : null;
+            @endphp
+            {{ Breadcrumbs::render('add-category-from-edit-form', $formId) }}
+        @else
+            {{ Breadcrumbs::render('add-category-from-add-form') }}
+        @endif
+    </nav>
     <div class="card">
         <div class="card-header">
             <h5>Form Categories</h5>
@@ -69,6 +80,7 @@
                     <thead>
                         <tr>
                             <th>Category</th>
+                            <th>Auction</th>
                         </tr>
                     </thead>
                     <tbody>

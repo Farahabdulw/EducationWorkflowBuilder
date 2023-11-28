@@ -17,6 +17,7 @@ class Workflow extends Model
     protected $fillable = [
         'forms_id',
         'created_by',
+        'affiliations',
         'status',
     ];
     public function form()

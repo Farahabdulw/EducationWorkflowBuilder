@@ -25,6 +25,8 @@
 @endsection
 
 @section('content')
+    {{ Breadcrumbs::render('departments') }}
+
     <div class="card">
         <table class="datatables-departments table">
             <thead class="table-light">

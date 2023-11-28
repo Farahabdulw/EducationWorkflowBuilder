@@ -43,14 +43,14 @@
             <div class="card invoice-preview-card mb-4">
                 <div class="card-body">
                     <div
-                        class="d-flex justify-content-between flex-xl-row flex-md-column flex-sm-row flex-column m-sm-3 m-0">
+                        class=" d-flex justify-content-between flex-xl-row flex-md-column flex-sm-row flex-column m-sm-3 m-0">
                         <div class="mb-xl-0 mb-4">
                             <div class="d-flex svg-illustration mb-2 gap-2 align-items-center">
                                 <span class="form-title fw-bold fs-4">
 
                                 </span>
                             </div>
-                            <p class="mb-0 form-creator"></p>
+                            <span>Form Owner:</span><p class="mb-0 form-creator"></p>
                         </div>
                         <div>
                             <h4 class="fw-medium mb-2 form-number"></h4>

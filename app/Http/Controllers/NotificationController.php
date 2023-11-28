@@ -18,4 +18,8 @@ class NotificationController extends Controller
         return response()->json(['message' => 'Notification marked as read'], 200);
 
     }
+    public function index()
+    {
+        return view('content.pages.notifications');
+    }
 }

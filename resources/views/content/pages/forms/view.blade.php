@@ -37,6 +37,12 @@
 @endsection
 
 @section('content')
+
+    <nav aria-label="breadcrumb">
+
+        {{ Breadcrumbs::render('view-form', $formId) }}
+    </nav>
+
     <div class="card" id="savedForm">
         <div class="card-header">
             <h5>View Form</h5>
@@ -54,7 +60,7 @@
                 @endforeach
             </div>
         </div>
-        <div id="fb-render" data-form="{{ $form->content }}" class="px-4 pb-5 pt-0">
+        <div id="fb-render" data-form="{{ $form->content }}" class="row row-bordered px-4 pb-5 pt-0">
         </div>
     </div>
 
@@ -66,18 +72,19 @@
             <table class="datatables-workflows table">
                 <thead class="table-light" id="forms-head">
                     <tr>
-                        <th >id</th>
-                        <th class="shrink"></th>
+                        <th>ID</th>
                         <th>Created By</th>
                         <th>Created At</th>
+                        <th>Affiliations</th>
                         <th>Status</th>
+                        <th>auction</th>
                     </tr>
                 </thead>
             </table>
         </div>
     </div>
-    <div class="modal fade overflow-auto" id="view-workflow-progress" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"
-        aria-hidden="true">
+    <div class="modal fade overflow-auto" id="view-workflow-progress" tabindex="-1" role="dialog"
+        aria-labelledby="modalTitleId" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">

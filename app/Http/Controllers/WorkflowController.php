@@ -20,10 +20,12 @@ class WorkflowController extends Controller
         $users = $request->users;
         $form_id = $request->form;
         $sender_id = $request->sender_id;
+        $affiliations = $request->affiliations;
         $workflow = Workflow::create([
             "forms_id" => $form_id,
             "status" => 0, // 0 => pending , 1 => in progress , 2 => completed/over
             "created_by" => $sender_id,
+            "affiliations" => $affiliations,
         ]);
 
         foreach ($users as $index => $user) {

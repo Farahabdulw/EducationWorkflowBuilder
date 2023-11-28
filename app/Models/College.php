@@ -13,17 +13,17 @@ use App\Models\Department;
 class College extends Model
 {
     use HasFactory, SoftDeletes;
-    public function committee():BelongsTo
-    {
-        return $this->belongsTo(Committe::class ,'committee_id');
-    }
+    // public function committee():BelongsTo
+    // {
+    //     return $this->belongsTo(Committe::class ,'committee_id');
+    // }
     public function departments():HasMany
     {
         return $this->hasMany(Department::class);
     }
     protected $fillable = [
         'name',
-        'committee_id',
+        // 'committee_id',
         'description',
     ];
 }

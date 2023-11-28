@@ -18,7 +18,6 @@ class UserController extends Controller
         else
             return view('403');
     }
-
     public function addForm()
     {
 
@@ -34,6 +33,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'fname' => 'required',
             'lname' => 'required',
+            'uni_id' => 'required',
             'birthdate' => 'required|date',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
@@ -53,6 +53,7 @@ class UserController extends Controller
         $user = User::create([
             'first_name' => $request->get('fname'),
             'last_name' => $request->get('lname'),
+            'uni_id' => $request->get('uni_id'),
             'email' => $request->get('email'),
             'password' => bcrypt($request->get('password')),
             'birthdate' => $request->get('birthdate'),
@@ -89,6 +90,7 @@ class UserController extends Controller
                     'id' => $user->id,
                     'fname' => $user->first_name,
                     'email' => $user->email,
+                    'uni_id' => $user->uni_id,
                     'lname' => $user->last_name,
                     'age' => $age,
                     'can-edit' => true,
@@ -130,6 +132,7 @@ class UserController extends Controller
                 $userInfo = [
                     'id' => $user->id,
                     'fname' => $user->first_name,
+                    'uni_id' => $user->uni_id,
                     'email' => $user->email,
                     'lname' => $user->last_name,
                     'age' => $age,
@@ -160,6 +163,7 @@ class UserController extends Controller
             'fname' => $user->first_name,
             'email' => $user->email,
             'lname' => $user->last_name,
+            'uni_id' => $user->uni_id,
             'birthdate' => $user->birthdate,
         ];
 
@@ -175,6 +179,7 @@ class UserController extends Controller
 
         $user->first_name = $request->fname;
         $user->last_name = $request->lname;
+        $user->uni_id = $request->uni_id;
         $user->email = $request->email;
         $user->birthdate = $request->birthdate;
         $user->save();

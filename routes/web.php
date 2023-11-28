@@ -6,10 +6,12 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\CenterController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\CommitteController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\WorkflowController;
+use App\Http\Controllers\RequestController;
 use App\Http\Controllers\NotificationController;
 
 use App\Http\Controllers\authentications\LoginBasic;
@@ -170,6 +172,28 @@ Route::middleware(['auth'])->group(function () {
     });
     // END of functionality of centers
 
+    // Courses UI Routes
+    Route::group(['middleware' => ['role_or_permission:super-admin|courses_view']], function () {
+        Route::get('/courses', [CourseController::class, 'index'])->name('courses-list');
+        Route::post('/courses', [CourseController::class, 'get_courses'])->name('courses-get');
+    });
+    Route::group(['middleware' => ['role_or_permission:super-admin|courses_add']], function () {
+        Route::get('/course/add', [CourseController::class, 'create'])->name('courses-add');
+        Route::post('/course/add', [CourseController::class, 'add_course'])->name('courses-addCollege');
+    });
+    Route::group(['middleware' => ['role_or_permission:super-admin|courses_edit|courses_view']], function () {
+        Route::get('/course/{id}', [CourseController::class, 'get_course'])->name('course-get');
+    });
+    Route::group(['middleware' => ['role_or_permission:super-admin|courses_edit']], function () {
+        Route::post('/course/edit', [CourseController::class, 'edit_course'])->name('course-edit');
+
+    });
+    Route::group(['middleware' => ['role_or_permission:super-admin|courses_delete']], function () {
+        Route::post('/course/delete', [CourseController::class, 'delete'])->name('course-delete');
+
+    });
+    // END of functionality of courses
+
     // Forms UI Routes
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_view']], function () {
         Route::get('/forms', [FormsController::class, 'index'])->name('forms');
@@ -207,11 +231,25 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/form/update', [FormsController::class, 'update'])->name('form-update');
         Route::get('/forms/add/category', [FormsController::class, 'create_category'])->name('forms-create-category');
         Route::post('/forms/add/category', [FormsController::class, 'add_category'])->name('forms-add-category');
+        Route::post('/forms/edit/category/{id}', [FormsController::class, 'edit_category'])->name('forms-edit-category');
+        Route::post('/forms/delete/category/{id}', [FormsController::class, 'delete_category'])->name('forms-delete-category');
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_delete']], function () {
         Route::post('/form/delete', [FormsController::class, 'delete'])->name('form-delete');
     });
 
+    Route::group(['middleware' => ['role:super-admin']], function () {
+        Route::get('/requests', [RequestController::class, 'index'])->name('requests');
+        Route::post('/requests', [RequestController::class, 'getAll'])->name('get-all-request');
+        Route::post('/requests/filters', [RequestController::class, 'filters'])->name('requests');
+        Route::post('/requests/filtered', [RequestController::class, 'filtered'])->name('filtered');
+
+
+
+    });
+
+
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
     Route::post('/notification/read/{notif_id}', [NotificationController::class, 'read'])->name('read-notification');
 
 

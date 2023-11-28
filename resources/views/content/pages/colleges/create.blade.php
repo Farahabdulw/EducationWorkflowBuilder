@@ -32,6 +32,8 @@
 @endsection
 
 @section('content')
+    {{ Breadcrumbs::render('add-college') }}
+
     <div class="card">
         <div class="card-header">
             <h5>Add a new College</h5>
@@ -46,11 +48,11 @@
                 </div>
             </div>
 
-            <div class="col-md-7 col-lg-7 col-sm-12">
+            {{-- <div class="col-md-7 col-lg-7 col-sm-12">
                 <label for="committees" class="form-labelx">Committee*</label>
                 <select class="js-example-basic-single" id="committees" name="state">
                 </select>
-            </div>
+            </div> --}}
 
             <div class="col-md-7 col-lg-7 col-sm-12">
                 <label for="description" class="form-label">Description*</label>

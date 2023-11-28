@@ -32,6 +32,8 @@
 @endsection
 
 @section('content')
+    {{ Breadcrumbs::render('add-user') }}
+
     <div class="card">
         <div class="card-header">
             <h5>Create a new user</h5>
@@ -59,12 +61,17 @@
             <div class="col-md-7 col-lg-7 col-sm-12">
                 <label class="form-label" for="birthdate">Birth Date</label>
                 <input type="date" id="birthdate" class="form-control dob-picker flatpickr-input active"
-                    placeholder="YYYY-MM-DD" value="2000-01-01">
+                    placeholder="YYYY-MM-DD" value="2000-01-01" required>
+            </div>
+            <div class="col-md-7 col-lg-7 col-sm-12">
+                <label class="form-label" for="uni_id">Student ID</label>
+                <input type="text" id="uni_id" class="form-control dob-picker flatpickr-input active" required
+                    placeholder="Abc1231323">
             </div>
 
             <div class="col-md-7 col-sm-12">
                 <label for="groups" class="form-label">Groups</label>
-                <select class="js-example-basic-multiple" id="groups" multiple="multiple">
+                <select class="js-example-basic-multiple" id="groups" multiple="multiple" required>
                 </select>
             </div>
 
@@ -75,7 +82,8 @@
                         <input type="password" class="form-control" id="password1"
                             placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                             aria-describedby="password1" required>
-                        <span class="input-group-text cursor-pointer" id="password1"><i class="ti ti-eye-off"></i></span>
+                        <span class="input-group-text cursor-pointer" id="password1"><i
+                                class="ti ti-eye-off togglePassword"></i></span>
                     </div>
                 </div>
 
@@ -85,7 +93,8 @@
                         <input type="password" class="form-control" id="password2"
                             placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                             aria-describedby="password2" required>
-                        <span class="input-group-text cursor-pointer" id="password2"><i class="ti ti-eye-off"></i></span>
+                        <span class="input-group-text cursor-pointer" id="password2"><i
+                                class="ti ti-eye-off togglePassword"></i></span>
                     </div>
                 </div>
             </div>

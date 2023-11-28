@@ -31,10 +31,22 @@
       "url": "/departments"
     },
     {
+      "name": "Courses",
+      "icon": "menu-icon tf-icons ti ti-vocabulary",
+      "slug": "courses",
+      "url": "/courses"
+    },
+    {
       "name": "Centers",
       "icon": "menu-icon tf-icons ti ti-building-fortress",
       "slug": "centers",
       "url": "/centers"
+    },
+    {
+      "name": "Requests",
+      "icon": "menu-icon tf-icons ti ti-folder-down ",
+      "slug": "requests",
+      "url": "/requests"
     },
     {
       "name": "Forms",
@@ -42,5 +54,6 @@
       "slug": "forms",
       "url": "/forms"
     }
+
   ]
 }

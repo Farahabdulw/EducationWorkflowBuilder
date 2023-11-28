@@ -44,15 +44,26 @@
 @endsection
 
 @section('content')
+    <nav aria-label="breadcrumb">
+        @if (Str::contains(url()->current(), 'edit'))
+            @php
+                preg_match('/edit\/(\d+)/', url()->current(), $matches);
+                $formId = isset($matches[1]) ? $matches[1] : null;
+            @endphp
+            {{ Breadcrumbs::render('edit-form', $formId) }}
+        @else
+            {{ Breadcrumbs::render('add-form') }}
+        @endif
+    </nav>
     <div class="card collapse show " id="savedForm">
-        <div class="card-header">
+        <div class="card-header page-header">
             <h5>Create a new Form</h5>
         </div>
         <div class="card-body row browser-default-validation d-flex align-items-end">
 
             <div class="col-md-5 col-sm-12 mb-4">
                 <label for="title" class="form-label">Form Title</label>
-                <input type="title" class="form-control" id="title" placeholder="Vication" required="">
+                <input type="title" class="form-control" id="title" placeholder="Vacation" required="">
             </div>
 
             <div class="col-md-5 col-sm-12 mb-4" data-select2-id="45">
@@ -100,7 +111,8 @@
                     <input name='tags' id="TagifyUserList" class='form-control'>
                 </div>
                 <div class="col-6 col-sm-12">
-                    <button type="submit" class="btn btn-primary waves-effect waves-light" id="WorkflowUsers">Start the Workflow</button>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light" id="WorkflowUsers">Start the
+                        Workflow</button>
                 </div>
             </div>
         </div>

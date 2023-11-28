@@ -28,6 +28,8 @@
 @endsection
 
 @section('content')
+{{ Breadcrumbs::render('centers') }}
+
     <div class="card">
         <table class="datatables-centers table">
             <thead class="table-light">

@@ -32,6 +32,8 @@
 @endsection
 
 @section('content')
+{{ Breadcrumbs::render('add-office') }}
+
     <div class="card">
         <div class="card-header">
             <h5>Add a new Office</h5>

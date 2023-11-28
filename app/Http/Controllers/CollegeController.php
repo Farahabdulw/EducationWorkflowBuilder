@@ -22,7 +22,7 @@ class CollegeController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'committee' => 'required',
+            // 'committee' => 'required',
             'description' => 'max:255',
         ]);
 
@@ -37,7 +37,7 @@ class CollegeController extends Controller
         // Create a new college record in the database
         $college = College::create([
             'name' => $request->get('name'),
-            'committee_id' => $request->get('committee'),
+            // 'committee_id' => $request->get('committee'),
             'description' => $request->get('description'),
         ]);
 
@@ -69,11 +69,13 @@ class CollegeController extends Controller
             })->flatten();
 
             // Assuming $colleges is the collection of all colleges
-            $colleges = College::whereIn('id', $groupsAff->toArray())->with([
-                'committee' => function ($query) {
-                    $query->select('id', 'name');
-                }
-            ])->get();
+            $colleges = College::whereIn('id', $groupsAff->toArray())
+            // ->with([
+            //     'committee' => function ($query) {
+            //         $query->select('id', 'name');
+            //     }
+            // ])
+            ->get();
         }
         $responseObject = [
             'colleges' => $colleges,
@@ -113,7 +115,7 @@ class CollegeController extends Controller
             return response()->json(['error' => 'college not found'], 404);
 
         $college->name = $request->name;
-        $college->committee_id = $request->committee_id;
+        // $college->committee_id = $request->committee_id;
         $college->description = $request->description;
         $college->save();
 

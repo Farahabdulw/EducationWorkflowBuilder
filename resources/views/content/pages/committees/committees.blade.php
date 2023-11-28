@@ -29,6 +29,8 @@
 @endsection
 
 @section('content')
+    {{ Breadcrumbs::render('committees') }}
+
     <div class="card">
         <table class="datatables-committees table">
             <thead class="table-light">

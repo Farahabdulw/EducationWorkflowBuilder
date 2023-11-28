@@ -30,6 +30,8 @@
 @endsection
 
 @section('content')
+{{ Breadcrumbs::render('add-committee') }}
+
     <div class="card">
         <div class="card-header">
             <h5>Add a new Committee</h5>

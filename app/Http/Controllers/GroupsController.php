@@ -9,6 +9,7 @@ use App\Models\Center;
 use App\Models\College;
 use App\Models\Office;
 use App\Models\Committe;
+use App\Models\Course;
 use App\Models\User;
 use App\Models\Groups;
 use Spatie\Permission\Models\Role;
@@ -38,6 +39,7 @@ class GroupsController extends Controller
         $data->affiliations->departments = Department::select('id', 'name')->get();
         $data->affiliations->colleges = College::select('id', 'name')->get();
         $data->affiliations->offices = Office::select('id', 'name')->get();
+        $data->affiliations->courses = Course::select('id', 'name')->get();
 
         return response()->json($data, 200);
     }

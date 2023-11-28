@@ -97,7 +97,7 @@ class FormsController extends Controller
         $userRoles = auth()->user()->roles->pluck('name')->toArray();
 
         if (auth()->user()->hasRole($userRoles)) {
-            return view('content.pages.forms.view', ['form' => $form]);
+            return view('content.pages.forms.view', ['form' => $form, 'formId' => $form->id]);
         } else {
             return view('403');
         }
@@ -156,6 +156,27 @@ class FormsController extends Controller
     {
         $categories = Category::get();
         return response()->json($categories, 200);
+    }
+    public function edit_category($id, Request $request)
+    {
+        $category = Category::find($id);
+        if ($category) {
+            $category->name = $request->name;
+            $category->save();
+            return response()->json($category, 200);
+        }
+        return response()->json(['error' => 'category not found'], 404);
+
+    }
+    public function delete_category($id)
+    {
+        $category = Category::find($id);
+        if ($category) {
+            $category->delete();
+            return response()->json(['message' => 'Category deleted successfully'], 200);
+        }
+        return response()->json(['error' => 'category not found'], 404);
+
     }
     public function add_category(Request $request)
     {

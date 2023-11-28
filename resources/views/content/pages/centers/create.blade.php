@@ -32,6 +32,8 @@
 @endsection
 
 @section('content')
+{{ Breadcrumbs::render('add-center') }}
+
     <div class="card">
         <div class="card-header">
             <h5>Add a new Center</h5>

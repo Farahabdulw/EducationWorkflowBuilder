@@ -25,13 +25,15 @@
 @endsection
 
 @section('content')
+{{ Breadcrumbs::render('colleges') }}
+
     <div class="card">
         <table class="datatables-colleges table">
             <thead class="table-light">
                 <tr>
                     <th></th>
                     <th>COLLEGE NAME</th>
-                    <th>COMMITTE NAME</th>
+                    {{-- <th>COMMITTE NAME</th> --}}
                     <th>ACTIONS</th>
                 </tr>
             </thead>
@@ -61,13 +63,13 @@
                                     </div>
                                 </div>
 
-                                <div class="col-12 col-md-6 fv-plugins-icon-container">
+                                {{-- <div class="col-12 col-md-6 fv-plugins-icon-container">
                                     <label for="modalEditCollegeCommiteeName" class="form-label">Commitee Name</label>
                                     <select class="form-select" id="modalEditCollegeCommiteeName"
                                         aria-label="Default select example">
                                     </select>
                                 </div>
-
+ --}}
 
                                 <div class="col-12 fv-plugins-icon-container">
                                     <label class="form-label" for="modalEditCollegeDescription">Description</label>
