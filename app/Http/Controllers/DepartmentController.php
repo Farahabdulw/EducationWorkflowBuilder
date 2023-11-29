@@ -58,7 +58,7 @@ class DepartmentController extends Controller
             $canEdit = true;
             $canDelete = true;
             $canAdd = true;
-            $departments = Department::get();
+            $departments = Department::with('colleges')->get();
         } else {
             $authUser = auth()->user();
             $canEdit = auth()->user()->can('departments_edit');

@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+
 @endsection
 
 @section('page-style')
@@ -18,6 +20,8 @@
 
 @section('vendor-script')
     <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+
 @endsection
 
 @section('page-script')
@@ -28,16 +32,18 @@
     {{ Breadcrumbs::render('departments') }}
 
     <div class="card">
-        <table class="datatables-departments table">
-            <thead class="table-light">
-                <tr>
-                    <th></th>
-                    <th>DEPARTMENT NAME</th>
-                    <th>COLLEGE NAME</th>
-                    <th>ACTIONS</th>
-                </tr>
-            </thead>
-        </table>
+        <div class="table-responsive">
+            <table class="datatables-departments table">
+                <thead class="table-light">
+                    <tr>
+                        <th></th>
+                        <th>DEPARTMENT NAME</th>
+                        <th>COLLEGE NAME</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
     <div class="modal fade" id="edit-department" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"
         aria-hidden="true">
@@ -101,29 +107,5 @@
         </div>
     </div>
 
-    <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="modal-body">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            <div class="text-center mb-4">
-                                <h3 class="mb-2">Confirm Department Delete</h3>
-                            </div>
-                            <form id="deleteDepartmentForm" class="col-6 col-sm-12">
-                                <div class="col-12 text-center">
-                                    <button type="submit"
-                                        class="btn btn-primary me-sm-3 me-1 waves-effect waves-light">Confirm</button>
-                                    <button type="reset" class="btn btn-label-secondary waves-effect"
-                                        data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
 @endsection

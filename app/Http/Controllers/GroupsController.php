@@ -39,7 +39,7 @@ class GroupsController extends Controller
         $data->affiliations->departments = Department::select('id', 'name')->get();
         $data->affiliations->colleges = College::select('id', 'name')->get();
         $data->affiliations->offices = Office::select('id', 'name')->get();
-        $data->affiliations->courses = Course::select('id', 'name')->get();
+        $data->affiliations->courses = Course::select('id', 'title AS name')->get();
 
         return response()->json($data, 200);
     }
@@ -198,7 +198,6 @@ class GroupsController extends Controller
         }
         return response()->json(['success' => true, 'message' => 'Group has been updated successfully'], 200);
     }
-
     public function edit_groups_permissions(Request $request)
     {
         $group = Groups::find($request->id);
@@ -248,5 +247,23 @@ class GroupsController extends Controller
         }
 
         return response()->json(['success' => true, 'message' => 'Groups permissions updated successfully'], 200);
+    }
+    public function delete(Request $request)
+    {
+        if (auth()->user()->can('groups_delete')) {
+            $group = Groups::find($request->id);
+
+            if ($group) {
+                $roleName = $group->name;
+                $group->delete();
+                $role = Spatie\Permission\Models\Role::where('name', $roleName)->first();
+
+                if ($role)
+                    $role->delete();
+            }
+            return response()->json(200);
+
+        }
+        return response()->json(403);
     }
 }

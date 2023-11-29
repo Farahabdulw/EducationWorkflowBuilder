@@ -19,13 +19,28 @@ class RequestController extends Controller
     }
     public function getAll()
     {
-        $workflows = Workflow::query()
-            ->with([
-                'creator' => function ($query) {
-                    $query->select('id', 'first_name', 'last_name');
-                }
-            ])->get();
-        return response()->json($workflows, 200);
+        $user = auth()->user();
+        if ($user->hasRole('super-admin')) {
+            $workflows = Workflow::query()
+                ->with([
+                    'creator' => function ($query) {
+                        $query->select('id', 'first_name', 'last_name');
+                    }
+                ])->get();
+        } else {
+            if ($user->can('forms_view')) {
+
+                $workflows = Workflow::where('created_by', $user->id)
+                    ->orWhereHas('creator', function ($query) use ($user) {
+                        $query->role($user->roles);
+                    })
+                    ->with(['creator:id,first_name,last_name'])
+                    ->get();
+                return response()->json($workflows, 200);
+            } else
+
+                return response()->json(403);
+        }
     }
     public function filters()
     {
@@ -36,9 +51,34 @@ class RequestController extends Controller
         $filters['Departments'] = Department::select('id', 'name')->get();
         $filters['Centers'] = Center::select('id', 'name')->get();
         return response()->json($filters, 200);
-
     }
-    public function filtered(Request $request){
+    public function filtered(Request $request)
+    {
+        $data = $request->selection;
+        $entity = $data['entity'];
+        $selection = $data['selection'];
 
+        $workflows = Workflow::whereHas('creator.groups', function ($query) {
+            $query->select('affiliations')->whereNotNull('affiliations');
+        })->get();
+
+        $filteredWorkflows = $workflows->filter(function ($workflow) use ($entity, $selection) {
+            foreach ($workflow->creator->groups as $group) {
+                $affiliations = json_decode($group->affiliations, true);
+
+                if (isset($affiliations[$entity])) {
+                    foreach ($affiliations[$entity] as $item) {
+                        if (isset($item['name']) && $item['name'] === $selection) {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        })->values()->toArray();
+
+
+        return response()->json($filteredWorkflows, 200);
     }
 }

@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 
 
-    @endsection
+@endsection
 
 @section('page-style')
     <!-- Page -->
@@ -33,17 +33,20 @@
     {{ Breadcrumbs::render('courses') }}
 
     <div class="card">
-        <table class="datatables-courses table">
-            <thead class="table-light">
-                <tr>
-                    <th></th>
-                    <th>COURSE TITLE</th>
-                    <th>COURSE CODE</th>
-                    <th>DEPARTMENT</th>
-                    <th>ACTIONS</th>
-                </tr>
-            </thead>
-        </table>
+        <div class="table-responsive">
+
+            <table class="datatables-courses table">
+                <thead class="table-light">
+                    <tr>
+                        <th></th>
+                        <th>COURSE TITLE</th>
+                        <th>COURSE CODE</th>
+                        <th>DEPARTMENT</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
     <div class="modal fade" id="edit-course" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"
         aria-hidden="true">

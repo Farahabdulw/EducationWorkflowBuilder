@@ -3,54 +3,63 @@
     {
       "name": "Users",
       "icon": "menu-icon tf-icons ti ti-users",
+      "permission": "users",
       "slug": "users",
       "url": "/users"
     },
     {
       "name": "Committees",
       "icon": "menu-icon tf-icons ti ti-users-group",
+      "permission": "committees",
       "slug": "committees",
       "url": "/committees"
     },
     {
       "name": "Offices",
       "icon": "menu-icon tf-icons ti ti-brand-office",
+      "permission": "offices",
       "slug": "offices",
       "url": "/offices"
     },
     {
       "name": "Colleges",
       "icon": "menu-icon tf-icons ti ti-school",
+      "permission": "colleges",
       "slug": "colleges",
       "url": "/colleges"
     },
     {
       "name": "Departments",
       "icon": "menu-icon tf-icons ti ti-building",
+      "permission": "departments",
       "slug": "departments",
       "url": "/departments"
     },
     {
       "name": "Courses",
       "icon": "menu-icon tf-icons ti ti-vocabulary",
+      "permission": "courses",
       "slug": "courses",
       "url": "/courses"
     },
     {
       "name": "Centers",
       "icon": "menu-icon tf-icons ti ti-building-fortress",
+      "permission": "centers",
       "slug": "centers",
       "url": "/centers"
     },
     {
       "name": "Requests",
       "icon": "menu-icon tf-icons ti ti-folder-down ",
+      "permission": "forms",
       "slug": "requests",
       "url": "/requests"
     },
     {
       "name": "Forms",
       "icon": "menu-icon tf-icons ti ti-clipboard-text",
+      "permission": "forms",
       "slug": "forms",
       "url": "/forms"
     }

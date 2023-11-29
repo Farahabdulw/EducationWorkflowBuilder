@@ -238,14 +238,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/form/delete', [FormsController::class, 'delete'])->name('form-delete');
     });
 
-    Route::group(['middleware' => ['role:super-admin']], function () {
+    Route::group(['middleware' => ['role_or_permission:super-admin|forms_view']], function () {
         Route::get('/requests', [RequestController::class, 'index'])->name('requests');
         Route::post('/requests', [RequestController::class, 'getAll'])->name('get-all-request');
-        Route::post('/requests/filters', [RequestController::class, 'filters'])->name('requests');
+        Route::post('/requests/filters', [RequestController::class, 'filters'])->name('requests-filtred');
         Route::post('/requests/filtered', [RequestController::class, 'filtered'])->name('filtered');
-
-
-
     });
 
 

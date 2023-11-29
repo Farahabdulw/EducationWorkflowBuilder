@@ -44,13 +44,13 @@
             <div class="d-flex flex-row gap-2 col-md-7 col-lg-7 col-sm-12">
                 <div class="input-group">
                     <span class="input-group-text">Office Name</span>
-                    <input type="text" id="name" aria-label="Committee Name" class="form-control" required>
+                    <input type="text" id="name" aria-label="Office Name" class="form-control" required>
                 </div>
             </div>
 
             <div class="col-md-7 col-lg-7 col-sm-12">
                 <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" id="description" placeholder="Committee Description" required></textarea>
+                <textarea class="form-control" id="description" placeholder="Office Description" required></textarea>
             </div>
 
             <div class="d-flex flex-row gap-2 col-md-7 col-lg-7 col-sm-12">

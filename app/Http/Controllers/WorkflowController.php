@@ -38,7 +38,7 @@ class WorkflowController extends Controller
             ]);
         }
         $this->lunchWorkflow($workflow, $sender_id, $form_id);
-        return response()->json("succsful", 200);
+        return response()->json(["successful" => true, "form" => $form_id], 200);
 
     }
     public function lunchWorkflow(Workflow $workflow, int $sender_id, $form_id)

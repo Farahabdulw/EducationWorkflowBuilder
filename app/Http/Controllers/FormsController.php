@@ -140,7 +140,7 @@ class FormsController extends Controller
                                     'id' => $step->workflow->form->creator->id,
                                     'first_name' => $step->workflow->form->creator->first_name,
                                     'last_name' => $step->workflow->form->creator->last_name,
-                                ],
+                                ], 
                             ],
                         ],
                     ];
@@ -231,17 +231,17 @@ class FormsController extends Controller
     }
     public function get_forms(Request $request)
     {
-
-        if (auth()->user()->hasRole('super-admin')) {
+        $user = auth()->user();
+        if ($user->hasRole('super-admin')) {
             $canEdit = true;
             $canDelete = true;
             $canAdd = true;
             $forms = Forms::with('categories')->get();
         } else {
-            $authUser = auth()->user();
-            $canEdit = auth()->user()->can('forms_edit');
-            $canDelete = auth()->user()->can('forms_delete');
-            $canAdd = auth()->user()->can('forms_add');
+            $authUser = $user;
+            $canEdit = $user->can('forms_edit');
+            $canDelete = $user->can('forms_delete');
+            $canAdd = $user->can('forms_add');
 
             $authUserRoles = $authUser->getRoleNames();
             $users = User::role($authUserRoles)->get();

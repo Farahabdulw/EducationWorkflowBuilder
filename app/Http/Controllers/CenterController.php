@@ -58,7 +58,7 @@ class CenterController extends Controller
             $canEdit = true;
             $canDelete = true;
             $canAdd = true;
-            $centers = Center::get();
+            $centers = Center::with('departments')->get();
         } else {
             $authUser = auth()->user();
             $canEdit = auth()->user()->can('centers_edit');
