@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Spatie\Permission\Models\Role;
 
 use App\Models\User;
 
@@ -40,7 +41,6 @@ class UserController extends Controller
             'groups' => 'array',
         ]);
 
-
         if ($validator->fails()) {
             // Validation failed
             return response()->json([
@@ -62,6 +62,12 @@ class UserController extends Controller
 
         if (isset($request->groups)) {
             $user->groups()->sync($request->groups);
+            // Sync roles based on the groups
+            $groupNames = $user->groups->pluck('name');
+            $roles = Role::whereIn('name', $groupNames)->get();
+
+            // Sync roles to the user
+            $user->syncRoles($roles);
         }
         if ($user)
             return response()->json(['success' => true, 'message' => 'User added successfully'], 200);
@@ -102,6 +108,7 @@ class UserController extends Controller
             // Get authenticated user's roles
             $authUser = auth()->user();
             $authUserRoles = $authUser->roles;
+            $authUserGroups = $authUser->groups;
             $canEdit = $authUserRoles->contains(function ($role) {
                 return $role->hasPermissionTo('users_edit');
             });
@@ -113,14 +120,15 @@ class UserController extends Controller
             $canAdd = $authUserRoles->contains(function ($role) {
                 return $role->hasPermissionTo('users_add');
             });
-
-            $users = User::role($authUserRoles)->get();
+            $GroupsIds = $authUserGroups->pluck('id');
+            $users = User::with("groups")->whereHas("groups", function ($q) use ($GroupsIds) {
+                $q->whereIn("groups.id", $GroupsIds);
+            })->get();
 
             // Exclude the authenticated user from the list
             $users = $users->reject(function ($user) use ($authUser) {
                 return $user->id === $authUser->id;
             });
-
 
             // Iterate through each user
             foreach ($users as $user) {

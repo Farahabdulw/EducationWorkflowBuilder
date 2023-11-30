@@ -56,7 +56,7 @@
 
             <div class="col-md-7 col-lg-7 col-sm-12">
                 <label for="description" class="form-label">Description*</label>
-                <textarea class="form-control" id="description" placeholder="Committee Description" required></textarea>
+                <textarea class="form-control" id="description" placeholder="College Description" required></textarea>
             </div>
 
             <div class="d-flex flex-row gap-2 col-md-7 col-lg-7 col-sm-12">

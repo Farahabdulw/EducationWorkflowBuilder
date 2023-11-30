@@ -78,9 +78,9 @@
                 </div>
             </div>
         </div>
-        <!-- /Invoice -->
+        <!-- / -->
 
-        <!-- Invoice Actions -->
+        <!--  Actions -->
         @if (!$status)
             <div class="col-xl-3 col-md-4 col-12 invoice-actions pb-3">
                 <div class="card">

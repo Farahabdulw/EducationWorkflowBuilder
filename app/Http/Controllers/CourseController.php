@@ -14,7 +14,17 @@ class CourseController extends Controller
     }
     public function create()
     {
+
         return view('content.pages.courses.create');
+    }
+    public function edit(int $id)
+    {
+        if (auth()->user()->can('edit_courses')|| auth()->user()->hasRole('super-admin')) {
+            $course = Course::with('department')->find($id);
+            return view('content.pages.courses.edit', compact('course'));
+        }
+        return view('403');
+
     }
 
     public function add_course(Request $request)
@@ -105,7 +115,7 @@ class CourseController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Course soft deleted successfully'], 200);
     }
-    public function edit_course(Request $request)
+    public function update_course(Request $request)
     {
         $course = Course::with('department')->find($request->id);
 

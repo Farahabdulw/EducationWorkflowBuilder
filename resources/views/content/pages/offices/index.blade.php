@@ -62,7 +62,7 @@
                                 <div class="col-12 fv-plugins-icon-container">
                                     <label class="form-label" for="modalEditOfficeName">Office Name</label>
                                     <input type="text" id="modalEditOfficeName" name="modalEditOfficeName"
-                                        class="form-control" placeholder="John">
+                                        class="form-control" placeholder="John" required>
                                     <div
                                         class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                                     </div>
@@ -70,7 +70,7 @@
 
                                 <div class="col-12 fv-plugins-icon-container">
                                     <label class="form-label" for="modalEditOfficeDescription">Description</label>
-                                    <textarea class="form-control" id="modalEditOfficeDescription" required></textarea>
+                                    <textarea class="form-control" id="modalEditOfficeDescription"></textarea>
                                     <div
                                         class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                                     </div>

@@ -32,7 +32,6 @@
 
     <div class="card">
         <div class="table-responsive">
-
             <table class="datatables-centers table">
                 <thead class="table-light">
                     <tr>

@@ -108,7 +108,7 @@ class DepartmentController extends Controller
     }
     public function edit_department(Request $request)
     {
-        $department = Department::find($request->id);
+        $department = Department::with('colleges')->find($request->id);
 
         if (!$department)
             return response()->json(['error' => 'Department not found'], 404);
@@ -119,6 +119,6 @@ class DepartmentController extends Controller
         $department->description = $request->description;
         $department->save();
 
-        return response()->json(['message' => 'Department updated successfully'], 200);
+        return response()->json(['message' => 'Department updated successfully' ,'department' =>$department], 200);
     }
 }

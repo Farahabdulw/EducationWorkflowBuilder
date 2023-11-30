@@ -47,6 +47,7 @@ class FormsController extends Controller
                     case 0:
                     case 2:
                     case 3:
+                    case 5:
                         $status = 1;
                         break;
                     case 1:

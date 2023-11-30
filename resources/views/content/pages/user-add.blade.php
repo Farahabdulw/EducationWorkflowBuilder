@@ -71,7 +71,7 @@
 
             <div class="col-md-7 col-sm-12">
                 <label for="groups" class="form-label">Groups</label>
-                <select class="js-example-basic-multiple" id="groups" multiple="multiple">
+                <select class="js-example-basic-multiple" id="groups" multiple="multiple" required>
                 </select>
             </div>
 

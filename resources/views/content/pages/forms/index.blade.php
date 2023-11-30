@@ -37,9 +37,8 @@
         <div class="card-header">
             <h5>Forms list</h5>
         </div>
-        <div class=" text-nowrap mb-3">
+        <div class="table-responsive text-nowrap mb-3">
             <table class="datatables-forms table">
-
                 <thead class="table-light" id="forms-head">
                     <tr>
                         <th class="shrink"></th>

@@ -108,7 +108,7 @@ class CenterController extends Controller
     }
     public function edit_center(Request $request)
     {
-        $center = Center::find($request->id);
+        $center = Center::with('departments')->find($request->id);
 
         if (!$center)
             return response()->json(['error' => 'center not found'], 404);
@@ -118,6 +118,6 @@ class CenterController extends Controller
         $center->description = $request->description;
         $center->save();
 
-        return response()->json(['message' => 'Center updated successfully'], 200);
+        return response()->json(['message' => 'Center updated successfully' , 'center' =>$center], 200);
     }
 }

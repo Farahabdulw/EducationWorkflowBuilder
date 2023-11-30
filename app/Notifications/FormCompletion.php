@@ -45,7 +45,8 @@ class FormCompletion extends Notification implements ShouldQueue
             ->subject('Worlflow Completion mail.')
             ->greeting('Hello ! Mr.'. $notifiable->last_name)
             ->line($this->message)
-            ->action('check its log and progress at', $this->workflowUrl);
+            ->line('check its log and progress at')
+            ->action("$notifiable->first_name Form", $this->workflowUrl);
     }
 
     /**

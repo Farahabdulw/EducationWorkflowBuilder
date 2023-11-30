@@ -3,7 +3,7 @@
 @endphp
 @extends('layouts/layoutMaster')
 
-@section('title', 'Users')
+@section('title', 'Edit Course')
 
 @section('vendor-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
@@ -28,44 +28,57 @@
 @endsection
 
 @section('page-script')
-    <script src="{{ asset('assets/js/centers/create.js') }}"></script>
+    <script src="{{ asset('assets/js/courses/edit.js') }}"></script>
 @endsection
 
 @section('content')
-{{ Breadcrumbs::render('add-center') }}
+    {{ Breadcrumbs::render('edit-course', $course->id) }}
 
     <div class="card">
         <div class="card-header">
-            <h5>Add a new Center</h5>
+            <h5>Edit Course</h5>
         </div>
         <form id="add-form" method="post" action=""
             class="card-body col d-flex flex-column gap-3 browser-default-validation">
             @csrf
             <div class="d-flex flex-row gap-2 col-md-7 col-lg-7 col-sm-12">
                 <div class="input-group">
-                    <span class="input-group-text">Center Name*</span>
-                    <input type="text" id="name" aria-label="Committee Name" class="form-control" required>
-
+                    <span class="input-group-text">Course Title</span>
+                    <input type="text" id="title" value="{{ $course->title }}" class="form-control" required>
                 </div>
             </div>
 
+            <div class="col-md-7 col-lg-7 col-sm-12">
+                <label for="code" class="form-label">Course Code</label>
+                <input type="text" class="form-control" id="code" value="{{ $course->code }}" required>
+            </div>
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
             <div class="col-md-7 col-lg-7 col-sm-12 p-b-0">
-                <label for="departments" class="form-label">Department*</label>
-                <select id="departments" class="select2-hidden-accessible" name="state">
+                <label for="departments" class="form-label">Department</label>
+                <select id="departments" class="select2-hidden-accessible" name="state"
+                    data-selected={{ $course->department->id }}>
                 </select>
             </div>
 
-
-            <div class="col-md-7 col-lg-7 col-sm-12">
-                <label for="description" class="form-label">Description*</label>
-                <textarea class="form-control" id="description" placeholder="Center Description" required></textarea>
-            </div>
-
             <div class="d-flex flex-row gap-2 col-md-7 col-lg-7 col-sm-12">
-                <button type="submit" class="btn btn-primary waves-effect waves-light">Add Department</button>
+                <button type="submit" class="btn btn-primary waves-effect waves-light">Add Course</button>
             </div>
         </form>
-        <span class="select2 select2-container select2-container--default select2-container--below">
+
 
     </div>
 @endsection

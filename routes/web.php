@@ -185,7 +185,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/course/{id}', [CourseController::class, 'get_course'])->name('course-get');
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_edit']], function () {
-        Route::post('/course/edit', [CourseController::class, 'edit_course'])->name('course-edit');
+        Route::get('/course/edit/{id}', [CourseController::class, 'edit'])->name('course-edit');
+        Route::post('/course/edit', [CourseController::class, 'update_course'])->name('course-update');
 
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_delete']], function () {

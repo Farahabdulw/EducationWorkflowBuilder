@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('code');
+            $table->json('PLOS');
+            $table->json('CLOS');
+            $table->json('students');
             $table->string('department_id');
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();

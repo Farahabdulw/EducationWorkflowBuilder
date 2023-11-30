@@ -123,7 +123,7 @@ class CommitteController extends Controller
     }
     public function edit_committee(Request $request)
     {
-        $committee = Committe::find($request->id);
+        $committee = Committe::with('chairpersonUser')->find($request->id);
 
         if (!$committee)
             return response()->json(['error' => 'committee not found'], 404);
@@ -133,7 +133,7 @@ class CommitteController extends Controller
         $committee->description = $request->description;
         $committee->save();
 
-        return response()->json(['message' => 'committee updated successfully'], 200);
+        return response()->json(['message' => 'committee updated successfully' , 'committee' => $committee], 200);
     }
 
 }

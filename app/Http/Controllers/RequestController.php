@@ -28,19 +28,17 @@ class RequestController extends Controller
                     }
                 ])->get();
         } else {
-            if ($user->can('forms_view')) {
-
-                $workflows = Workflow::where('created_by', $user->id)
-                    ->orWhereHas('creator', function ($query) use ($user) {
-                        $query->role($user->roles);
-                    })
-                    ->with(['creator:id,first_name,last_name'])
-                    ->get();
-                return response()->json($workflows, 200);
-            } else
-
+            if (!($user->can('forms_view')))
                 return response()->json(403);
+
+            $workflows = Workflow::where('created_by', $user->id)
+                ->orWhereHas('creator', function ($query) use ($user) {
+                    $query->role($user->roles);
+                })
+                ->with(['creator:id,first_name,last_name'])
+                ->get();
         }
+        return response()->json($workflows, 200);
     }
     public function filters()
     {

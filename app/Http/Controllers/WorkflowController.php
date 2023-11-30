@@ -267,7 +267,7 @@ class WorkflowController extends Controller
 
             // Update the workflow status to "rejected"
             $workflow = $step->workflow;
-            $workflow->status = 2;
+            $workflow->status =3;
             $workflow->save();
 
             // Notify the workflow creator

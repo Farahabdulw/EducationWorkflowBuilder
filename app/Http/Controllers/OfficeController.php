@@ -46,7 +46,6 @@ class OfficeController extends Controller
         ];
         return response()->json($responseObject, 200);
     }
-
     public function add(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -110,7 +109,7 @@ class OfficeController extends Controller
         $office->description = $request->description;
         $office->save();
 
-        return response()->json(['message' => 'Office updated successfully'], 200);
+        return response()->json(['message' => 'Office updated successfully' , 'office' =>$office], 200);
     }
 
 

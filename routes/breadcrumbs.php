@@ -88,9 +88,11 @@ Breadcrumbs::for('add-course', function ($trail) {
     $trail->parent('courses');
     $trail->push('Add Course', route('courses-add'));
 });
-
-
-
+// Edit Course
+Breadcrumbs::for('edit-course', function ($trail , $cousreId) {
+    $trail->parent('courses');
+    $trail->push('Edit Course', route('course-edit' , $cousreId));
+});
 
 // Forms
 Breadcrumbs::for('forms', function ($trail) {

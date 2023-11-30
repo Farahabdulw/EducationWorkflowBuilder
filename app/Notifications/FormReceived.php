@@ -45,7 +45,8 @@ class FormReceived extends Notification implements ShouldQueue
             ->subject('Form arrival mail.')
             ->greeting(sprintf('Hello !', $notifiable->first_name))
             ->line($this->message)
-            ->action('check the form at', $this->formUrl);
+            ->line('check the form at')
+            ->action("Review Form", $this->formUrl);
     }
 
     /**

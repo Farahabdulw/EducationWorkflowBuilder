@@ -115,10 +115,9 @@ class CollegeController extends Controller
             return response()->json(['error' => 'college not found'], 404);
 
         $college->name = $request->name;
-        // $college->committee_id = $request->committee_id;
         $college->description = $request->description;
         $college->save();
 
-        return response()->json(['message' => 'College updated successfully'], 200);
+        return response()->json(['message' => 'College updated successfully' , 'college' =>$college], 200);
     }
 }
