@@ -19,11 +19,47 @@ class CourseController extends Controller
     }
     public function edit(int $id)
     {
-        if (auth()->user()->can('edit_courses')|| auth()->user()->hasRole('super-admin')) {
+        if (auth()->user()->can('edit_courses') || auth()->user()->hasRole('super-admin')) {
             $course = Course::with('department')->find($id);
+
+            $students = $course->students;
+            $decodedStudents = json_decode($students, true);
+
+            $course->students = $decodedStudents;
+
+
             return view('content.pages.courses.edit', compact('course'));
         }
         return view('403');
+
+    }
+    public function course(int $id)
+    {
+        if (auth()->user()->can('edit_courses') || auth()->user()->hasRole('super-admin')) {
+            $course = Course::select('PLOS', 'CLOS', 'department_id')->find($id);
+
+            // Decode the PLOS property
+            $decodedPLOS = json_decode($course->PLOS);
+            $decodedPLOS = json_decode($decodedPLOS);
+        
+            // Decode the CLOS property
+            $decodedCLOS = json_decode($course->CLOS);
+        
+            // Decode the knowledge, skills, and values properties within CLOS
+            $decodedCLOS->knowledge = json_decode($decodedCLOS->knowledge);
+            $decodedCLOS->skills = json_decode($decodedCLOS->skills);
+            $decodedCLOS->values = json_decode($decodedCLOS->values);
+        
+            // Create a new variable to hold the decoded data
+            $decodedCourse = [
+                'PLOS' => $decodedPLOS,
+                'CLOS' => $decodedCLOS,
+                'department_id' => $course->department_id,
+            ];
+        
+            // Return the decoded data
+        }
+        return response()->json($decodedCourse , 200);
 
     }
 
@@ -48,6 +84,9 @@ class CourseController extends Controller
         // Create a new course record in the database
         $course = Course::create([
             'title' => $request->get('title'),
+            'PLOS' => json_encode($request->get('PLOS')),
+            'CLOS' => json_encode($request->get('CLOS')),
+            'students' => json_encode($request->get('students')),
             'department_id' => $request->get('department'),
             'code' => $request->get('code'),
         ]);

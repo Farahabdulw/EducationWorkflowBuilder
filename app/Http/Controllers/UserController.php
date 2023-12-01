@@ -34,8 +34,6 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'fname' => 'required',
             'lname' => 'required',
-            'uni_id' => 'required',
-            'birthdate' => 'required|date',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
             'groups' => 'array',
@@ -53,10 +51,8 @@ class UserController extends Controller
         $user = User::create([
             'first_name' => $request->get('fname'),
             'last_name' => $request->get('lname'),
-            'uni_id' => $request->get('uni_id'),
             'email' => $request->get('email'),
             'password' => bcrypt($request->get('password')),
-            'birthdate' => $request->get('birthdate'),
         ]);
         // add the newly created user to the each group 
 
@@ -90,15 +86,11 @@ class UserController extends Controller
             $canAdd = true;
             $users = User::all();
             foreach ($users as $user) {
-                $birthdate = Carbon::parse($user->birthdate);
-                $age = $birthdate->age;
                 $formattedUser = [
                     'id' => $user->id,
                     'fname' => $user->first_name,
                     'email' => $user->email,
-                    'uni_id' => $user->uni_id,
                     'lname' => $user->last_name,
-                    'age' => $age,
                     'can-edit' => true,
                     'delete-edit' => true,
                 ];
@@ -132,18 +124,12 @@ class UserController extends Controller
 
             // Iterate through each user
             foreach ($users as $user) {
-                // Calculate age using Carbon
-                $birthdate = Carbon::parse($user->birthdate);
-                $age = $birthdate->age;
-
                 // Build user information array
                 $userInfo = [
                     'id' => $user->id,
                     'fname' => $user->first_name,
-                    'uni_id' => $user->uni_id,
                     'email' => $user->email,
                     'lname' => $user->last_name,
-                    'age' => $age,
                 ];
 
                 // Add user information to the formattedUsers array
@@ -171,8 +157,6 @@ class UserController extends Controller
             'fname' => $user->first_name,
             'email' => $user->email,
             'lname' => $user->last_name,
-            'uni_id' => $user->uni_id,
-            'birthdate' => $user->birthdate,
         ];
 
         return response()->json($formattedUser, 200);
@@ -187,9 +171,7 @@ class UserController extends Controller
 
         $user->first_name = $request->fname;
         $user->last_name = $request->lname;
-        $user->uni_id = $request->uni_id;
         $user->email = $request->email;
-        $user->birthdate = $request->birthdate;
         $user->save();
 
         return response()->json(['message' => 'User updated successfully'], 200);

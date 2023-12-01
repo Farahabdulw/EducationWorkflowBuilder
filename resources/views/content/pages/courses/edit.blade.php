@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/tagify/tagify.css') }}" />
+
 
 @endsection
 
@@ -24,6 +26,9 @@
     <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+    <script src="{{ asset('assets/vendor/libs/jquery-repeater/jquery-repeater.js') }}"></script>
 
 @endsection
 
@@ -33,52 +38,145 @@
 
 @section('content')
     {{ Breadcrumbs::render('edit-course', $course->id) }}
-
     <div class="card">
         <div class="card-header">
-            <h5>Edit Course</h5>
+            <h5>Add a new Course</h5>
         </div>
-        <form id="add-form" method="post" action=""
-            class="card-body col d-flex flex-column gap-3 browser-default-validation">
+        <div id="add-form" class="card-body col d-flex flex-column gap-3 browser-default-validation">
             @csrf
             <div class="d-flex flex-row gap-2 col-md-7 col-lg-7 col-sm-12">
                 <div class="input-group">
                     <span class="input-group-text">Course Title</span>
-                    <input type="text" id="title" value="{{ $course->title }}" class="form-control" required>
+                    <input type="text" id="title" aria-label="Math 101" class="form-control"
+                        value="{{ $course->title }}" required>
                 </div>
             </div>
 
             <div class="col-md-7 col-lg-7 col-sm-12">
                 <label for="code" class="form-label">Course Code</label>
-                <input type="text" class="form-control" id="code" value="{{ $course->code }}" required>
+                <input type="text" class="form-control" id="code" value="{{ $course->code }}"
+                    placeholder="A345fxg45" required>
             </div>
 
+            <div class="col-md-7 col-lg-7 col-sm-12 PLOS border rounded p-3">
+                <label for="TagifyPLOSList" class="form-label d-block">PLOs</label>
+                <input id="TagifyPLOSList" class="tagify-email-list" tabindex="-1" data-value="{{ $course->PLOS }}">
+                <button type="button" class="btn btn-sm rounded-pill btn-icon btn-outline-primary mb-1 waves-effect">
+                    <span class="tf-icons ti ti-plus">
+                    </span>
+                </button>
+            </div>
+            <div class="col-md-7 col-lg-7 col-sm-12 border rounded p-3">
+                <label class="form-label d-block">CLOs</label>
+                <div class="row ps-2">
+                    <div class="col-lg-10 col-sm-12">
+                        <div class="row pt-1" id="CLOS" data-CLOS="{{ $course->CLOS }}">
+                            <div class="col-md-7 col-lg-7 col-sm-12 PLOS">
+                                <label for="TagifyKnowlegeList"  class="form-label text-muted d-block">Knowledge and
+                                    understanding</label>
+                                <input id="TagifyKnowlegeList" class="ps-1 tagify-items tagify-email-list" tabindex="-1">
+                                <button type="button"
+                                    class="btn btn-sm rounded-pill btn-icon btn-outline-primary mb-1 waves-effect">
+                                    <span class="tf-icons ti ti-plus">
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row pt-1">
+                            <div class="col-md-7 col-lg-7 col-sm-12 PLOS">
+                                <label for="TagifySkillsList" class="form-label text-muted d-block">Skills</label>
+                                <input id="TagifySkillsList" class="ps-1 tagify-items tagify-email-list" tabindex="-1">
+                                <button type="button"
+                                    class="btn btn-sm rounded-pill btn-icon btn-outline-primary mb-1 waves-effect">
+                                    <span class="tf-icons ti ti-plus">
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row pt-1">
+                            <div class="col-md-7 col-lg-7 col-sm-12 PLOS">
+                                <label for="TagifyValuesList" class="form-label text-muted d-block">values</label>
+                                <input id="TagifyValuesList" class="ps-1 tagify-items tagify-email-list" tabindex="-1">
+                                <button type="button"
+                                    class="btn btn-sm rounded-pill btn-icon btn-outline-primary mb-1 waves-effect">
+                                    <span class="tf-icons ti ti-plus">
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            
+            <div class="col-md-7 col-lg-7 col-sm-12 border rounded p-3">
+                <p>Student Info</p>
+                <div class="row">
+                    <table id="students" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Student ID</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            @forelse($course->students as $student)
+                                <tr>
+                                    <td>{{ $student['name'] }}</td>
+                                    <td>{{ $student['id'] }}</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </button>
+                                            <div class="dropdown-menu" style="">
+                                                <a class="dropdown-item edit-student" href="javascript:void(0);">
+                                                    <i class="ti ti-pencil me-1"></i> Edit
+                                                </a>
+                                                <a class="dropdown-item delete-student" href="javascript:void(0);">
+                                                    <i class="ti ti-trash me-1"></i> Delete
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr class="noData">
+                                    <td class="text-center" colspan="3">No students were added</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                <form id="addStudent" action="">
+                    <div class="row">
+                        <div class="col-md-4 col-lg-4 col-sm-12">
+                            <input type="text" class="name form-control" placeholder="Student Name">
+                        </div>
+                        <div class="col-md-4 col-lg-4 col-sm-12">
+                            <input type="text" class="id form-control" placeholder="Student ID">
+                        </div>
 
+                        <div class="col-md-4 col-lg-4 col-sm-12 d-flex justify-content-evenly">
+                            <button class="btn btn-label-primary mb-4">
+                                <i class="ti ti-check me-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
 
-
-
-
-
-
-
-
-
-
+            </div>
 
             <div class="col-md-7 col-lg-7 col-sm-12 p-b-0">
                 <label for="departments" class="form-label">Department</label>
-                <select id="departments" class="select2-hidden-accessible" name="state"
-                    data-selected={{ $course->department->id }}>
+                <select id="departments" value='{{ $course->department }}' class="select2-hidden-accessible"
+                    name="state">
                 </select>
             </div>
-
             <div class="d-flex flex-row gap-2 col-md-7 col-lg-7 col-sm-12">
-                <button type="submit" class="btn btn-primary waves-effect waves-light">Add Course</button>
+                <button id="formSubmition" class="btn btn-primary waves-effect waves-light">Add Course</button>
             </div>
-        </form>
-
-
+        </div>
     </div>
 @endsection

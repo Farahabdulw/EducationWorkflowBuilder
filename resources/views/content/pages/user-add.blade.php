@@ -58,16 +58,6 @@
                 <label for="email" class="form-label">Email address</label>
                 <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
             </div>
-            <div class="col-md-7 col-lg-7 col-sm-12">
-                <label class="form-label" for="birthdate">Birth Date</label>
-                <input type="date" id="birthdate" class="form-control dob-picker flatpickr-input active"
-                    placeholder="YYYY-MM-DD" value="2000-01-01" required>
-            </div>
-            <div class="col-md-7 col-lg-7 col-sm-12">
-                <label class="form-label" for="uni_id">Student ID</label>
-                <input type="text" id="uni_id" class="form-control dob-picker flatpickr-input active" required
-                    placeholder="Abc1231323">
-            </div>
 
             <div class="col-md-7 col-sm-12">
                 <label for="groups" class="form-label">Groups</label>

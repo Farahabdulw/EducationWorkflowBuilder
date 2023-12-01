@@ -45,7 +45,6 @@
                 <thead class="table-light" id="users-head">
                     <tr>
                         <th></th>
-                        <th>Student ID</th>
                         <th>FULL NAME</th>
                         <th>EMAIL</th>
                         <th>Actions</th>
@@ -113,16 +112,6 @@
                                     <label class="form-label" for="modalEditUserEmail">Email</label>
                                     <input type="text" id="modalEditUserEmail" name="modalEditUserEmail"
                                         class="form-control" placeholder="example@domain.com">
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label class="form-label" for="modalEditUniId">Stduent ID</label>
-                                    <input type="text" id="modalEditUniId"
-                                        class="form-control dob-picker flatpickr-input active" placeholder="ACB3242">
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label class="form-label" for="modalEditbirthdate">Birth Date</label>
-                                    <input type="date" id="modalEditbirthdate"
-                                        class="form-control dob-picker flatpickr-input active" placeholder="YYYY-MM-DD">
                                 </div>
                                 <div class="col-12 text-center">
                                     <button type="submit"

@@ -19,5 +19,8 @@ class Course extends Model
         'title',
         'department_id',
         'code',
+        'PLOS',
+        'CLOS',
+        'students',
     ];
 }
