@@ -41,25 +41,27 @@ class CourseController extends Controller
             // Decode the PLOS property
             $decodedPLOS = json_decode($course->PLOS);
             $decodedPLOS = json_decode($decodedPLOS);
-        
+
             // Decode the CLOS property
             $decodedCLOS = json_decode($course->CLOS);
-        
+
             // Decode the knowledge, skills, and values properties within CLOS
-            $decodedCLOS->knowledge = json_decode($decodedCLOS->knowledge);
-            $decodedCLOS->skills = json_decode($decodedCLOS->skills);
-            $decodedCLOS->values = json_decode($decodedCLOS->values);
-        
+            if ($decodedCLOS->knowledge)
+                $decodedCLOS->knowledge = json_decode($decodedCLOS->knowledge);
+            if ($decodedCLOS->skills)
+                $decodedCLOS->skills = json_decode($decodedCLOS->skills);
+            if ($decodedCLOS->values)
+                $decodedCLOS->values = json_decode($decodedCLOS->values);
             // Create a new variable to hold the decoded data
             $decodedCourse = [
                 'PLOS' => $decodedPLOS,
                 'CLOS' => $decodedCLOS,
                 'department_id' => $course->department_id,
             ];
-        
+
             // Return the decoded data
         }
-        return response()->json($decodedCourse , 200);
+        return response()->json($decodedCourse, 200);
 
     }
 
@@ -86,7 +88,7 @@ class CourseController extends Controller
             'title' => $request->get('title'),
             'PLOS' => json_encode($request->get('PLOS')),
             'CLOS' => json_encode($request->get('CLOS')),
-            'students' => json_encode($request->get('students')),
+            'CLOS' => json_encode($request->get('students')),
             'department_id' => $request->get('department'),
             'code' => $request->get('code'),
         ]);
@@ -162,8 +164,11 @@ class CourseController extends Controller
             return response()->json(['error' => 'course not found'], 404);
 
         $course->title = $request->title;
-        $course->department_id = $request->department_id;
+        $course->department_id = $request->department;
         $course->code = $request->code;
+        $course->PLOS = json_encode($request->PLOS);
+        $course->CLOS = json_encode($request->CLOS);
+        $course->students = json_encode($request->students);
         $course->save();
 
         return response()->json(['message' => 'Course updated successfully', 'course' => $course], 200);

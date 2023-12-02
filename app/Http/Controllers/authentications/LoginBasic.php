@@ -27,9 +27,14 @@ class LoginBasic extends Controller
     // Attempt to authenticate the user
     if (Auth::attempt($credentials)) {
       // Authentication successful
+      if (session()->has('url.intended'))
+        $intendedRoute = session('url.intended');
+      else
+        $intendedRoute = '/offices';
+
       return response()->json([
         'success' => true,
-        'route' => session('url.intended'),
+        'route' => $intendedRoute,
       ], 200);
     } else {
       // Authentication failed
@@ -42,6 +47,6 @@ class LoginBasic extends Controller
   public function logout()
   {
     Auth::logout();
-    return redirect('/');
+    return redirect('/login');
   }
 }

@@ -186,9 +186,8 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_edit']], function () {
         Route::get('/course/edit/{id}', [CourseController::class, 'edit'])->name('course-edit');
-        Route::post('/course/edit', [CourseController::class, 'update_course'])->name('course-update');
+        Route::post('/course/update/{id}', [CourseController::class, 'update_course'])->name('course-update');
         Route::post('/course/edit/{id}', [CourseController::class, 'course'])->name('get-course');
-
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_delete']], function () {
         Route::post('/course/delete', [CourseController::class, 'delete'])->name('course-delete');
@@ -250,12 +249,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
     Route::post('/notification/read/{notif_id}', [NotificationController::class, 'read'])->name('read-notification');
-
-
-
 });
 
-Route::get('/login', [LoginBasic::class, 'index'])->name('login');
+Route::middleware('guest')->get('/login', [LoginBasic::class, 'index'])->name('login');
 Route::post('/login', [LoginBasic::class, 'auth'])->name('login.auth');
 Route::post('/logout', [LoginBasic::class, 'logout'])->name('logout');
 Route::get('/register', [RegisterBasic::class, 'index'])->name('register');

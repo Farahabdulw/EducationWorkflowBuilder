@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/tagify/tagify.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 
 
 @endsection
@@ -40,9 +40,9 @@
     {{ Breadcrumbs::render('edit-course', $course->id) }}
     <div class="card">
         <div class="card-header">
-            <h5>Add a new Course</h5>
+            <h5>Edit Course</h5>
         </div>
-        <div id="add-form" class="card-body col d-flex flex-column gap-3 browser-default-validation">
+        <div id="edit-form" class="card-body col d-flex flex-column gap-3 browser-default-validation">
             @csrf
             <div class="d-flex flex-row gap-2 col-md-7 col-lg-7 col-sm-12">
                 <div class="input-group">
@@ -60,7 +60,7 @@
 
             <div class="col-md-7 col-lg-7 col-sm-12 PLOS border rounded p-3">
                 <label for="TagifyPLOSList" class="form-label d-block">PLOs</label>
-                <input id="TagifyPLOSList" class="tagify-email-list" tabindex="-1" data-value="{{ $course->PLOS }}">
+                <input id="TagifyPLOSList" class="tagify-email-list" tabindex="-1">
                 <button type="button" class="btn btn-sm rounded-pill btn-icon btn-outline-primary mb-1 waves-effect">
                     <span class="tf-icons ti ti-plus">
                     </span>
@@ -170,12 +170,12 @@
 
             <div class="col-md-7 col-lg-7 col-sm-12 p-b-0">
                 <label for="departments" class="form-label">Department</label>
-                <select id="departments" value='{{ $course->department }}' class="select2-hidden-accessible"
+                <select id="departments" class="select2-hidden-accessible"
                     name="state">
                 </select>
             </div>
             <div class="d-flex flex-row gap-2 col-md-7 col-lg-7 col-sm-12">
-                <button id="formSubmition" class="btn btn-primary waves-effect waves-light">Add Course</button>
+                <button id="formSubmition" class="btn btn-primary waves-effect waves-light">Save Course</button>
             </div>
         </div>
     </div>

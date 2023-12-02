@@ -17,6 +17,8 @@
 @section('page-style')
     <!-- Page -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/cards-advance.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/users.css') }}">
+
 @endsection
 
 @section('vendor-script')
