@@ -29,7 +29,7 @@
 @endsection
 
 @section('content')
-    {{ Breadcrumbs::render('courses') }}
+    {{ Breadcrumbs::render('requests') }}
 
     <div class="card">
         <div class="row p-4">

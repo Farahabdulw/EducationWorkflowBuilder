@@ -32,6 +32,8 @@
 @section('page-script')
     <script src="{{ asset('assets/js/forms/view.js') }}"></script>
     <script src="{{ asset('assets/js/forms/form-render.min.js') }}"></script>
+    <script src="{{ asset('assets/js/forms/control_plugins/mathematic.js') }}"></script>
+
     {{-- <script src="{{ asset('assets/js/forms/form-builder.min.js') }}"></script> --}}
 
 @endsection

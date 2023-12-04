@@ -33,6 +33,8 @@
     <script src="{{ asset('assets/js/forms/form-render.min.js') }}"></script>
     <script src="{{ asset('assets/js/forms/form-builder.min.js') }}"></script>
     <script defer src="{{ asset('assets/js/forms/review.js') }}"></script>
+    <script src="{{ asset('assets/js/forms/control_plugins/mathematic.js') }}"></script>
+
 @endsection
 
 @section('content')

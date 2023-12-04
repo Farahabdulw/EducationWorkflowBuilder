@@ -42,6 +42,7 @@
     <script src="{{ asset('assets/js/forms/create.js') }}"></script>
     <script src="{{ asset('assets/js/forms/form-render.min.js') }}"></script>
     <script src="{{ asset('assets/js/forms/form-builder.min.js') }}"></script>
+    <script src="{{ asset('assets/js/forms/control_plugins/mathematic.js') }}"></script>
     @if (request()->is('form/edit*'))
         <script defer src="{{ asset('assets/js/forms/edit.js') }}"></script>
     @endif
