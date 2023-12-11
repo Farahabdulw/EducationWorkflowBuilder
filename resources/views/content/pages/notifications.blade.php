@@ -41,23 +41,6 @@
         </div>
         <div class="notifications-list">
             <ul class="list-group list-group-flush">
-                {{-- <li class="list-group-item list-group-item-action dropdown-notifications-item">
-                    <div class="d-flex">
-
-                        <div class="flex-grow-1">
-                            <h6 class="mb-1">Congratulation Lettie 🎉</h6>
-                            <p class="mb-0">Won the monthly best seller gold badge</p>
-                            <small class="text-muted">1h ago</small>
-                        </div>
-                        <div class="flex-shrink-0 dropdown-notifications-actions">
-                            <a href="javascript:void(0)" class="dropdown-notifications-read">
-                                <span
-                                    class="badge badge-dot">
-                                </span>
-                            </a>
-                        </div>
-                    </div>
-                </li> --}}
                 @forelse (auth()->user()->notifications as $notification)
                     <li class="list-group-item list-group-item-action dropdown-notifications-item py-1">
                         <div class="d-flex p-2">
