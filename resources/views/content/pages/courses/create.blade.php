@@ -44,11 +44,11 @@
             <h4 class="mb-0">
                 <span class="text-muted fw-light">Add a new Course</span>
             </h4>
-            <p class="text-muted">Version : 1</p>
+            <p class="text-muted version">Version : 1</p>
         </div>
         <div class="d-flex flex-column align-items-end pt-3 pb-2">
             <p class="text-muted mb-0">Last Revision:</p>
-            <p class="text-muted">20/2/1 12 AM by Developer</p>
+            <p class="text-muted lastModifed">20/2/1 12 AM by Developer</p>
         </div>
     </div>
     <div class="card">
@@ -70,8 +70,8 @@
             </div>
 
             <div class="col-md-6 col-lg-4 col-sm-12 pb-1">
-                <label for="code" class="form-label">Course Program</label>
-                <input type="text" class="form-control" id="code" required>
+                <label for="program" class="form-label">Course Program</label>
+                <input type="text" class="form-control" id="program" required>
             </div>
 
             <div class="col-md-6 col-lg-4 col-sm-12 pb-1">
@@ -189,19 +189,19 @@
         <div class="card-header">
             <h5>Course Identification</h5>
         </div>
-        <div class="card-body d-flex">
-            <div class="col-12">
+        <div class="card-body d-flex flex-column ">
+            <div class="col-12 d-flex justify-content-between">
                 <div class=" col-md-6 col-lg-6 col-sm-12 pt-2">
                     <div class="input-group">
-                        <span class="input-group-text">Credit Hours</span>
+                        <span class="input-group-text creditHours">Credit Hours</span>
                         <input type="number" aria-label="First name" class="form-control">
-                        <span class="input-group-text">Tatorial Hours</span>
+                        <span class="input-group-text tatorialHours">Tatorial Hours</span>
                         <input type="number" aria-label="Last name" class="form-control">
                     </div>
                 </div>
             </div>
 
-            <div class="border py-3">
+            <div class="mt-2 border rounded p-3">
                 <div class="col-12">
                     <label class="col-2 switch switch-lg">
                         <input type="checkbox" class="switch-input">
@@ -264,9 +264,9 @@
                         <span class="switch-label">Others</span>
                     </label>
                 </div>
-                <div class="col-12">
+                <div class="col-12 pt-2">
                     <label class="col-2 switch switch-lg">
-                        <input type="checkbox" class="switch-input">
+                        <input type="checkbox" class="switch-input" id="requiredCheckbox" name="subject-stat">
                         <span class="switch-toggle-slider">
                             <span class="switch-on">
                                 <i class="ti ti-check"></i>
@@ -278,7 +278,7 @@
                         <span class="switch-label">Required</span>
                     </label>
                     <label class="col-2 switch switch-lg">
-                        <input type="checkbox" class="switch-input">
+                        <input type="checkbox" class="switch-input" id="electiveCheckbox" name="subject-stat">
                         <span class="switch-toggle-slider">
                             <span class="switch-on">
                                 <i class="ti ti-check"></i>
@@ -291,11 +291,283 @@
                     </label>
                 </div>
             </div>
+
+            <div class="col-12 d-flex justify-content-between">
+                <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
+                    <div class="input-group">
+                        <span class="input-group-text">Course Level or Year to be Offered</span>
+                        <input type="number" aria-label="level" class="form-control coruseLevel">
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 d-flex flex-column pt-2">
+                <label for="description" class="form-label description">Course Description</label>
+                <textarea id="description" rows="3" class="form-control"
+                    style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 83px;"></textarea>
+            </div>
+            <div class="d-flex justify-content-between ">
+                <div class="col-lg-6 col-md-12 pe-1 col-sm-12 pt-2">
+                    <table id="preRequirements" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th> Course Pre-requirements </th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            {{-- <tr class="noData">
+                            <td class="text-center"> No pre-requirements were added</td>
+                        </tr> --}}
+                            <tr>
+                                <td>math 101</td>
+                            </tr>
+                            <tr>
+                                <td>fundamentals of algebra</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <form id="addPreRequirements" class="pt-1">
+                        <div class="row">
+                            <div class="col-md-10 col-lg-10 col-sm-12">
+                                <input type="text" class="name form-control" placeholder="Add a Pre-requirement ">
+                            </div>
+                            <div class="col-md-1 col-lg-1 col-sm-12 d-flex justify-content-evenly">
+                                <button class="btn btn-label-primary mb-4">
+                                    <i class="ti ti-check me-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-6 col-md-12 ps-1 col-sm-12 py-2">
+                    <table id="coRequisites" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th> Course Co-requisites</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            <tr>
+                                <td>lab math 101</td>
+                            </tr>
+                            {{-- <tr class="noData">
+                            <td class="text-center"> No co-requisites were added</td>
+                        </tr> --}}
+                        </tbody>
+                    </table>
+                    <form id="addCoRequisites" class="pt-1">
+                        <div class="row">
+                            <div class="col-md-10 col-lg-10 col-sm-12">
+                                <input type="text" class="name form-control" placeholder="Add a Pre-requirement ">
+                            </div>
+                            <div class="col-md-1 col-lg-1 col-sm-12 d-flex justify-content-evenly">
+                                <button class="btn btn-label-primary mb-4">
+                                    <i class="ti ti-check me-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <table id="mainObjective" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th> Course Main Objective </th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+
+                        <tr class="noData">
+                            <td class="text-center"> No main objectives were added</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <form id="addMainObjective" class="pt-1">
+                    <div class="row">
+                        <div class="col-md-11 col-lg-11 col-sm-12">
+                            <input type="text" class="name form-control" placeholder="Add a main objective">
+                        </div>
+                        <div class="col-md-1 col-lg-1 col-sm-12 d-flex justify-content-evenly">
+                            <button class="btn btn-label-primary mb-4">
+                                <i class="ti ti-check me-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+    <div class="card mt-3">
+        <div class="card-header">
+            <h5>Teaching mode</h5>
+        </div>
+        <div class="card-body">
+            <div class="col-12">
+                <table id="teachingMode" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:10%"> NO </th>
+                            <th> Mode of Instruction </th>
+                            <th> Contact Hours </th>
+                            <th> Percentage </th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        <tr class="noData">
+                            <td>1</td>
+                            <td> Traditional classroom</td>
+                            <td> From 10:00 AM To 12:00 AM </td>
+                            <td> 10% </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <form id="addTeachingMode" class="pt-1">
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-md-3 col-lg-3 col-sm-12">
+                            <input type="text" class="name form-control">
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-sm-12">
+                            <input type="text" class="name form-control">
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-sm-12">
+                            <input type="text" class="name form-control">
+                        </div>
+                        <div class="col-md-1 col-lg-1 col-sm-12 d-flex justify-content-evenly">
+                            <button class="btn btn-label-primary mb-4">
+                                <i class="ti ti-check me-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="card mt-3">
+        <div class="card-header">
+            <h5>Contact Hours</h5>
+        </div>
+        <div class="card-body">
+            <div class="col-12">
+                <table id="contactHours" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:10%"> NO </th>
+                            <th> Activity </th>
+                            <th> Contact Hours </th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        <tr class="noData">
+                            <td>1</td>
+                            <td> Traditional classroom</td>
+                            <td> 10% </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <form id="addContactHours" class="pt-1">
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-md-4 col-lg-4 col-sm-12">
+                            <input type="text" class="name form-control">
+                        </div>
+                        <div class="col-md-4 col-lg-4 col-sm-12">
+                            <input type="text" class="name form-control">
+                        </div>
+                        <div class="col-md-1 col-lg-1 col-sm-12 d-flex justify-content-evenly">
+                            <button class="btn btn-label-primary mb-4">
+                                <i class="ti ti-check me-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="card mt-3">
+        <div class="card-header">
+            <h5>Instructional Framework</h5>
+        </div>
+        <div class="card-body">
+            <div class="col-12">
+                <table id="instructionalFramwork" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:10%"> Code </th>
+                            <th> Course Learning Outcomes </th>
+                            <th> Code of CLOs aligned with program </th>
+                            <th> Teaching Strategies </th>
+                            <th> Assessment Methods </th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        <tr class="group">
+                            <td> 1.0 </td>
+                            <td colspan="4">Knowledge and understanding</td>
+                        </tr>
+                        <tr class="even">
+                            <td>1</td>
+                            <td>Define key concepts in the field</td>
+                            <td>CLO-001</td>
+                            <td>Lectures, Readings</td>
+                            <td>Written Exam</td>
+                        </tr>
+                        <tr class="even">
+                            <td>2</td>
+                            <td>Explain the historical development of the subject</td>
+                            <td>CLO-002</td>
+                            <td>Class Discussions, Research</td>
+                            <td>Research Paper</td>
+                        </tr>
+                        <tr class="even">
+                            <td>3</td>
+                            <td>Apply theoretical frameworks to real-world scenarios</td>
+                            <td>CLO-003</td>
+                            <td>Case Studies, Group Projects</td>
+                            <td>Presentations</td>
+                        </tr>
+                        <tr class="even">
+                            <td>4</td>
+                            <td>Analyze and interpret data relevant to the subject</td>
+                            <td>CLO-004</td>
+                            <td>Lab Work, Data Analysis</td>
+                            <td>Lab Report</td>
+                        </tr>
+
+                        <tr class="group">
+                            <td colspan="5">Skills</td>
+                        </tr>
+
+                        <tr class="group">
+                            <td colspan="5">Values, autonomy responsibility</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {{-- <form id="addInstructionalFramwork" class="pt-1">
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-md-4 col-lg-4 col-sm-12">
+                            <input type="text" class="name form-control">
+                        </div>
+                        <div class="col-md-4 col-lg-4 col-sm-12">
+                            <input type="text" class="name form-control">
+                        </div>
+                        <div class="col-md-1 col-lg-1 col-sm-12 d-flex justify-content-evenly">
+                            <button class="btn btn-label-primary mb-4">
+                                <i class="ti ti-check me-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form> --}}
+            </div>
+        </div>
+    </div>
+
     <div class="col-12">
         <div class="d-flex flex-row pt-3 col-md-6 col-lg-4 col-sm-12">
             <button id="formSubmition" class="btn btn-primary waves-effect waves-light">Add Course</button>
         </div>
     </div>
+
 @endsection
