@@ -180,6 +180,7 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_add']], function () {
         Route::get('/course/add', [CourseController::class, 'create'])->name('courses-add');
         Route::post('/course/add', [CourseController::class, 'add_course'])->name('courses-addCollege');
+        Route::get('//suggestions/course/specification', [CourseController::class, 'specification_suggestions'])->name('courses-specification-suggestions');
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_edit|courses_view']], function () {
         Route::get('/course/{id}', [CourseController::class, 'get_course'])->name('course-get');

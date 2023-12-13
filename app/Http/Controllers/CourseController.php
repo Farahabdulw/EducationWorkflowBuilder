@@ -144,7 +144,6 @@ class CourseController extends Controller
         }
         return response()->json($course, 200);
     }
-
     public function delete(Request $request)
     {
         $course = Course::find($request->id);
@@ -173,4 +172,16 @@ class CourseController extends Controller
 
         return response()->json(['message' => 'Course updated successfully', 'course' => $course], 200);
     }
+    public function specification_suggestions(Request $request)
+    {
+        $query = $request->input('q');
+        list($entity, $query) = explode('~*~', $query);
+    
+        $suggestions = Course::select($entity)
+            ->where($entity, 'like', '%' . $query . '%')
+            ->get(); 
+    
+        return response()->json($suggestions);
+    }
+    
 }
