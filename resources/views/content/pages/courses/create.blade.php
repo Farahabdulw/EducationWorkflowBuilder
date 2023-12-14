@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/typeahead-js/typeahead.css') }}" />
     <style>
-        .dark-style tr.group,
-        .dark-style tr.group:hover {
+        .dark-style tr[name="instructionalFramwork-group"],
+        .dark-style tr[name="instructionalFramwork-group"]:hover {
             background-color: rgba(134, 146, 208, .1) !important;
         }
     </style>
@@ -95,8 +95,7 @@
 
                 <div class="col-md-6 col-lg-4 col-sm-12 pb-1">
                     <label for="institutions" class="form-label">Institution</label>
-                    <select id="institutions" class="select2-hidden-accessible">
-                    </select>
+                    <input type="text" class="form-control" id="institutions" required>
                 </div>
             </div>
         </div>
@@ -110,15 +109,16 @@
                         <div class="input-group">
                             <span class="input-group-text creditHours">Credit Hours</span>
                             <input type="number" aria-label="First name" min=0 class="form-control">
-                            <span class="input-group-text tatorialHours" >Tatorial Hours</span>
+                            <span class="input-group-text tatorialHours">Tatorial Hours</span>
                             <input type="number" aria-label="Last name" min=0 class="form-control">
                         </div>
                     </div>
                 </div>
 
                 <div class="mt-2 border rounded p-3">
-                    <div class="col-12">
-                        <label class="col-2 switch switch-lg">
+                    <div class="col-12 d-lg-flex courseCategories">
+                        <div class="col-lg-2 col-md-12 col-sm-12 pb-md-2 pb-sm-2">Course Categories</div>
+                        <label class="col-lg-2 col-md-4 col-sm-6 pb-md-2 pb-sm-2 switch switch-lg">
                             <input type="checkbox" class="switch-input">
                             <span class="switch-toggle-slider">
                                 <span class="switch-on">
@@ -130,7 +130,7 @@
                             </span>
                             <span class="switch-label">University</span>
                         </label>
-                        <label class="col-2 switch switch-lg">
+                        <label class="col-lg-2 col-md-4 col-sm-6 pb-md-2 pb-sm-2 switch switch-lg">
                             <input type="checkbox" class="switch-input">
                             <span class="switch-toggle-slider">
                                 <span class="switch-on">
@@ -142,7 +142,7 @@
                             </span>
                             <span class="switch-label">College</span>
                         </label>
-                        <label class="col-2 switch switch-lg">
+                        <label class="col-lg-2 col-md-4 col-sm-6 pb-md-2 pb-sm-2 switch switch-lg">
                             <input type="checkbox" class="switch-input">
                             <span class="switch-toggle-slider">
                                 <span class="switch-on">
@@ -154,7 +154,7 @@
                             </span>
                             <span class="switch-label">Department</span>
                         </label>
-                        <label class="col-2 switch switch-lg">
+                        <label class="col-lg-2 col-md-4 col-sm-6 pb-md-2 pb-sm-2 switch switch-lg">
                             <input type="checkbox" class="switch-input">
                             <span class="switch-toggle-slider">
                                 <span class="switch-on">
@@ -166,7 +166,7 @@
                             </span>
                             <span class="switch-label">Track</span>
                         </label>
-                        <label class="col-2 switch switch-lg">
+                        <label class="col-lg-2 col-md-4 col-sm-6 pb-md-2 pb-sm-2 switch switch-lg">
                             <input type="checkbox" class="switch-input">
                             <span class="switch-toggle-slider">
                                 <span class="switch-on">
@@ -179,9 +179,12 @@
                             <span class="switch-label">Others</span>
                         </label>
                     </div>
-                    <div class="col-12 pt-2">
-                        <label class="col-2 switch switch-lg">
-                            <input type="checkbox" class="switch-input courseType " id="requiredCheckbox" name="subject-stat">
+                    <div class="col-12 pt-2 d-lg-flex">
+                        <div class="col-lg-2 col-md-12 col-sm-12 pb-md-2 pb-sm-2">enrollment option</div>
+
+                        <label class="col-lg-2 col-md-12 col-sm-12 pb-md-2 pb-sm-2 switch switch-lg">
+                            <input type="checkbox" class="switch-input courseType" checked id="requiredCheckbox"
+                                name="subject-stat">
                             <span class="switch-toggle-slider">
                                 <span class="switch-on">
                                     <i class="ti ti-check"></i>
@@ -192,8 +195,9 @@
                             </span>
                             <span class="switch-label">Required</span>
                         </label>
-                        <label class="col-2 switch switch-lg">
-                            <input type="checkbox" class="switch-input courseType " id="electiveCheckbox" name="subject-stat">
+                        <label class="col-lg-2 col-md-12 col-sm-12 pb-md-2 pb-sm-2 switch switch-lg">
+                            <input type="checkbox" class="switch-input courseType " id="electiveCheckbox"
+                                name="subject-stat">
                             <span class="switch-toggle-slider">
                                 <span class="switch-on">
                                     <i class="ti ti-check"></i>
@@ -211,7 +215,7 @@
                     <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                         <div class="input-group">
                             <span class="input-group-text">Course Level or Year to be Offered</span>
-                            <input type="number" aria-label="level" class="form-control coruseLevel">
+                            <input type="text" aria-label="level" class="form-control coruseLevel">
                         </div>
                     </div>
                 </div>
@@ -220,36 +224,29 @@
                     <textarea id="description" rows="3" class="form-control"
                         style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 83px;"></textarea>
                 </div>
-                <div class="d-flex justify-content-between ">
+                <div class="d-lg-flex justify-content-between">
                     <div class="col-lg-6 col-md-12 pe-1 col-sm-12 pt-2">
                         <table id="preRequirements" class="table table-striped">
                             <thead>
                                 <tr>
                                     <th style="width: 10%">No.</th>
                                     <th> Course Pre-requirements </th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody class="table-border-bottom-0">
-                                {{-- <tr class="noData">
-                            <td class="text-center"> No pre-requirements were added</td>
-                        </tr> --}}
-                                <tr>
-                                    <td>1</td>
-                                    <td>math 101</td>
+                                <tr class="noData">
+                                    <td class="text-center" colspan="3"> No pre-requirements were added</td>
                                 </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>fundamentals of algebra</td>
-                                </tr>
-                                <tr class="add-new-record preRequirements">
+                                <tr class="preRequirements">
                                     <td>
                                         <button type="button" class="btn btn-label-primary add-new-record-btn">
                                             <i class="fa fa-add"></i>
                                         </button>
                                     </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="preRequirements-inp"
-                                            id="preRequirements-inp">
+                                    <td colspan="2">
+                                        <input type="text" class="form-control preRequirements-inp"
+                                            name="preRequirements-inp">
                                     </td>
                                 </tr>
                             </tbody>
@@ -261,53 +258,51 @@
                                 <tr>
                                     <th style="width:10%">NO.</th>
                                     <th> Course Co-requisites</th>
+                                    <th> </th>
                                 </tr>
                             </thead>
                             <tbody class="table-border-bottom-0">
-                                <tr>
-                                    <td>1</td>
-                                    <td>lab math 101</td>
+                                <tr class="noData">
+                                    <td class="text-center" colspan="3"> No co-requisites were added</td>
                                 </tr>
-                                <tr class="add-new-record coRequisites">
+                                <tr class="coRequisites">
                                     <td>
                                         <button type="button" class="btn btn-label-primary add-new-record-btn">
                                             <i class="fa fa-add"></i>
                                         </button>
                                     </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="coRequisites-inp"
-                                            id="coRequisites-inp">
+                                    <td colspan="2">
+                                        <input type="text" class="form-control coRequisites-inp"
+                                            name="coRequisites-inp">
                                     </td>
                                 </tr>
-                                {{-- <tr class="noData">
-                            <td class="text-center"> No co-requisites were added</td>
-                        </tr> --}}
                             </tbody>
                         </table>
                     </div>
                 </div>
 
                 <div class="col-12">
-                    <table id="mainObjective" class="table table-striped">
+                    <table id="courseMainObjective" class="table table-striped">
                         <thead>
                             <tr>
                                 <th style="width:10%">NO</th>
                                 <th> Course Main Objective </th>
+                                <th> </th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
                             <tr class="noData">
-                                <td class="text-center" colspan="2"> No main objectives were added</td>
+                                <td class="text-center" colspan="3"> No main objectives were added</td>
                             </tr>
-                            <tr class="add-new-record courseMainObjective">
+                            <tr class="courseMainObjective">
                                 <td>
                                     <button type="button" class="btn btn-label-primary add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
-                                <td>
-                                    <input type="text" class="form-control" name="courseMainObjective"
-                                        id="courseMainObjective">
+                                <td colspan="2">
+                                    <input type="text" class="form-control courseMainObjective-inp"
+                                        name="courseMainObjective">
                                 </td>
                             </tr>
                         </tbody>
@@ -328,30 +323,28 @@
                                 <th> Mode of Instruction </th>
                                 <th> Contact Hours </th>
                                 <th> Percentage </th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
                             <tr class="noData">
-                                <td>1</td>
-                                <td> Traditional classroom</td>
-                                <td> From 10:00 AM To 12:00 AM </td>
-                                <td> 10% </td>
+                                <td colspan="5" class="text-center"> No records were added</td>
                             </tr>
-                            <tr class="add-new-record teachingMode">
+                            <tr class="teachingMode">
                                 <td>
                                     <button type="button" class="btn btn-label-primary add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="modeInstruction"
-                                        id="modeInstruction">
+                                    <input type="text" class="form-control teachingMode-inp" name="modeInstruction">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="contactHours" id="contactHours">
+                                    <input type="text" class="form-control teachingMode-inp" name="contactHours">
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control" name="percentage" id="percentage">
+                                    <input type="number" class="form-control teachingMode-inp" max=100 min=0
+                                        name="percentage">
                                 </td>
                             </tr>
                         </tbody>
@@ -371,25 +364,24 @@
                                 <th style="width:10%"> NO </th>
                                 <th> Activity </th>
                                 <th> Contact Hours </th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
                             <tr class="noData">
-                                <td>1</td>
-                                <td> Traditional classroom</td>
-                                <td> 10% </td>
+                                <td colspan="4" class="text-center"> No records were added</td>
                             </tr>
-                            <tr class="add-new-record values">
+                            <tr class="contactHours">
                                 <td>
                                     <button type="button" class="btn btn-label-primary add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="activity" id="activity">
+                                    <input type="text" class="form-control contactHours-inp" name="activity">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="contactHours" id="contactHours">
+                                    <input type="text" class="form-control contactHours-inp" name="contactHours">
                                 </td>
                             </tr>
                         </tbody>
@@ -411,115 +403,97 @@
                                 <th> Code of CLOs aligned with program </th>
                                 <th> Teaching Strategies </th>
                                 <th> Assessment Methods </th>
+                                <th> </th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                            <tr class="group">
+                            <tr name="instructionalFramwork-group" class="instructionalFramwork">
                                 <td> 1.0 </td>
-                                <td colspan="4">Knowledge and understanding</td>
+                                <td colspan="6">Knowledge and understanding</td>
                             </tr>
-                            <tr class="even">
-                                <td>1.1</td>
-                                <td>Define key concepts in the field</td>
-                                <td>CLO-001</td>
-                                <td>Lectures, Readings</td>
-                                <td>Written Exam</td>
-                            </tr>
-                            <tr class="add-new-record knowledge">
+
+                            <tr class="instructionalFramwork" name="add-record">
                                 <td>
-                                    <button type="button" class="btn btn-label-primary add-new-record-btn">
+                                    <button type="button" data-group = "1"
+                                        class="btn btn-label-primary add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="courseLearningOutcomes-knowledge"
-                                        id=" courseLearningOutcomes-knowledge">
+                                    <input type="text" class="form-control instructionalFramwork-inp"
+                                        name="courseLearningOutcomes-knowledge">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="codeCLOs-knowledge"
-                                        id="codeCLOs-knowledge">
+                                    <input type="text" class="form-control instructionalFramwork-inp"
+                                        name="codeCLOs-knowledge">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="teachingStrategies-knowledge"
-                                        id=" teachingStrategies-knowledge">
+                                    <input type="text" class="form-control instructionalFramwork-inp"
+                                        name="teachingStrategies-knowledge">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="assessmentMethods-knowledge"
-                                        id="assessmentMethods-knowledge">
+                                    <input type="text" class="form-control instructionalFramwork-inp"
+                                        name="assessmentMethods-knowledge">
                                 </td>
                             </tr>
-                            <tr class="group">
+                            <tr name="instructionalFramwork-group" class="instructionalFramwork">
                                 <td> 2.0 </td>
-                                <td colspan="5">Skills</td>
+                                <td colspan="6">Skills</td>
                             </tr>
-                            <tr class="add-new-record skills">
+                            <tr class="instructionalFramwork" name="add-record">
                                 <td>
-                                    <button type="button" class="btn btn-label-primary add-new-record-btn">
+                                    <button type="button" data-group = "2"
+                                        class="btn btn-label-primary add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="courseLearningOutcomes-skills"
-                                        id=" courseLearningOutcomes-skills">
+                                    <input type="text" class="form-control instructionalFramwork-inp"
+                                        name="courseLearningOutcomes-skills">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="codeCLOs-skills"
-                                        id="codeCLOs-skills">
+                                    <input type="text" class="form-control instructionalFramwork-inp"
+                                        name="codeCLOs-skills">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="teachingStrategies-skills"
-                                        id=" teachingStrategies-skills">
+                                    <input type="text" class="form-control instructionalFramwork-inp"
+                                        name="teachingStrategies-skills">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="assessmentMethods-skills"
-                                        id="assessmentMethods-skills">
+                                    <input type="text" class="form-control instructionalFramwork-inp"
+                                        name="assessmentMethods-skills">
                                 </td>
                             </tr>
-                            <tr class="group">
+                            <tr name="instructionalFramwork-group" class="instructionalFramwork">
                                 <td> 3.0 </td>
-                                <td colspan="5">Values, autonomy responsibility</td>
+                                <td colspan="6">Values, autonomy responsibility</td>
                             </tr>
-                            <tr class="add-new-record values">
+                            <tr class="instructionalFramwork" name="add-record">
                                 <td>
-                                    <button type="button" class="btn btn-label-primary add-new-record-btn">
+                                    <button type="button" data-group = "3"
+                                        class="btn btn-label-primary add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="courseLearningOutcomes-values"
-                                        id=" courseLearningOutcomes-values">
+                                    <input type="text" class="form-control instructionalFramwork-inp"
+                                        name="courseLearningOutcomes-values">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="codeCLOs-values"
-                                        id="codeCLOs-values">
+                                    <input type="text" class="form-control instructionalFramwork-inp"
+                                        name="codeCLOs-values">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="teachingStrategies-values"
-                                        id=" teachingStrategies-values">
+                                    <input type="text" class="form-control instructionalFramwork-inp"
+                                        name="teachingStrategies-values">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="assessmentMethods-values"
-                                        id="assessmentMethods-values">
+                                    <input type="text" class="form-control instructionalFramwork-inp"
+                                        name="assessmentMethods-values">
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    {{-- <form id="addInstructionalFramwork" class="pt-1">
-                    <div class="row">
-                        <div class="col-3"></div>
-                        <div class="col-md-4 col-lg-4 col-sm-12">
-                            <input type="text" class="name form-control">
-                        </div>
-                        <div class="col-md-4 col-lg-4 col-sm-12">
-                            <input type="text" class="name form-control">
-                        </div>
-                        <div class="col-md-1 col-lg-1 col-sm-12 d-flex justify-content-evenly">
-                            <button class="btn btn-label-primary mb-4">
-                                <i class="ti ti-check me-1"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form> --}}
                 </div>
             </div>
         </div>
@@ -535,35 +509,27 @@
                                 <th style="width:10%"> NO </th>
                                 <th> List of Topics </th>
                                 <th> Contact Hours </th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                            <tr class="noData">
-                                <td>1</td>
-                                <td> Traditional classroom</td>
-                                <td> 13:00 - 16:00 </td>
+
+                            <tr class="noData text-center">
+                                <td colspan="4">No topics were added</td>
                             </tr>
-                            <tr>
-                                <td></td>
-                                <td colspan="1">Total</td>
-                                <td>3 hours</td>
-                            </tr>
-                            {{-- <tr class="noData text-center">
-                            <td colspan="3" >No topics were added</td>
-                        </tr> --}}
-                            <tr class="add-new-record courseContent">
+                            <tr class="courseContent">
                                 <td>
                                     <button type="button" class="btn btn-label-primary add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="topic-courseContent"
-                                        id="topic-courseContent">
+                                    <input type="text" class="form-control courseContent-inp"
+                                        name="topic-courseContent">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="contactHours-courseContent"
-                                        id="contactHours-courseContent">
+                                    <input type="text" class="form-control courseContent-inp"
+                                        name="contactHours-courseContent">
                                 </td>
                             </tr>
                         </tbody>
@@ -584,34 +550,32 @@
                                 <th> Assessment Activities </th>
                                 <th> Assessment timing (in weeks) </th>
                                 <th> Percentage of Total Assessment Score </th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                            {{-- <tr class="noData">
-                            <td>1</td>
-                            <td> Traditional classroom</td>
-                            <td> 10% </td>
-                        </tr> --}}
+
                             <tr class="noData text-center">
-                                <td colspan="4">No assessments were added</td>
+                                <td colspan="5">No assessments were added</td>
                             </tr>
-                            <tr class="add-new-record studentsAssessmentActivities">
+
+                            <tr class="studentsAssessmentActivities">
                                 <td>
                                     <button type="button" class="btn btn-label-primary add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="assessmentActivity"
-                                        id="assessmentActivity">
+                                    <input type="text" class="form-control studentsAssessmentActivities-inp"
+                                        name="assessmentActivity">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="assessmentTiming"
-                                        id="assessmentTiming">
+                                    <input type="text" class="form-control studentsAssessmentActivities-inp"
+                                        name="assessmentTiming">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="assessmentScore"
-                                        id="assessmentScore">
+                                    <input type="text" class="form-control studentsAssessmentActivities-inp"
+                                        name="assessmentScore">
                                 </td>
                             </tr>
                         </tbody>
@@ -666,34 +630,30 @@
             </div>
             <div class="card-body">
                 <div class="col-12">
-                    <table id="studentsAssessmentActivities" class="table table-striped">
+                    <table id="facilitiesEquipment" class="table table-striped">
                         <thead>
                             <tr>
                                 <th style="width:10%"> NO </th>
                                 <th> Items </th>
                                 <th> Resources </th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                            {{-- <tr class="noData">
-                            <td>1</td>
-                            <td> Traditional classroom</td>
-                            <td> 10% </td>
-                        </tr> --}}
                             <tr class="noData text-center">
-                                <td colspan="3">No resources were added</td>
+                                <td colspan="4">No resources were added</td>
                             </tr>
-                            <tr class="add-new-record facilitiesEquipment">
+                            <tr class="facilitiesEquipment">
                                 <td>
                                     <button type="button" class="btn btn-label-primary add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="items" id="items">
+                                    <input type="text" class="form-control facilitiesEquipment-inp" name="items">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="resources" id="resources">
+                                    <input type="text" class="form-control facilitiesEquipment-inp" name="resources">
                                 </td>
                             </tr>
                         </tbody>
@@ -714,33 +674,30 @@
                                 <th> Assessment Areas/Issues </th>
                                 <th> Assessor </th>
                                 <th> Assessment Methods </th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                            {{-- <tr class="noData">
-                            <td>1</td>
-                            <td> Traditional classroom</td>
-                            <td> 10% </td>
-                        </tr> --}}
                             <tr class="noData text-center">
-                                <td colspan="4">No Assessments were added</td>
+                                <td colspan="5">No Assessments were added</td>
                             </tr>
-                            <tr class="add-new-record facilitiesEquipment">
+                            <tr class="assessmentCourseQualitys">
                                 <td>
                                     <button type="button" class="btn btn-label-primary add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="assessmentAreas"
-                                        id="assessmentAreas">
+                                    <input type="text" class="form-control assessmentCourseQualitys-inp"
+                                        name="assessmentAreas">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="Assessor" id="Assessor">
+                                    <input type="text" class="form-control assessmentCourseQualitys-inp"
+                                        name="Assessor">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="assessmentMethods"
-                                        id="assessmentMethods">
+                                    <input type="text" class="form-control assessmentCourseQualitys-inp"
+                                        name="assessmentMethods">
                                 </td>
                             </tr>
                         </tbody>
