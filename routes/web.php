@@ -180,7 +180,11 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_add']], function () {
         Route::get('/course/add', [CourseController::class, 'create'])->name('courses-add');
         Route::post('/course/add', [CourseController::class, 'add_course'])->name('courses-addCollege');
-        Route::get('//suggestions/course/specification', [CourseController::class, 'specification_suggestions'])->name('courses-specification-suggestions');
+        Route::get('/suggestions/course/specification', [CourseController::class, 'specification_suggestions'])->name('courses-specification-suggestions');
+        Route::get('/suggestions/course/identification', [CourseController::class, 'identification_suggestions'])->name('courses-identification-suggestions');
+        Route::get('/suggestions/course/teachingMode', [CourseController::class, 'teachingMode_suggestions'])->name('courses-teachingMode-suggestions');
+        Route::get('/suggestions/course/contactHours', [CourseController::class, 'contactHours_suggestions'])->name('courses-contactHours-suggestions');
+        Route::get('/suggestions/course/framework/{section}', [CourseController::class, 'framework_suggestions'])->name('courses-framework-suggestions');
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_edit|courses_view']], function () {
         Route::get('/course/{id}', [CourseController::class, 'get_course'])->name('course-get');

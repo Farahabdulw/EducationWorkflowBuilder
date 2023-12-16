@@ -215,7 +215,7 @@
                     <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                         <div class="input-group">
                             <span class="input-group-text">Course Level or Year to be Offered</span>
-                            <input type="text" aria-label="level" class="form-control coruseLevel">
+                            <input type="text" aria-label="level" id="level" class="form-control coruseLevel">
                         </div>
                     </div>
                 </div>

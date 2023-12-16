@@ -183,5 +183,88 @@ class CourseController extends Controller
     
         return response()->json($suggestions);
     }
+    public function identification_suggestions(Request $request)
+    {
+        $query = $request->input('q');
+        list($entity, $searchTerm) = explode('~*~', $query);
     
+        $courses = Course::whereHas($entity, function ($queryBuilder) use ($searchTerm) {
+            $queryBuilder->where('name', 'like', '%' . $searchTerm . '%');
+        })
+            ->get();
+        $suggestions = [];
+    
+        foreach ($courses as $course) {
+            $relatedEntities = $course->{$entity};
+    
+            if ($relatedEntities && $relatedEntities->isNotEmpty()) {
+                foreach ($relatedEntities as $relatedEntity) {
+                    $suggestions[] = [$entity => $relatedEntity->name];
+                }
+            }
+        }
+    
+        return response()->json($suggestions);
+    }
+    public function teachingMode_suggestions(Request $request){
+        $query = $request->input('q');
+        list($entity, $searchTerm) = explode('~*~', $query);
+        $courses = Course::whereHas("teachingMode", function ($queryBuilder) use ($searchTerm) {
+            $queryBuilder->where('mode_of_instruction', 'like', '%' . $searchTerm . '%');
+        })
+            ->get();
+        $suggestions = [];
+    
+        foreach ($courses as $course) {
+            $relatedEntities = $course->teachingMode;
+    
+            if ($relatedEntities && $relatedEntities->isNotEmpty()) {
+                foreach ($relatedEntities as $relatedEntity) {
+                    $suggestions[] = [$entity => $relatedEntity->mode_of_instruction];
+                }
+            }
+        }
+        return response()->json($suggestions);
+    }
+    public function contactHours_suggestions(Request $request){
+        $query = $request->input('q');
+        list($entity, $searchTerm) = explode('~*~', $query);
+        $courses = Course::whereHas("contactHours", function ($queryBuilder) use ($searchTerm , $entity) {
+            $queryBuilder->where($entity, 'like', '%' . $searchTerm . '%');
+        })
+            ->get();
+        $suggestions = [];
+    
+        foreach ($courses as $course) {
+            $relatedEntities = $course->contactHours;
+    
+            if ($relatedEntities && $relatedEntities->isNotEmpty()) {
+                foreach ($relatedEntities as $relatedEntity) {
+                    $suggestions[] = [$entity => $relatedEntity->{$entity}];
+                }
+            }
+        }
+        return response()->json($suggestions);
+    }
+    public function framework_suggestions(Request $request , $section){
+        $query = $request->input('q');
+        list($entity, $searchTerm) = explode('~*~', $query);
+        $courses = Course::whereHas($section, function ($queryBuilder) use ($searchTerm , $entity) {
+            $queryBuilder->where($entity, 'like', '%' . $searchTerm . '%');
+        })
+            ->get();
+        $suggestions = [];
+    
+        foreach ($courses as $course) {
+            $relatedEntities = $course->{$section};
+    
+            if ($relatedEntities && $relatedEntities->isNotEmpty()) {
+                foreach ($relatedEntities as $relatedEntity) {
+                    $suggestions[] = [$entity => $relatedEntity->{$entity}];
+                }
+            }
+        }
+        return response()->json($suggestions);
+    }
+
 }
