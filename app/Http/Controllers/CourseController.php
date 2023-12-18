@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Course;
+use Illuminate\Support\Facades\Date;
 
 class CourseController extends Controller
 {
@@ -68,35 +69,107 @@ class CourseController extends Controller
     public function add_course(Request $request)
     {
 
+
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'code' => 'required',
             'department' => 'required',
-            'description' => 'max:255',
+            'college' => 'required',
+            'program' => 'required',
+            'institution' => 'required',
+            'creditHours' => 'required|numeric',
+            'description' => 'max:1000',
+            'councilOrCommitte' => 'required',
+            'referenceNumber' => 'required',
+            'level' => 'required',
+            'date' => 'required|date',
+            'councilOrCommitte' => 'required',
         ]);
-
-
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors(),
             ], 422);
         }
+        $currentUser = auth()->user();
+        $lastRevisionData = [
+            'date' => now(), 
+            'by' => $currentUser->first_name . ' ' . $currentUser->last_name,
+        ];
 
-        // Create a new course record in the database
         $course = Course::create([
             'title' => $request->get('title'),
-            'PLOS' => json_encode($request->get('PLOS')),
-            'CLOS' => json_encode($request->get('CLOS')),
-            'CLOS' => json_encode($request->get('students')),
-            'department_id' => $request->get('department'),
             'code' => $request->get('code'),
+            'program' => $request->get('program'),
+            'department_id' => $request->get('department'),
+            'college_id' => $request->get('college'),
+            'institution' => $request->get('institution'),
+
+            'credit' => $request->get('creditHours'),
+            'tatorial' => $request->get('tatorialHours'),
+            'description' => $request->get('description') ?? " ",
+
+            'approved_by' => $request->get('councilOrCommitte'),
+            'approval_number' => $request->get('referenceNumber'),
+            'approval_date' => $request->get('date'),
+            'level' => $request->get('level'),
+
+            'type' => json_encode($request->get('courseCategories')?? []),
+            'enrollment' => json_encode($request->get('enrollmentOption')?? []),
+
+            'essential_references' => $request->get('essentialReferences') ?? null ,
+            'supportive_references' => $request->get('supportiveReferences') ?? null ,
+            'electronic_references' => $request->get('electronicMaterials') ?? null ,
+            'other_references' => $request->get('otherLearningMaterials') ?? null ,
+            'version' => "1" ,
+            'last_revision' => $lastRevisionData,
         ]);
 
-        // Return a success response
-        if ($course)
+        if ($course){
+            if ($request->has('preRequirements')) {
+                $preRequirements = $request->get('preRequirements');
+                $course->preRequisites()->sync($preRequirements);
+            }
+            
+            if ($request->has('coRequisites')) {
+                $coRequisites = $request->get('coRequisites');
+            }
+            
+            if ($request->has('courseMainObjectives')) {
+                $courseMainObjectives = $request->get('courseMainObjectives');
+            }
+            
+            if ($request->has('enrollmentOption')) {
+                $enrollmentOption = $request->get('enrollmentOption');
+            }
+            
+            if ($request->has('courseCategories')) {
+                $courseCategories = $request->get('courseCategories');
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             return response()->json(['success' => true, 'message' => 'Course added successfully'], 200);
-        else
+        }    else
             return response()->json([
                 'success' => false,
                 'error' => $course,
@@ -179,6 +252,7 @@ class CourseController extends Controller
     
         $suggestions = Course::select($entity)
             ->where($entity, 'like', '%' . $query . '%')
+            ->groupBy($entity)
             ->get(); 
     
         return response()->json($suggestions);

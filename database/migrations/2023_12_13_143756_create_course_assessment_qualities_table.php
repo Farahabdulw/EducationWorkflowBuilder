@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('course_assessment_qualities', function (Blueprint $table) {
             $table->id();
+            $table->integer('course_id');
             $table->string('assessment_area')->nullable();
             $table->string('assessor')->nullable();
             $table->string('assessment_method')->nullable();

@@ -37,6 +37,8 @@
     <script src="{{ asset('assets/vendor/libs/jquery-repeater/jquery-repeater.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/bloodhound/bloodhound.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/typeahead-js/typeahead.js') }}"></script>
+    <script src="{{ asset('assets/js/courses/typeahead.js') }}"></script>
+
 
 @endsection
 
@@ -56,7 +58,7 @@
         </div>
         <div class="d-flex flex-column align-items-end pt-3 pb-2">
             <p class="text-muted mb-0">Last Revision:</p>
-            <p class="text-muted lastModifed">20/2/1 12 AM by Developer</p>
+            <p class="text-muted lastModifed">New Course</p>
         </div>
     </div>
     <form id="add-form" method="POST">
@@ -108,9 +110,9 @@
                     <div class=" col-md-6 col-lg-6 col-sm-12 pt-2">
                         <div class="input-group">
                             <span class="input-group-text creditHours">Credit Hours</span>
-                            <input type="number" aria-label="First name" min=0 class="form-control">
+                            <input type="number" aria-label="credit Hours" id="creditHours" min=0 class="form-control">
                             <span class="input-group-text tatorialHours">Tatorial Hours</span>
-                            <input type="number" aria-label="Last name" min=0 class="form-control">
+                            <input type="number" aria-label="tatorial Hours" id="tatorialHours" min=0 class="form-control">
                         </div>
                     </div>
                 </div>
@@ -230,7 +232,7 @@
                             <thead>
                                 <tr>
                                     <th style="width: 10%">No.</th>
-                                    <th> Course Pre-requirements </th>
+                                    <th data-name="PreRequirment"> Course Pre-requirements </th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -257,7 +259,7 @@
                             <thead>
                                 <tr>
                                     <th style="width:10%">NO.</th>
-                                    <th> Course Co-requisites</th>
+                                    <th data-name="CoRequirment"> Course Co-requisites</th>
                                     <th> </th>
                                 </tr>
                             </thead>
@@ -286,7 +288,7 @@
                         <thead>
                             <tr>
                                 <th style="width:10%">NO</th>
-                                <th> Course Main Objective </th>
+                                <th data-name="mainObjective"> Course Main Objective </th>
                                 <th> </th>
                             </tr>
                         </thead>
@@ -320,9 +322,9 @@
                         <thead>
                             <tr>
                                 <th style="width:10%"> NO </th>
-                                <th> Mode of Instruction </th>
-                                <th> Contact Hours </th>
-                                <th> Percentage </th>
+                                <th data-name="modeOfInstruction"> Mode of Instruction </th>
+                                <th data-name="contactHour"> Contact Hours </th>
+                                <th data-name="percentage"> Percentage </th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -362,8 +364,8 @@
                         <thead>
                             <tr>
                                 <th style="width:10%"> NO </th>
-                                <th> Activity </th>
-                                <th> Contact Hours </th>
+                                <th data-name="activity"> Activity </th>
+                                <th data-name="contactHour"> Contact Hours </th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -399,15 +401,15 @@
                         <thead>
                             <tr>
                                 <th style="width:10%"> Code </th>
-                                <th> Course Learning Outcomes </th>
-                                <th> Code of CLOs aligned with program </th>
-                                <th> Teaching Strategies </th>
-                                <th> Assessment Methods </th>
+                                <th data-name="leaeningOutcome"> Course Learning Outcomes </th>
+                                <th data-name="CLOcode"> Code of CLOs aligned with program </th>
+                                <th data-name="teachingStrategie"> Teaching Strategies </th>
+                                <th data-name="assessmentMethod"> Assessment Methods </th>
                                 <th> </th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                            <tr name="instructionalFramwork-group" class="instructionalFramwork">
+                            <tr name="instructionalFramwork-group" data-name="knowledge" class="instructionalFramwork">
                                 <td> 1.0 </td>
                                 <td colspan="6">Knowledge and understanding</td>
                             </tr>
@@ -436,7 +438,7 @@
                                         name="assessmentMethods-knowledge">
                                 </td>
                             </tr>
-                            <tr name="instructionalFramwork-group" class="instructionalFramwork">
+                            <tr name="instructionalFramwork-group" data-name="skills" class="instructionalFramwork">
                                 <td> 2.0 </td>
                                 <td colspan="6">Skills</td>
                             </tr>
@@ -464,7 +466,7 @@
                                         name="assessmentMethods-skills">
                                 </td>
                             </tr>
-                            <tr name="instructionalFramwork-group" class="instructionalFramwork">
+                            <tr name="instructionalFramwork-group" data-name="values" class="instructionalFramwork">
                                 <td> 3.0 </td>
                                 <td colspan="6">Values, autonomy responsibility</td>
                             </tr>
@@ -507,8 +509,8 @@
                         <thead>
                             <tr>
                                 <th style="width:10%"> NO </th>
-                                <th> List of Topics </th>
-                                <th> Contact Hours </th>
+                                <th data-name="topic"> List of Topics </th>
+                                <th data-name="contactHour"> Contact Hours </th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -547,9 +549,9 @@
                         <thead>
                             <tr>
                                 <th style="width:10%"> NO </th>
-                                <th> Assessment Activities </th>
-                                <th> Assessment timing (in weeks) </th>
-                                <th> Percentage of Total Assessment Score </th>
+                                <th data-name="assessmentActivity"> Assessment Activities </th>
+                                <th data-name="assessmentTiming"> Assessment timing (in weeks) </th>
+                                <th data-name="assessmentpercentage"> Percentage of Total Assessment Score </th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -593,7 +595,8 @@
                         <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                             <div class="input-group">
                                 <span class="input-group-text">Essential References</span>
-                                <input type="text" aria-label="level" class="form-control essentialReferences">
+                                <input type="text" aria-label="essentialReferences"
+                                    class="form-control essentialReferences">
                             </div>
                         </div>
                     </div>
@@ -601,7 +604,8 @@
                         <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                             <div class="input-group">
                                 <span class="input-group-text">Supportive References</span>
-                                <input type="text" aria-label="level" class="form-control supportiveReferences">
+                                <input type="text" aria-label="supportiveReferences"
+                                    class="form-control supportiveReferences">
                             </div>
                         </div>
                     </div>
@@ -609,7 +613,8 @@
                         <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                             <div class="input-group">
                                 <span class="input-group-text">Electronic Materials</span>
-                                <input type="text" aria-label="level" class="form-control electronicMaterials">
+                                <input type="text" aria-label="electronicMaterials"
+                                    class="form-control electronicMaterials">
                             </div>
                         </div>
                     </div>
@@ -617,7 +622,8 @@
                         <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                             <div class="input-group">
                                 <span class="input-group-text">Other Learning Materials</span>
-                                <input type="text" aria-label="level" class="form-control otherLearningMaterials">
+                                <input type="text" aria-label="otherLearningMaterials"
+                                    class="form-control otherLearningMaterials">
                             </div>
                         </div>
                     </div>
@@ -634,8 +640,8 @@
                         <thead>
                             <tr>
                                 <th style="width:10%"> NO </th>
-                                <th> Items </th>
-                                <th> Resources </th>
+                                <th data-name="item"> Items </th>
+                                <th data-name="resource"> Resources </th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -671,9 +677,9 @@
                         <thead>
                             <tr>
                                 <th style="width:10%"> NO </th>
-                                <th> Assessment Areas/Issues </th>
-                                <th> Assessor </th>
-                                <th> Assessment Methods </th>
+                                <th data-name="assessmentArea"> Assessment Areas/Issues </th>
+                                <th data-name="assessor"> Assessor </th>
+                                <th data-name="assessmentMethod"> Assessment Methods </th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -715,7 +721,8 @@
                         <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                             <div class="input-group">
                                 <span class="input-group-text">COUNCIL / COMMITTEE</span>
-                                <input type="text" aria-label="level" class="form-control councilOrCommitte">
+                                <input type="text" aria-label="council Or Committe"
+                                    class="form-control councilOrCommitte">
                             </div>
                         </div>
                     </div>
@@ -723,7 +730,7 @@
                         <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                             <div class="input-group">
                                 <span class="input-group-text">REFERENCE NO.</span>
-                                <input type="text" aria-label="level" class="form-control referenceNumber">
+                                <input type="text" aria-label="referenceNumber" class="form-control referenceNumber">
                             </div>
                         </div>
                     </div>
@@ -731,7 +738,7 @@
                         <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                             <div class="input-group">
                                 <span class="input-group-text">DATE</span>
-                                <input type="text" aria-label="level" class="form-control date">
+                                <input type="date" aria-label="level" class="form-control date">
                             </div>
                         </div>
                     </div>

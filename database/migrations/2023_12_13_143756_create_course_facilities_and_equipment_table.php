@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('course_facilities_and_equipment', function (Blueprint $table) {
             $table->id();
+            $table->integer('course_id');
             $table->string('items')->nullable();
             $table->string('resource')->nullable();
             $table->timestamps();
