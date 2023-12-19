@@ -9,6 +9,9 @@ use App\Model\Course;
 class CourseContactHours extends Model
 {
     use HasFactory;
+    protected $fillable = ['course_id' , 'activity
+    ','hours' ];
+
     function course()
     {
         return $this->belongsTo(Course::class , 'course_id');

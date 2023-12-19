@@ -9,6 +9,11 @@ use App\Model\Course;
 class CourseStudentsAssessment extends Model
 {
     use HasFactory;
+    protected $fillable = ['course_id' , 
+    'assessment_activity',
+    'assessment_timing',
+    'percentage'];
+
     function course()
     {
         return $this->belongsTo(Course::class , 'course_id');

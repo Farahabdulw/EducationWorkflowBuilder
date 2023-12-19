@@ -196,7 +196,6 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_delete']], function () {
         Route::post('/course/delete', [CourseController::class, 'delete'])->name('course-delete');
-
     });
     // END of functionality of courses
 
@@ -251,6 +250,12 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/requests/filtered', [RequestController::class, 'filtered'])->name('filtered');
     });
 
+
+    Route::group(['middleware' => ['role_or_permission:super-admin|courses_add']], function () {
+        Route::get('/register-portal', [CourseController::class, 'register_portal'])->name('register_portal');
+        Route::post('/course/register', [CourseController::class, 'register'])->name('register-course');
+
+    });
 
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
     Route::post('/notification/read/{notif_id}', [NotificationController::class, 'read'])->name('read-notification');

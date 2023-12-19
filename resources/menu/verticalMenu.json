@@ -62,12 +62,13 @@
       "permission": "users",
       "slug": "users",
       "url": "/users"
+    },
+    {
+      "name": "Registration Portal",
+      "icon": "menu-icon tf-icons ti ti-user-circle",
+      "permission": "courses",
+      "slug": "register",
+      "url": "/register-portal"
     }
-
-
-
-
-
-
   ]
 }

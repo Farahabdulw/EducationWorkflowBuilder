@@ -9,6 +9,8 @@ use App\Model\Course;
 class CourseMainObjective extends Model
 {
     use HasFactory;
+    protected $fillable = ['course_id' , 'name'];
+
     function course()
     {
         return $this->belongsTo(Course::class , 'course_id');

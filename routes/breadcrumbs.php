@@ -133,3 +133,8 @@ Breadcrumbs::for('add-category-from-edit-form', function ($trail, $formId) {
     $trail->parent('edit-form', $formId);
     $trail->push('Add Category', route('forms-create-category'));
 });
+
+// register-portal
+Breadcrumbs::for('register', function ($trail) {
+    $trail->push('Register portal', route('register_portal'));
+});
