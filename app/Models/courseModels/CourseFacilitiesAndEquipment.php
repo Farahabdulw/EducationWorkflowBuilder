@@ -9,7 +9,7 @@ use App\Model\Course;
 class CourseFacilitiesAndEquipment extends Model
 {
     use HasFactory;
-    protected $fillable = ['course_id' , 'item' , 'resource'];
+    protected $fillable = ['course_id' , 'items' , 'resource'];
 
     function course()
     {

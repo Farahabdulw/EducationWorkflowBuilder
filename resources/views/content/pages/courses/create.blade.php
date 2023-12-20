@@ -576,7 +576,7 @@
                                         name="assessmentTiming">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control studentsAssessmentActivities-inp"
+                                    <input type="number" class="form-control studentsAssessmentActivities-inp"
                                         name="assessmentScore">
                                 </td>
                             </tr>

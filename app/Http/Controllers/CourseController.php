@@ -18,7 +18,7 @@ use App\Models\courseModels\CourseStudentsAssessment;
 use App\Models\courseModels\CourseFacilitiesAndEquipment;
 use App\Models\courseModels\CourseAssessmentQuality;
 use App\Models\courseModels\CourseStudents;
-
+use Illuminate\Support\Facades\DB;
 
 
 use Illuminate\Support\Facades\Date;
@@ -41,48 +41,36 @@ class CourseController extends Controller
     public function edit(int $id)
     {
         if (auth()->user()->can('edit_courses') || auth()->user()->hasRole('super-admin')) {
-            $course = Course::with('department')->find($id);
-
-            $students = $course->students;
-            $decodedStudents = json_decode($students, true);
-
-            $course->students = $decodedStudents;
-
+            $course = Course::with([
+                'department' ,
+                'preRequisites' ,
+                'coRequisites',
+                'mainObjective',
+                'teachingMode',
+                'contactHours',
+                'knowledge',
+                'skills',
+                'values',
+                'content',
+                'studentsAssessment',
+                'facilitiesAndEquipment',
+                'assessmentQuality',
+                'students'
+            ])->find($id);
 
             return view('content.pages.courses.edit', compact('course'));
         }
         return view('403');
 
     }
+    
     public function course(int $id)
     {
         if (auth()->user()->can('edit_courses') || auth()->user()->hasRole('super-admin')) {
-            $course = Course::select('PLOS', 'CLOS', 'department_id')->find($id);
+            $course = Course::select( 'department_id')->find($id);
 
-            // Decode the PLOS property
-            $decodedPLOS = json_decode($course->PLOS);
-            $decodedPLOS = json_decode($decodedPLOS);
-
-            // Decode the CLOS property
-            $decodedCLOS = json_decode($course->CLOS);
-
-            // Decode the knowledge, skills, and values properties within CLOS
-            if ($decodedCLOS->knowledge)
-                $decodedCLOS->knowledge = json_decode($decodedCLOS->knowledge);
-            if ($decodedCLOS->skills)
-                $decodedCLOS->skills = json_decode($decodedCLOS->skills);
-            if ($decodedCLOS->values)
-                $decodedCLOS->values = json_decode($decodedCLOS->values);
-            // Create a new variable to hold the decoded data
-            $decodedCourse = [
-                'PLOS' => $decodedPLOS,
-                'CLOS' => $decodedCLOS,
-                'department_id' => $course->department_id,
-            ];
-
-            // Return the decoded data
         }
-        return response()->json($decodedCourse, 200);
+        return response()->json($course, 200);
     }
     public function add_course(Request $request)
     {
@@ -108,184 +96,265 @@ class CourseController extends Controller
             ], 422);
         }
         $currentUser = auth()->user();
+        try {
+            DB::beginTransaction();
+        
+            $lastRevisionData = [
+                'date' => now(), 
+                'by' => $currentUser->first_name . ' ' . $currentUser->last_name,
+            ];
+
+            $course = Course::create([
+                'title' => $request->get('title'),
+                'code' => $request->get('code'),
+                'program' => $request->get('program'),
+                'department_id' => $request->get('department'),
+                'college_id' => $request->get('college'),
+                'institution' => $request->get('institution'),
+
+                'credit' => $request->get('creditHours'),
+                'tatorial' => $request->get('tatorialHours'),
+                'description' => $request->get('description') ?? " ",
+
+                'approved_by' => $request->get('councilOrCommitte'),
+                'approval_number' => $request->get('referenceNumber'),
+                'approval_date' => $request->get('date'),
+                'level' => $request->get('level'),
+
+                'type' => json_encode($request->get('courseCategories') ?? []),
+                'enrollment' => json_encode($request->get('enrollmentOption') ?? []),
+
+                'essential_references' => $request->get('essentialReferences') ?? null ,
+                'supportive_references' => $request->get('supportiveReferences') ?? null ,
+                'electronic_references' => $request->get('electronicMaterials') ?? null ,
+                'other_references' => $request->get('otherLearningMaterials') ?? null ,
+                'version' => "1" ,
+                'last_revision' => json_encode($lastRevisionData),
+            ]);
+
+            if ($course){
+                $this->createRecords($request , $course);
+                DB::commit();
+                return response()->json(['success' => true, 'message' => 'Course added successfully' , "course"=> $course], 200);
+            }else{
+                DB::rollBack();
+                return response()->json([
+                    'success' => false,
+                    'error' => $course,
+                ], 422);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+        
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+    public function update_course(Request $request)
+    {
+        $course = Course::with('department')->find($request->id);
+
+        if (!$course)
+            return response()->json(['error' => 'course not found'], 404);
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'code' => 'required',
+            'department' => 'required',
+            'college' => 'required',
+            'program' => 'required',
+            'institution' => 'required',
+            'creditHours' => 'required|numeric',
+            'description' => 'max:1000',
+            'councilOrCommitte' => 'required',
+            'referenceNumber' => 'required',
+            'level' => 'required',
+            'date' => 'required|date',
+            'councilOrCommitte' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+        $currentUser = auth()->user();
+        $course->version = $course->version - - 1; 
         $lastRevisionData = [
             'date' => now(), 
             'by' => $currentUser->first_name . ' ' . $currentUser->last_name,
         ];
+        
+        $course->title = $request->title;
+        $course->code = $request->code;
+        $course->program = $request->program;
+        $course->department_id = $request->department;
+        $course->college_id = $request->college;
+        $course->institution = $request->institution;
+        
+        $course->credit = $request->creditHours;
+        $course->tatorial = $request->tatorialHours;
+        $course->description = $request->description ?? " ";
+        $course->approved_by = $request->councilOrCommitte;
+        $course->approval_number = $request->referenceNumber;
+        $course->approval_date = $request->date;
+        $course->level = $request->level;
 
-        $course = Course::create([
-            'title' => $request->get('title'),
-            'code' => $request->get('code'),
-            'program' => $request->get('program'),
-            'department_id' => $request->get('department'),
-            'college_id' => $request->get('college'),
-            'institution' => $request->get('institution'),
+        $course->type = json_encode($request->courseCategories ?? []);
+        $course->enrollment = json_encode($request->enrollmentOption ?? []);
 
-            'credit' => $request->get('creditHours'),
-            'tatorial' => $request->get('tatorialHours'),
-            'description' => $request->get('description') ?? " ",
+        $course->essential_references = $request->essentialReferences;
+        $course->supportive_references = $request->supportiveReferences;
+        $course->electronic_references = $request->electronicMaterials;
+        $course->other_references = $request->otherLearningMaterials;
 
-            'approved_by' => $request->get('councilOrCommitte'),
-            'approval_number' => $request->get('referenceNumber'),
-            'approval_date' => $request->get('date'),
-            'level' => $request->get('level'),
+        $this->deleteExistingRecords($course->id);
+        $this->createRecords($request, $course);
+        $course->save();
 
-            'type' => json_encode($request->get('courseCategories') ?? []),
-            'enrollment' => json_encode($request->get('enrollmentOption') ?? []),
+        return response()->json(['message' => 'Course updated successfully', 'course' => $course], 200);
+    }
+    public function deleteExistingRecords($id){
+        CoursePrerequisites::where('course_id', $id)->delete();
+        CourseCorequisites::where('course_id', $id)->delete();
+        CourseMainObjective::where('course_id', $id)->delete();
+        CourseTeachingMode::where('course_id', $id)->delete();
+        CourseContactHours::where('course_id', $id)->delete();
+        CourseKnowledge::where('course_id', $id)->delete();
+        CourseSkills::where('course_id', $id)->delete();
+        CourseValues::where('course_id', $id)->delete();
+        CourseContent::where('course_id', $id)->delete();
+        CourseStudentsAssessment::where('course_id', $id)->delete();
+        CourseFacilitiesAndEquipment::where('course_id', $id)->delete();
+        CourseAssessmentQuality::where('course_id', $id)->delete();
+    }
+    public function createRecords($request , $course){
 
-            'essential_references' => $request->get('essentialReferences') ?? null ,
-            'supportive_references' => $request->get('supportiveReferences') ?? null ,
-            'electronic_references' => $request->get('electronicMaterials') ?? null ,
-            'other_references' => $request->get('otherLearningMaterials') ?? null ,
-            'version' => "1" ,
-            'last_revision' => json_encode($lastRevisionData),
-        ]);
-
-        if ($course){
-            if ($request->has('preRequirements')) {
-                $preRequirements = $request->get('preRequirements');
-                foreach ($preRequirements as $preRequirement) {
-                    CoursePrerequisites::create([
-                        'course_id' => $course->id,
-                        'name' => $preRequirement['PreRequirment'],
-                    ]);
-                }
+        if ($request->has('preRequirements')) {
+            $preRequirements = $request->get('preRequirements');
+            foreach ($preRequirements as $preRequirement) {
+                CoursePrerequisites::create([
+                    'course_id' => $course->id,
+                    'name' => $preRequirement['PreRequirment'],
+                ]);
             }
-            
-            if ($request->has('coRequisites')) {
-                $coRequisites = $request->get('coRequisites');
-                foreach ($coRequisites as $coRequisite) {
-                    CourseCorequisites::create([
-                        'course_id' => $course->id,
-                        'name' => $coRequisite['CoRequirment'],
-                    ]);
-                }
+        }
+        if ($request->has('coRequisites')) {
+            $coRequisites = $request->get('coRequisites');
+            foreach ($coRequisites as $coRequisite) {
+                CourseCorequisites::create([
+                    'course_id' => $course->id,
+                    'name' => $coRequisite['CoRequirment'],
+                ]);
             }
-            
-            if ($request->has('courseMainObjectives')) {
-                $courseMainObjectives = $request->get('courseMainObjectives');
-                foreach ($courseMainObjectives as $courseMainObjective) {
-                    CourseMainObjective::create([
-                        'course_id' => $course->id,
-                        'name' => $courseMainObjective['mainObjective'],
-                    ]);
-                }
+        }
+        if ($request->has('courseMainObjectives')) {
+            $courseMainObjectives = $request->get('courseMainObjectives');
+            foreach ($courseMainObjectives as $courseMainObjective) {
+                CourseMainObjective::create([
+                    'course_id' => $course->id,
+                    'name' => $courseMainObjective['mainObjective'],
+                ]);
             }
-            
-            if ($request->has('teachingModes')) {
-                $teachingModes = $request->get('teachingModes');
-                foreach ($teachingModes as $teachingMode) {
-                    CourseTeachingMode::create([
-                        'course_id' => $course->id,
-                        'percentage' => $teachingMode['percentage'],
-                        'mode_of_instruction' => $teachingMode['modeOfInstruction'],
-                        'contact_hours' => $teachingMode['contactHour'],
-                    ]);
-                }
+        }
+        if ($request->has('teachingModes')) {
+            $teachingModes = $request->get('teachingModes');
+            foreach ($teachingModes as $teachingMode) {
+                CourseTeachingMode::create([
+                    'course_id' => $course->id,
+                    'percentage' => $teachingMode['percentage'],
+                    'mode_of_instruction' => $teachingMode['modeOfInstruction'],
+                    'contact_hours' => $teachingMode['contactHour'],
+                ]);
             }
-
-            if ($request->has('contactHours')) {
-                $contactHours = $request->get('contactHours');
-                foreach ($contactHours as $contactHour) {
-                    CourseContactHours::create([
-                        'course_id' => $course->id,
-                        'activity' => $contactHour['activity'],
-                        'contact_hours' => $contactHour['contactHour'],
-                    ]);
-                }
+        }
+        if ($request->has('contactHours')) {
+            $contactHours = $request->get('contactHours');
+            foreach ($contactHours as $contactHour) {
+                CourseContactHours::create([
+                    'course_id' => $course->id,
+                    'activity' => $contactHour['activity'],
+                    'hours' => $contactHour['contactHour'],
+                ]);
             }
-
-            if ($request->has('knowledge')) {
-                $knowledge = $request->get('knowledge');
-                foreach ($knowledge as $knlg) {
-                    CourseKnowledge::create([
-                        'course_id' => $course->id,
-                        'learning_outcome' => $knlg['learningOutcomes'],
-                        'CLO_code' => $knlg['codeCLOs'],
-                        'teaching_strategies' => $knlg['teachingStrategies'],
-                        'assessment_methods' => $knlg['assessmentMethods'],
-                    ]);
-                }
+        }
+        if ($request->has('knowledge')) {
+            $knowledge = $request->get('knowledge');
+            foreach ($knowledge as $knlg) {
+                CourseKnowledge::create([
+                    'course_id' => $course->id,
+                    'learning_outcome' => $knlg['learningOutcomes'],
+                    'CLO_code' => $knlg['codeCLOs'],
+                    'teaching_strategies' => $knlg['teachingStrategies'],
+                    'assessment_methods' => $knlg['assessmentMethods'],
+                ]);
             }
-
-            if ($request->has('skills')) {
-                $skills = $request->get('skills');
-                foreach ($skills as $skill) {
-                    CourseSkills::create([
-                        'course_id' => $course->id,
-                        'learning_outcome' => $skill['learningOutcomes'],
-                        'CLO_code' => $skill['codeCLOs'],
-                        'teaching_strategies' => $skill['teachingStrategies'],
-                        'assessment_methods' => $skill['assessmentMethods'],
-                    ]);
-                }
+        }
+        if ($request->has('skills')) {
+            $skills = $request->get('skills');
+            foreach ($skills as $skill) {
+                CourseSkills::create([
+                    'course_id' => $course->id,
+                    'learning_outcome' => $skill['learningOutcomes'],
+                    'CLO_code' => $skill['codeCLOs'],
+                    'teaching_strategies' => $skill['teachingStrategies'],
+                    'assessment_methods' => $skill['assessmentMethods'],
+                ]);
             }
-
-            if ($request->has('values')) {
-                $values = $request->get('values');
-                foreach ($values as $value) {
-                    CourseValues::create([
-                        'course_id' => $course->id,
-                        'learning_outcome' => $value['learningOutcomes'],
-                        'CLO_code' => $value['codeCLOs'],
-                        'teaching_strategies' => $value['teachingStrategies'],
-                        'assessment_methods' => $value['assessmentMethods'],
-                    ]);
-                }
+        }
+        if ($request->has('values')) {
+            $values = $request->get('values');
+            foreach ($values as $value) {
+                CourseValues::create([
+                    'course_id' => $course->id,
+                    'learning_outcome' => $value['learningOutcomes'],
+                    'CLO_code' => $value['codeCLOs'],
+                    'teaching_strategies' => $value['teachingStrategies'],
+                    'assessment_methods' => $value['assessmentMethods'],
+                ]);
             }
-
-            if ($request->has('courseContents')) {
-                $courseContents = $request->get('courseContents');
-                foreach ($courseContents as $content) {
-                    CourseContent::create([
-                        'course_id' => $course->id,
-                        'topic' => $content['topic'],
-                        'contact_hours' => $content['contactHour'],
-                    ]);
-                }
+        }
+        if ($request->has('courseContents')) {
+            $courseContents = $request->get('courseContents');
+            foreach ($courseContents as $content) {
+                CourseContent::create([
+                    'course_id' => $course->id,
+                    'topic' => $content['topic'],
+                    'contact_hours' => $content['contactHour'],
+                ]);
             }
-
-            if ($request->has('studentsAssessmentActivities')) {
-                $studentsAssessmentActivities = $request->get('studentsAssessmentActivities');
-                foreach ($studentsAssessmentActivities as $studentsAssessmentActivitie) {
-                    CourseStudentsAssessment::create([
-                        'course_id' => $course->id,
-                        'assessment_activity' => $studentsAssessmentActivitie['assessmentActivity'],
-                        'assessment_timing' => $studentsAssessmentActivitie['assessmentTiming'],
-                        'percentage' => $studentsAssessmentActivitie['assessmentpercentage'],
-                    ]);
-                }
+        }
+        if ($request->has('studentsAssessmentActivities')) {
+            $studentsAssessmentActivities = $request->get('studentsAssessmentActivities');
+            foreach ($studentsAssessmentActivities as $studentsAssessmentActivitie) {
+                CourseStudentsAssessment::create([
+                    'course_id' => $course->id,
+                    'assessment_activity' => $studentsAssessmentActivitie['assessmentActivity'],
+                    'assessment_timing' => $studentsAssessmentActivitie['assessmentTiming'],
+                    'percentage' => $studentsAssessmentActivitie['assessmentpercentage'],
+                ]);
             }
-            
-            if ($request->has('facilitiesEquipments')) {
-                $facilitiesEquipments = $request->get('facilitiesEquipments');
-                foreach ($facilitiesEquipments as $facilitiesEquipment) {
-                    CourseFacilitiesAndEquipment::create([
-                        'course_id' => $course->id,
-                        'items' => $facilitiesEquipment['item'],
-                        'resource' => $facilitiesEquipment['resource'],
-                    ]);
-                }
+        }
+        if ($request->has('facilitiesEquipments')) {
+            $facilitiesEquipments = $request->get('facilitiesEquipments');
+            foreach ($facilitiesEquipments as $facilitiesEquipment) {
+                CourseFacilitiesAndEquipment::create([
+                    'course_id' => $course->id,
+                    'items' => $facilitiesEquipment['item'],
+                    'resource' => $facilitiesEquipment['resource'],
+                ]);
             }
-
-            if ($request->has('assessmentCourseQualitys')) {
-                $assessmentCourseQualitys = $request->get('assessmentCourseQualitys');
-                foreach ($assessmentCourseQualitys as $assessmentCourseQuality) {
-                    CourseAssessmentQuality::create([
-                        'course_id' => $course->id,
-                        'assessment_area' => $assessmentCourseQuality['assessmentArea'],
-                        'assessor' => $assessmentCourseQuality['assessor'],
-                        'assessment_method' => $assessmentCourseQuality['assessmentMethod'],
-                    ]);
-                }
+        }
+        if ($request->has('assessmentCourseQualitys')) {
+            $assessmentCourseQualitys = $request->get('assessmentCourseQualitys');
+            foreach ($assessmentCourseQualitys as $assessmentCourseQuality) {
+                CourseAssessmentQuality::create([
+                    'course_id' => $course->id,
+                    'assessment_area' => $assessmentCourseQuality['assessmentArea'],
+                    'assessor' => $assessmentCourseQuality['assessor'],
+                    'assessment_method' => $assessmentCourseQuality['assessmentMethod'],
+                ]);
             }
-            
-            return response()->json(['success' => true, 'message' => 'Course added successfully' , "course"=> $course], 200);
-        }else
-            return response()->json([
-                'success' => false,
-                'error' => $course,
-            ], 422);
+        }
     }
     public function get_courses()
     {
@@ -293,7 +362,22 @@ class CourseController extends Controller
             $canEdit = true;
             $canDelete = true;
             $canAdd = true;
-            $courses = Course::with('department')->get();
+            $courses = Course::with([
+                'department',
+                'preRequisites',
+                'coRequisites',
+                'mainObjective',
+                'teachingMode',
+                'contactHours',
+                'knowledge',
+                'skills',
+                'values',
+                'content',
+                'studentsAssessment',
+                'facilitiesAndEquipment',
+                'assessmentQuality',
+                'students'
+            ])->get();
         } else {
             $authUser = auth()->user();
             $canEdit = auth()->user()->can('courses_edit');
@@ -306,11 +390,23 @@ class CourseController extends Controller
             })->flatten();
 
             // Assuming $courses is the collection of all courses
-            $courses = Course::whereIn('id', $groupsAff->toArray())->with([
-                'departments' => function ($query) {
-                    $query->select('id', 'name');
-                }
-            ])->get();
+            $courses = Course::whereIn('id', $groupsAff->toArray())
+                ->with([
+                    'department' ,
+                    'coRequisites',
+                    'mainObjective',
+                    'teachingMode',
+                    'contactHours',
+                    'knowledge',
+                    'skills',
+                    'values',
+                    'content',
+                    'studentsAssessment',
+                    'facilitiesAndEquipment',
+                    'assessmentQuality',
+                    'students'
+                ])->get();
+
         }
         $responseObject = [
             'courses' => $courses,
@@ -340,23 +436,7 @@ class CourseController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Course soft deleted successfully'], 200);
     }
-    public function update_course(Request $request)
-    {
-        $course = Course::with('department')->find($request->id);
 
-        if (!$course)
-            return response()->json(['error' => 'course not found'], 404);
-
-        $course->title = $request->title;
-        $course->department_id = $request->department;
-        $course->code = $request->code;
-        $course->PLOS = json_encode($request->PLOS);
-        $course->CLOS = json_encode($request->CLOS);
-        $course->students = json_encode($request->students);
-        $course->save();
-
-        return response()->json(['message' => 'Course updated successfully', 'course' => $course], 200);
-    }
     public function specification_suggestions(Request $request)
     {
         $query = $request->input('q');
