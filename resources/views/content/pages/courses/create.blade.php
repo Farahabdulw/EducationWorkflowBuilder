@@ -242,7 +242,7 @@
                                 </tr>
                                 <tr class="preRequirements">
                                     <td>
-                                        <button type="button" class="btn btn-label-primary add-new-record-btn">
+                                        <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
                                             <i class="fa fa-add"></i>
                                         </button>
                                     </td>
@@ -269,7 +269,7 @@
                                 </tr>
                                 <tr class="coRequisites">
                                     <td>
-                                        <button type="button" class="btn btn-label-primary add-new-record-btn">
+                                        <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
                                             <i class="fa fa-add"></i>
                                         </button>
                                     </td>
@@ -298,7 +298,7 @@
                             </tr>
                             <tr class="courseMainObjective">
                                 <td>
-                                    <button type="button" class="btn btn-label-primary add-new-record-btn">
+                                    <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
@@ -334,7 +334,7 @@
                             </tr>
                             <tr class="teachingMode">
                                 <td>
-                                    <button type="button" class="btn btn-label-primary add-new-record-btn">
+                                    <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
@@ -375,7 +375,7 @@
                             </tr>
                             <tr class="contactHours">
                                 <td>
-                                    <button type="button" class="btn btn-label-primary add-new-record-btn">
+                                    <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
@@ -417,7 +417,7 @@
                             <tr class="instructionalFramwork" name="add-record">
                                 <td>
                                     <button type="button" data-group = "1"
-                                        class="btn btn-label-primary add-new-record-btn">
+                                        class="btn btn-label-primary actionBtn add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
@@ -438,6 +438,8 @@
                                         name="assessmentMethods-knowledge">
                                 </td>
                             </tr>
+                        </tbody>
+                        <tbody class="table-border-bottom-0">
                             <tr name="instructionalFramwork-group" data-name="skills" class="instructionalFramwork">
                                 <td> 2.0 </td>
                                 <td colspan="6">Skills</td>
@@ -445,7 +447,7 @@
                             <tr class="instructionalFramwork" name="add-record">
                                 <td>
                                     <button type="button" data-group = "2"
-                                        class="btn btn-label-primary add-new-record-btn">
+                                        class="btn btn-label-primary actionBtn add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
@@ -466,6 +468,8 @@
                                         name="assessmentMethods-skills">
                                 </td>
                             </tr>
+                        </tbody>
+                        <tbody class="table-border-bottom-0">
                             <tr name="instructionalFramwork-group" data-name="values" class="instructionalFramwork">
                                 <td> 3.0 </td>
                                 <td colspan="6">Values, autonomy responsibility</td>
@@ -473,7 +477,7 @@
                             <tr class="instructionalFramwork" name="add-record">
                                 <td>
                                     <button type="button" data-group = "3"
-                                        class="btn btn-label-primary add-new-record-btn">
+                                        class="btn btn-label-primary actionBtn add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
@@ -521,7 +525,7 @@
                             </tr>
                             <tr class="courseContent">
                                 <td>
-                                    <button type="button" class="btn btn-label-primary add-new-record-btn">
+                                    <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
@@ -563,7 +567,7 @@
 
                             <tr class="studentsAssessmentActivities">
                                 <td>
-                                    <button type="button" class="btn btn-label-primary add-new-record-btn">
+                                    <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
@@ -651,7 +655,7 @@
                             </tr>
                             <tr class="facilitiesEquipment">
                                 <td>
-                                    <button type="button" class="btn btn-label-primary add-new-record-btn">
+                                    <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
@@ -689,7 +693,7 @@
                             </tr>
                             <tr class="assessmentCourseQualitys">
                                 <td>
-                                    <button type="button" class="btn btn-label-primary add-new-record-btn">
+                                    <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
                                         <i class="fa fa-add"></i>
                                     </button>
                                 </td>
