@@ -19,6 +19,7 @@ use App\Models\courseModels\CourseFacilitiesAndEquipment;
 use App\Models\courseModels\CourseAssessmentQuality;
 use App\Models\courseModels\CourseStudents;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 
 use Illuminate\Support\Facades\Date;
@@ -149,6 +150,47 @@ class CourseController extends Controller
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
     }
+    public function mapping(Request $request){
+        return view('content.pages.courses.mapping');
+    }
+    // public function import(Request $request){
+    //     if ($request->hasFile('fileToImport')) {
+    //         $file = $request->file('fileToImport');
+    //         $validFileTypes = ['xlsx', 'xls'];
+    //         $extension = strtolower($file->getClientOriginalExtension());
+
+    //         if (!in_array($extension, $validFileTypes)) 
+    //             return response()->json(['error' => 'Invalid file type. Only Excel files are accepted.'], 400);
+            
+    //         $spreadsheet = IOFactory::load($file->getPathname());
+
+    //         // Get all sheets in the workbook
+    //         $allSheets = $spreadsheet->getAllSheets();
+    
+    //         // Skip the first sheet and process the rest
+    //         foreach ($allSheets as $index => $sheet) {
+    //             if ($index === 0) continue;
+                
+    //             $this->processSheet($sheet);
+    //         }
+    
+    //         return response()->json(['success' => 'File uploaded and processed successfully.']);
+            
+    //     }
+
+    //     return response()->json(['error' => 'No file was uploaded.'], 400);
+    // }
+
+    // public function processSheet($sheet){
+    //     $PLOSTable = [ "C"=>'Knowledge' , "D"=>'skills' , "E"=> 'skills' , "F"=> 'values' ,"G"=> 'values' , "H"=>'skills'];
+    //     $courseInfo =[];
+    //     $courseInfo[]->code = $sheet->cell('B1')
+    //     $courseInfo[]->title = $sheet->cell('B2')
+    //     $courseInfo[]->offeredTo = $sheet->cell('B3')
+    //     $courseInfo[]->group = $sheet->cell('B4')
+    //     $courseInfo[]->knowledge[] = $sheet->cell('B$')
+
+    // }   
     public function update_course(Request $request)
     {
         $course = Course::with('department')->find($request->id);

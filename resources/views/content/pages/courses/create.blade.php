@@ -216,7 +216,7 @@
                 <div class="col-12 d-flex justify-content-between">
                     <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                         <div class="input-group">
-                            <span class="input-group-text">Course Level or Year to be Offered</span>
+                            <span class="input-group-text">Course be Offered to</span>
                             <input type="text" aria-label="level" id="level" class="form-control coruseLevel">
                         </div>
                     </div>
@@ -227,7 +227,7 @@
                         style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 83px;"></textarea>
                 </div>
                 <div class="d-lg-flex justify-content-between">
-                    <div class="col-lg-6 col-md-12 pe-1 col-sm-12 pt-2">
+                    <div class="col-lg-6 col-md-12 pe-1 col-sm-12 pt-2 table-responsive">
                         <table id="preRequirements" class="table table-striped">
                             <thead>
                                 <tr>
@@ -254,7 +254,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-lg-6 col-md-12 ps-1 col-sm-12 py-2">
+                    <div class="col-lg-6 col-md-12 ps-1 col-sm-12 py-2 table-responsive">
                         <table id="coRequisites" class="table table-striped">
                             <thead>
                                 <tr>
@@ -283,7 +283,7 @@
                     </div>
                 </div>
 
-                <div class="col-12">
+                <div class="col-12 table-responsive">
                     <table id="courseMainObjective" class="table table-striped">
                         <thead>
                             <tr>
@@ -317,7 +317,7 @@
                 <h5>Teaching mode</h5>
             </div>
             <div class="card-body">
-                <div class="col-12">
+                <div class="col-12 table-responsive">
                     <table id="teachingMode" class="table table-striped">
                         <thead>
                             <tr>
@@ -359,8 +359,8 @@
                 <h5>Contact Hours</h5>
             </div>
             <div class="card-body">
-                <div class="col-12">
-                    <table id="contactHours" class="table table-striped">
+                <div class="col-12 table-responsive">
+                    <table id="contactHours " class="table table-striped">
                         <thead>
                             <tr>
                                 <th style="width:10%"> NO </th>
@@ -396,11 +396,11 @@
                 <h5>Instructional Framework</h5>
             </div>
             <div class="card-body">
-                <div class="col-12">
+                <div class="col-12 table-responsive">
                     <table id="instructionalFramwork" class="dt-row-grouping table dataTable dtr-column collapsed">
                         <thead>
                             <tr>
-                                <th style="width:10%"> Code </th>
+                                <th style="width:10%">#CLO </th>
                                 <th data-name="leaeningOutcome"> Course Learning Outcomes </th>
                                 <th data-name="CLOcode"> Code of CLOs aligned with program </th>
                                 <th data-name="teachingStrategie"> Teaching Strategies </th>
@@ -508,7 +508,7 @@
                 <h5>Course Content</h5>
             </div>
             <div class="card-body">
-                <div class="col-12">
+                <div class="col-12 table-responsive">
                     <table id="courseContent" class="table table-striped">
                         <thead>
                             <tr>
@@ -548,7 +548,7 @@
                 <h5>Students Assessment Activities</h5>
             </div>
             <div class="card-body">
-                <div class="col-12">
+                <div class="col-12 table-responsive">
                     <table id="studentsAssessmentActivities" class="table table-striped">
                         <thead>
                             <tr>
@@ -639,7 +639,7 @@
                 <h5>Required Facilities and equipment</h5>
             </div>
             <div class="card-body">
-                <div class="col-12">
+                <div class="col-12 table-responsive">
                     <table id="facilitiesEquipment" class="table table-striped">
                         <thead>
                             <tr>
@@ -676,7 +676,7 @@
                 <h5>Assessment of Course Quality </h5>
             </div>
             <div class="card-body">
-                <div class="col-12">
+                <div class="col-12 table-responsive">
                     <table id="assessmentCourseQualitys" class="table table-striped">
                         <thead>
                             <tr>

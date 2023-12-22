@@ -57,6 +57,13 @@
       "url": "/courses"
     },
     {
+      "name": "Master Mapping of CLO with PLO/SO",
+      "icon": "menu-icon tf-icons ti ti-table-export",
+      "permission": "courses",
+      "slug": "mapping",
+      "url": "/mapping-clo-with-plo"
+    },
+    {
       "name": "Users",
       "icon": "menu-icon tf-icons ti ti-users",
       "permission": "users",

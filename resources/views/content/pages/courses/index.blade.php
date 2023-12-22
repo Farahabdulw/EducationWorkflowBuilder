@@ -41,6 +41,7 @@
                 <thead class="table-light">
                     <tr>
                         <th></th>
+                        <th></th>
                         <th>COURSE TITLE</th>
                         <th>COURSE CODE</th>
                         <th>LEVEL</th>
