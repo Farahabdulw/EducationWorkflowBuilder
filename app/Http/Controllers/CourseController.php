@@ -19,10 +19,11 @@ use App\Models\courseModels\CourseFacilitiesAndEquipment;
 use App\Models\courseModels\CourseAssessmentQuality;
 use App\Models\courseModels\CourseStudents;
 use Illuminate\Support\Facades\DB;
-use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MappingExport;
 
-
-use Illuminate\Support\Facades\Date;
 
 class CourseController extends Controller
 {
@@ -153,7 +154,45 @@ class CourseController extends Controller
     public function mapping(Request $request){
         return view('content.pages.courses.mapping');
     }
-    // public function import(Request $request){
+   
+
+    public function export(Request $request)
+    {
+        $courses = $request->courses;
+        $maxClosLengths = array_fill_keys(range(1, 7), 1);
+
+        foreach ($courses as $course) {
+            foreach ($course["plos"] as $plo) {
+                if (isset($plo["clos"])) {
+                    $maxClosLengths[$plo["id"]] = max(
+                        isset($maxClosLengths[$plo["id"]]) ? $maxClosLengths[$plo["id"]] : 0,
+                        count($plo["clos"])
+                    );
+                }
+            }
+        }
+        // dd($courses);
+
+        $filePath = 'exports/courses.xlsx';
+        Excel::store(new MappingExport($courses, $maxClosLengths), $filePath);
+
+        $fileUrl = Storage::url($filePath);
+
+        return response()->json(['file_url' => $fileUrl]);
+    }
+
+    public function downloadCourses()
+    {
+        $filePath = 'exports/courses.xlsx';
+
+        $file = storage_path('app/' . $filePath);
+
+        return new BinaryFileResponse($file, 200, [
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => 'attachment; filename="master mapping sheet.xlsx"',
+        ]);
+    }
+// public function import(Request $request){
     //     if ($request->hasFile('fileToImport')) {
     //         $file = $request->file('fileToImport');
     //         $validFileTypes = ['xlsx', 'xls'];

@@ -13,7 +13,6 @@ use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\WorkflowController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\NotificationController;
-
 use App\Http\Controllers\authentications\LoginBasic;
 use App\Http\Controllers\authentications\RegisterBasic;
 
@@ -190,6 +189,8 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_edit|courses_view']], function () {
         Route::get('/course/{id}', [CourseController::class, 'get_course'])->name('course-get');
+        Route::post('/export/courses', [CourseController::class, 'export'])->name('export-course');
+        Route::get('/downlaod/mapping/courses', [CourseController::class, 'downloadCourses'])->name('downlaod-export-course');
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_edit']], function () {
         Route::get('/course/edit/{id}', [CourseController::class, 'edit'])->name('course-edit');
@@ -214,6 +215,7 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_add']], function () {
         Route::get('/form/add', [FormsController::class, 'create'])->name('forms-create');
         Route::post('/forms/add', [FormsController::class, 'add'])->name('forms-add');
+        // Route::post('/forms/add/document', [FormsController::class, 'add_document'])->name('forms-add-document');
 
 
     });

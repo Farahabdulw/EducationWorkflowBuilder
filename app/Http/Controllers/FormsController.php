@@ -10,6 +10,8 @@ use App\Models\User;
 use App\Models\Step;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use PhpOffice\PhpWord\IOFactory;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 
 
 class FormsController extends Controller
@@ -214,20 +216,33 @@ class FormsController extends Controller
     {
         $request->validate([
             'title' => 'required|string',
-            'categories' => 'required|array',
+            'categories' => 'required',
             'formData' => 'required|json',
         ]);
 
-        // Insert form data into the forms table
         $form = Forms::create([
             'name' => $request->get('title'),
             'created_by' => auth()->user()->id,
             'content' => $request->get('formData'),
         ]);
-
-        $categories = $request->get('categories');
+        if ($request->hasFile('formFile')) {
+            $file = $request->file('formFile');
+            $fileName = "form1-".$file->extension();  
+            $file->move(public_path('uploads'), $fileName);
+    
+            $domPdfPath = base_path('vendor/dompdf/dompdf');
+    
+            \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+            \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF'); 
+            $Content = \PhpOffice\PhpWord\IOFactory::load(public_path('uploads/'.$fileName)); 
+            $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content,'PDF');
+    
+            $pdfFileName = $form->id."-form". '.pdf';
+            $PDFWriter->save(storage_path('app/private/'.$pdfFileName)); 
+            $form->file =$pdfFileName; 
+        }
+        $categories = json_decode($request->get('categories'));
         $form->categories()->sync($categories);
-        // Return a success response
         return response()->json(['success' => true, 'message' => 'Form added successfully', 'id' => $form->id], 200);
     }
     public function get_forms(Request $request)

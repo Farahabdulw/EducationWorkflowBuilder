@@ -40,6 +40,7 @@ class FormCompletion extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
+        
         return (new MailMessage)
             ->from('workflow@example.com')
             ->subject('Worlflow Completion mail.')

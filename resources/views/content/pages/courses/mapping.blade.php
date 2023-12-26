@@ -36,6 +36,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
     <script src="{{ asset('assets/vendor/libs/jquery-repeater/jquery-repeater.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/bloodhound/bloodhound.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/jquery-repeater/jquery-repeater.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/typeahead-js/typeahead.js') }}"></script>
     <script src="{{ asset('assets/js/courses/typeahead.js') }}"></script>
 
@@ -44,6 +45,7 @@
 
 @section('page-script')
     <script src="{{ asset('assets/js/courses/mapping.js?time=' . time()) }}"></script>
+    <script src="{{ asset('assets/js/courses/mappingTables.js?time=' . time()) }}"></script>
 @endsection
 
 @section('content')
@@ -62,124 +64,111 @@
                 <h5>Course Specification</h5>
             </div>
             <div class="card-body row-gap-md-1 row-gap-lg-0 row-gap-sm-0 row d-flex">
-                <div class="col-md-8 col-lg-7 col-sm-12 pb-1">
-                    <label for="code" class="form-label">Course Code</label>
-                    <input type="text" class="form-control" id="code" required>
-                </div>
+                <form id='plosRepeater'>
+                    <div data-repeater-list="courses">
+                        <div data-repeater-item>
+                            <div class="col-md-8 col-lg-7 col-sm-12 pb-1">
+                                <label for="code" class="form-label">Course Code</label>
+                                <input type="text" class="form-control code" name="code" required>
+                            </div>
 
-                <div class="col-md-8 col-lg-7 col-sm-12 pb-1">
-                    <label for="levels" class="form-label">Level</label>
-                    <select id="levels" class="select2-hidden-accessible">
-                    </select>
-                </div>
+                            <div class="col-md-8 col-lg-7 col-sm-12 pb-1">
+                                <label for="levels" class="form-label">Level</label>
+                                <select class="form-select levels">
+                                    <option value="">select an option</option>
+                                    <option value="introduced">Introduced</option>
+                                    <option value="practiced">Practiced</option>
+                                    <option value="mastered">Mastered</option>
+                                </select>
+                            </div>
+                            <div class="col-12 mt-3">
+                                <h6 class="text-muted">PLOS</h6>
+                                <div class="nav-align-left nav-tabs-shadow shadow-none mb-4">
+                                    <ul class="nav nav-tabs me-3" role="tablist">
+                                        @for ($i = 1; $i <= 7; $i++)
+                                            <li class="nav-item" role="presentation">
+                                                <button type="button" class="nav-link {{ $i === 1 ? 'active' : '' }}"
+                                                    role="tab" data-bs-toggle="tab"
+                                                    data-bs-target="#course-plo-so-{{ $i }}"
+                                                    aria-controls="course-plo-so-{{ $i }}"
+                                                    aria-selected="{{ $i === 1 ? 'true' : 'false' }}">
+                                                    PLO{{ $i }}/SO{{ $i }}
+                                                </button>
+                                            </li>
+                                        @endfor
+                                    </ul>
+                                    <div class="tab-content shadow-none">
+                                        @for ($i = 1; $i <= 7; $i++)
+                                            <div class="tab-pane fade p-2 {{ $i === 1 ? 'active show' : '' }}"
+                                                id="course-plo-so-{{ $i }}" role="tabpanel">
 
-                <div class="col-12 mt-3">
-                    <h6 class="text-muted">PLOS</h6>
-                    <div class="nav-align-left nav-tabs-shadow shadow-none mb-4">
-                        <ul class="nav nav-tabs me-3" role="tablist">
-                            @for ($i = 1; $i <= 7; $i++)
-                                <li class="nav-item" role="presentation">
-                                    <button type="button" class="nav-link {{ $i === 1 ? 'active' : '' }}" role="tab"
-                                        data-bs-toggle="tab" data-bs-target="#navs-plo-so-{{ $i }}"
-                                        aria-controls="navs-plo-so-{{ $i }}"
-                                        aria-selected="{{ $i === 1 ? 'true' : 'false' }}">
-                                        PLO{{ $i }}/SO{{ $i }}
-                                    </button>
-                                </li>
-                            @endfor
-                        </ul>
-                        <div class="tab-content shadow-none">
-                            @for ($i = 1; $i <= 7; $i++)
-                                <div class="tab-pane fade p-2 {{ $i === 1 ? 'active show' : '' }}"
-                                    id="navs-plo-so-{{ $i }}" role="tabpanel">
+                                                <div class="table-responsive">
+                                                    <table id="plo-so-{{ $i }}"
+                                                        class="table table-striped overflow-x-auto">
+                                                        <thead>
+                                                            <tr>
+                                                                <th> #CLO </th>
+                                                                <th data-name="type"> Type </th>
+                                                                <th data-name="description"> Description </th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody class="table-border-bottom-0">
+                                                            <tr class="noData">
+                                                                <td colspan="4" class="text-center"> No records were
+                                                                    added</td>
+                                                            </tr>
 
-                                    <div class="table-responsive">
-                                        <table id="plo-so-{{ $i }}" class="table table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th> #CLO </th>
-                                                    <th data-name="type"> Type </th>
-                                                    <th data-name="description"> Description </th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="table-border-bottom-0">
-                                                {{-- <tr class="noData">
-                                                    <td colspan="4" class="text-center"> No records were added</td>
-                                                </tr> --}}
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Knowledge and Understanding</td>
-                                                    <td>Recognize a variety of engineering drawings</td>
-                                                    <td>
-                                                        <div class='dropdown'>
-                                                            <button type='button'
-                                                                class='btn p-0 dropdown-toggle hide-arrow'
-                                                                data-bs-toggle='dropdown' aria-expanded='false'>
-                                                                <i class='ti ti-dots-vertical'></i>
-                                                            </button>
-                                                            <div class='dropdown-menu'>
-                                                                <button type='button' class='dropdown-item edit-record'>
-                                                                    <i class='ti ti-pencil me-1'></i>Edit
-                                                                </button>
-                                                                <button type='button' class='dropdown-item delete-record'>
-                                                                    <i class='ti ti-trash me-1'></i>Delete
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>Skills</td>
-                                                    <td>Recognize a variety of engineering drawings</td>
-                                                    <td>
-                                                        <div class='dropdown'>
-                                                            <button type='button'
-                                                                class='btn p-0 dropdown-toggle hide-arrow'
-                                                                data-bs-toggle='dropdown' aria-expanded='false'>
-                                                                <i class='ti ti-dots-vertical'></i>
-                                                            </button>
-                                                            <div class='dropdown-menu'>
-                                                                <button type='button' class='dropdown-item edit-record'>
-                                                                    <i class='ti ti-pencil me-1'></i>Edit
-                                                                </button>
-                                                                <button type='button' class='dropdown-item delete-record'>
-                                                                    <i class='ti ti-trash me-1'></i>Delete
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div class="col-md-8 col-lg-7 col-sm-12 pb-1">
+                                                    <label for="" class="form-label">Type</label>
+                                                    <select class="cloType form-select">
+                                                        <option value="">select an option</option>
+                                                        <option value="Knowledge and Understanding">Knowledge and
+                                                            Understanding</option>
+                                                        <option value="Skills">Skills</option>
+                                                        <option value="Values">Values</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-8 col-lg-7 col-sm-12 pb-1">
+                                                    <label for="description" class="form-label">CLO Description</label>
+                                                    <input type="text" aria-label="CLO Description"
+                                                        class="form-control description" required>
+                                                </div>
+                                                <button type="button"
+                                                    class="btn btn-label-primary actionBtn add-new-record-btn">
+                                                    <i class="fa fa-add"></i>
+                                                </button>
+                                            </div>
+                                        @endfor
                                     </div>
-
-                                    <div class="col-md-8 col-lg-7 col-sm-12 pb-1">
-                                        <label for="" class="form-label">Type</label>
-                                        <select id="plo-{{ $i }}" class="clo-type select2-hidden-accessible">
-                                        </select>
-                                    </div>
-                                    <div class="col-md-8 col-lg-7 col-sm-12 pb-1">
-                                        <label for="title" class="form-label">Course Title</label>
-                                        <input type="text" id="title" aria-label="Course Title" class="form-control"
-                                            required>
-                                    </div>
-                                    <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
-                                        <i class="fa fa-add"></i>
+                                </div>
+                                <div class="d-flex flex-row pt-3 col-12 justify-content-end ">
+                                    <button type="button" data-repeater-delete
+                                        class="btn btn-danger waves-effect waves-light">Delete
                                     </button>
                                 </div>
-                            @endfor
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <div class="col-12">
+                        <div class="d-flex flex-row pt-3 col-12 justify-content-between ">
+                            <button type="button" data-repeater-create class="btn btn-primary waves-effect waves-light">Add
+                                Another Course
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="col-12">
             <div class="d-flex flex-row pt-3 col-12 justify-content-between ">
-                <button type="submit" id="formSubmition" class="btn btn-primary waves-effect waves-light">Add
-                    Another Course </button>
-                <button type="submit" id="formSubmition" class="btn btn-success waves-effect waves-light">Export
+                {{-- <button type="button" data-repeater-create class="btn btn-primary waves-effect waves-light">Add
+                    Another Course </button> --}}
+                <button type="button" id="export" class="btn btn-success waves-effect waves-light">Export
                 </button>
             </div>
         </div>

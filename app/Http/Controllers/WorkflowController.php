@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use App\Notifications\FormReceived;
 use App\Notifications\FormCompletion;
+use App\Notifications\FormCompletionFile;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Workflow;
@@ -234,7 +235,19 @@ class WorkflowController extends Controller
             $workflow->status = 2;
             $workflow->save();
             $message = 'Your workflow is over!';
+
             $workflow->creator->notify(new FormCompletion($workflow, $message));
+            if($workflow->form->file){
+                $usersInWorkflow = $workflow->steps->pluck('user');
+    
+                $usersRolesInWorkflow = $usersInWorkflow->flatMap(function ($user) {
+                    return $user->getRoleNames();
+                });
+                $users = User::role($usersRolesInWorkflow->unique()->all())->get();
+                foreach ($users as $user) {
+                    $user->notify(new FormCompletionFile($workflow , "The workflow is done here's the file"));
+                }
+            }
             return;
         } else {
             $nextStep = $workflow->steps()->where('step', '>', $step->step)->whereNull('forwarded_from')->orderBy('step')->first();
