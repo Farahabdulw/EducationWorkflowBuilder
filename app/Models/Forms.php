@@ -24,6 +24,7 @@ class Forms extends Model
     }
     protected $fillable = [
         'name',
+        'file',
         'created_by',
         'content',
     ];

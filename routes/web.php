@@ -28,7 +28,7 @@ use App\Http\Controllers\authentications\RegisterBasic;
 */
 Route::middleware(['auth'])->group(function () {
     // Main Page Route
-    Route::get('/', [UserController::class, 'index'])->name('users');
+    Route::get('/', [OfficeController::class, 'index'])->name('offices');
     Route::get('/currnt_user', [UserController::class, 'get_current_user'])->name('user-current-get');
 
     // Users UI Routes
@@ -223,7 +223,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/forms/form/{id}', [FormsController::class, 'get_form']);
         Route::post('/form/content/{id}', [FormsController::class, 'get_content'])->name('forms-get-conetent');
         Route::post('/forms/users', [FormsController::class, 'get_forms_users'])->name('forms-get-users');
-
+        
+        Route::get('/download/form/{id}', [FormsController::class, 'download_form_file'])->name('download-form-file');
         Route::post('/workflow/create', [WorkflowController::class, 'create'])->name('workflow-create');
         Route::post('/forms/form/{id}/workflows', [WorkflowController::class, 'get'])->name('workflow-get');
         Route::post('/workflows/workflow/progress', [WorkflowController::class, 'getWorkflowProgress'])->name('workflow-get-progress');

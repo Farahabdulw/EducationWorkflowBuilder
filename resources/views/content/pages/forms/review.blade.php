@@ -52,7 +52,8 @@
 
                                 </span>
                             </div>
-                            <span>Form Owner:</span><p class="mb-0 form-creator"></p>
+                            <span>Form Owner:</span>
+                            <p class="mb-0 form-creator"></p>
                         </div>
                         <div>
                             <h4 class="fw-medium mb-2 form-number"></h4>
@@ -101,15 +102,15 @@
                                 <span class="d-flex align-items-center justify-content-center text-nowrap"><i
                                         class="ti ti-send ti-xs me-2"></i>Forward</span>
                             </button>
-                            @if (!$isFirstStep)
-                                <button class="btn btn-label-secondary d-grid w-100 mb-2 waves-effect waves-light"
-                                    id="return">
-                                    <span class="d-flex align-items-center justify-content-center text-nowrap"><i
-                                            class="ti ti-arrow-back-up ti-xs me-2"></i>Return</span>
-                                </button>
-                            @endif
+                            <button
+                                @if ($isFirstStep) data-bs-toggle="tooltip" data-bs-placement="right" title="You can't return the form" @endif
+                                class="btn btn-label-secondary d-grid w-100 mb-2 waves-effect waves-light"
+                                @if (!$isFirstStep) id="return" @endif>
+                                <span class="d-flex align-items-center justify-content-center text-nowrap">
+                                    <i class="ti ti-arrow-back-up ti-xs me-2"></i>Return
+                                </span>
+                            </button>
                         @endif
-
                     </div>
                 </div>
             </div>

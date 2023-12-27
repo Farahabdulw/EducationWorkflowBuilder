@@ -39,19 +39,24 @@
 @endsection
 
 @section('page-script')
-    <script src="{{ asset('assets/js/forms/create.js') }}"></script>
     <script src="{{ asset('assets/js/forms/form-render.min.js') }}"></script>
     <script src="{{ asset('assets/js/forms/form-builder.min.js') }}"></script>
     <script src="{{ asset('assets/js/forms/control_plugins/mathematic.js') }}"></script>
+    <script defer src="{{ asset('assets/js/forms/edit.js?' . time()) }}"></script>
 @endsection
 
 @section('content')
     <nav aria-label="breadcrumb">
-        {{ Breadcrumbs::render('add-form') }}
+        @php
+            preg_match('/edit\/(\d+)/', url()->current(), $matches);
+            $formId = isset($matches[1]) ? $matches[1] : null;
+        @endphp
+        {{ Breadcrumbs::render('edit-form', $formId) }}
+
     </nav>
     <div class="card collapse show " id="savedForm">
         <div class="card-header page-header">
-            <h5>Create a new Form</h5>
+            <h5>Edit Form</h5>
         </div>
         <div class="card-body row browser-default-validation d-flex align-items-end">
 

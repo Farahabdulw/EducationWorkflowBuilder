@@ -37,7 +37,8 @@ class WorkflowController extends Controller
                 'step' => $index + 1,
                 'status' => 0, // 0 => pending , 1 => inProgress , 2 => approved , 3 => rejected , 4 => forwarded
             ]);
-        }
+        };
+
         $this->lunchWorkflow($workflow, $sender_id, $form_id);
         return response()->json(["successful" => true, "form" => $form_id], 200);
 
@@ -217,6 +218,9 @@ class WorkflowController extends Controller
     }
     public function nextStep(Step $step)
     {
+        
+
+
         $workflow = $step->workflow;
 
         if ($step->forwarded_from) {
@@ -238,14 +242,11 @@ class WorkflowController extends Controller
 
             $workflow->creator->notify(new FormCompletion($workflow, $message));
             if($workflow->form->file){
-                $usersInWorkflow = $workflow->steps->pluck('user');
-    
-                $usersRolesInWorkflow = $usersInWorkflow->flatMap(function ($user) {
-                    return $user->getRoleNames();
-                });
-                $users = User::role($usersRolesInWorkflow->unique()->all())->get();
+
+                $usersInWorkflow = $workflow->steps->pluck('user_id');
+                $users = User::whereIn('id', $usersInWorkflow)->get();
                 foreach ($users as $user) {
-                    $user->notify(new FormCompletionFile($workflow , "The workflow is done here's the file"));
+                    $user->notify(new FormCompletionFile($workflow , "The workflow for form No.".$workflow->form->id ." is done here's the PDF file"));
                 }
             }
             return;

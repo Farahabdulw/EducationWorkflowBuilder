@@ -24,9 +24,13 @@ class FormsController extends Controller
     {
         return view('content.pages.forms.create');
     }
-    public function edit()
+    public function edit($id)
     {
-        return view('content.pages.forms.create');
+        $form = Forms::find($id);
+        if (!$form) {
+            return view('404');
+        }
+        return view('content.pages.forms.edit');
     }
     public function create_category()
     {
@@ -240,6 +244,7 @@ class FormsController extends Controller
             $pdfFileName = $form->id."-form". '.pdf';
             $PDFWriter->save(storage_path('app/private/'.$pdfFileName)); 
             $form->file =$pdfFileName; 
+            $form->save();
         }
         $categories = json_decode($request->get('categories'));
         $form->categories()->sync($categories);
@@ -252,7 +257,9 @@ class FormsController extends Controller
             $canEdit = true;
             $canDelete = true;
             $canAdd = true;
-            $forms = Forms::with('categories')->get();
+            $forms = Forms::with('categories')
+            ->orderBy('created_at', 'desc')
+            ->get();
         } else {
             $authUser = $user;
             $canEdit = $user->can('forms_edit');
@@ -265,7 +272,10 @@ class FormsController extends Controller
                 return $user->forms->pluck('id');
             })->unique()->toArray();
 
-            $forms = Forms::whereIn('id', $formIds)->with('categories')->get();
+            $forms = Forms::whereIn('id', $formIds)
+            ->orderBy('created_at', 'desc')
+            ->with('categories')
+            ->get();
         }
         $responseObject = [
             'forms' => $forms,
@@ -295,14 +305,32 @@ class FormsController extends Controller
         if ($form) {
             $request->validate([
                 'title' => 'required|string',
-                'categories' => 'required|array',
+                'categories' => 'required',
                 'formData' => 'required|json',
             ]);
             // Insert form data into the forms table
             $form->name = $request->get('title');
             $form->content = $request->get('formData');
+            
+            if ($request->hasFile('formFile')) {
+                $file = $request->file('formFile');
+                $fileName = "form1-".$file->extension();  
+                $file->move(public_path('uploads'), $fileName);
+        
+                $domPdfPath = base_path('vendor/dompdf/dompdf');
+        
+                \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+                \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF'); 
+                $Content = \PhpOffice\PhpWord\IOFactory::load(public_path('uploads/'.$fileName)); 
+                $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content,'PDF');
+        
+                $pdfFileName = $form->id."-form". '.pdf';
+                $PDFWriter->save(storage_path('app/private/'.$pdfFileName)); 
+                $form->file =$pdfFileName; 
+            }
+
             $form->save();
-            $categories = $request->get('categories');
+            $categories = json_decode($request->get('categories'));
             $form->categories()->sync($categories);
 
             // Return a success response
@@ -334,5 +362,22 @@ class FormsController extends Controller
 
         return response()->json($uniqueUsers, 200);
 
+    }
+
+
+
+    public function download_form_file($id){
+        $id = Crypt::decryptString($id);
+        $form = Forms::find($id);
+        if (!$form) {
+            return view('404');
+        }
+
+    $filePath = storage_path('app/private/'.$form->file);
+
+    if (file_exists($filePath)) 
+        return response()->download($filePath, $form->file);
+    else 
+        return view('404');
     }
 }

@@ -26,7 +26,9 @@ class RequestController extends Controller
                     'creator' => function ($query) {
                         $query->select('id', 'first_name', 'last_name');
                     }
-                ])->get();
+                ])
+                ->orderBy('created_at' , 'desc')
+                ->get();
         } else {
             if (!($user->can('forms_view')))
                 return response()->json(403);
@@ -36,6 +38,7 @@ class RequestController extends Controller
                     $query->role($user->roles);
                 })
                 ->with(['creator:id,first_name,last_name'])
+                ->orderBy('created_at', 'desc')
                 ->get();
         }
         return response()->json($workflows, 200);

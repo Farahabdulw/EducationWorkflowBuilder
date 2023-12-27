@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Crypt;
 
-class FormCompletion extends Notification implements ShouldQueue
+class FormCompletionFile extends Notification implements ShouldQueue
 {
     use Queueable;
     public $workflow;
@@ -21,7 +21,7 @@ class FormCompletion extends Notification implements ShouldQueue
     {
         $this->workflow = $workflow;
         $this->message = $message;
-        $this->workflowUrl = storage_path('app/private/'.$workflow->form->file);
+        $this->workflowUrl = url("download/form/".Crypt::encryptString($workflow->form->id));
         
     }
 
@@ -46,7 +46,7 @@ class FormCompletion extends Notification implements ShouldQueue
             ->subject('Worlflow Completion mail.')
             ->greeting('Hello ! Mr.'. $notifiable->last_name)
             ->line($this->message)
-            ->line('check its log and progress at')
+            ->line('The form No.'.$this->workflow->form->id)
             ->action("$notifiable->first_name Form", $this->workflowUrl);
     }
 
@@ -60,7 +60,7 @@ class FormCompletion extends Notification implements ShouldQueue
         return [
             'Sname' => 'System',
             'body' => $this->message,
-            'header' => "Workflow Over",
+            'header' => "Download Form",
             'url' => $this->workflowUrl,
         ];
     }
