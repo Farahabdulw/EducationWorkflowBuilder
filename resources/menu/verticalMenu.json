@@ -43,6 +43,13 @@
       "url": "/requests"
     },
     {
+      "name": "New Requests",
+      "icon": "menu-icon tf-icons ti ti-folder-filled",
+      "permission": "forms",
+      "slug": "new_request",
+      "url": "/new_request"
+    },
+    {
       "name": "Forms",
       "icon": "menu-icon tf-icons ti ti-clipboard-text",
       "permission": "forms",
@@ -76,6 +83,13 @@
       "permission": "courses",
       "slug": "register",
       "url": "/register-portal"
+    },
+    {
+      "name": "Frequently Used",
+      "icon": "menu-icon tf-icons ti ti-repeat",
+      "permission": " ",
+      "slug": "frequent-used",
+      "url": "/frequent-used"
     }
   ]
 }

@@ -36,6 +36,7 @@ class FormsController extends Controller
     {
         return view('content.pages.forms.category');
     }
+   
     public function review_form($id, $step_id)
     {
         try {
@@ -284,6 +285,24 @@ class FormsController extends Controller
             'canAdd' => $canAdd,
         ];
         return response()->json($responseObject, 200);
+
+    }
+    public function get_forms_new_requests(Request $request)
+    {
+        $user = auth()->user();
+        $forms = Forms::with(['categories' => function ($query) {
+            $query->select('categories.id', 'categories.name');
+        }])
+        ->orderBy('created_at', 'desc')
+        ->get(['id', 'name']);
+        foreach ($forms as $form) {
+            $encryptedId = Crypt::encryptString($form->id);
+            $form->uid = $encryptedId;
+            $form->makeHidden(['id']);
+
+        }
+
+        return response()->json(['forms' => $forms], 200);
 
     }
     public function get_form(Request $request, $id)

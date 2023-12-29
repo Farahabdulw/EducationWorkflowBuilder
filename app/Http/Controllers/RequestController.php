@@ -17,6 +17,11 @@ class RequestController extends Controller
     {
         return view('content.pages.requests.index');
     }
+    public function newRequests()
+    {
+        return view('content.pages.requests.new-requests');
+    }
+    
     public function getAll()
     {
         $user = auth()->user();

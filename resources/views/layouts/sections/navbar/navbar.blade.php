@@ -20,7 +20,6 @@
             <span class="app-brand-logo demo">
                 @include('_partials.macros', ['height' => 20])
             </span>
-            <span class="app-brand-text demo menu-text fw-bold">{{ config('variables.templateName') }}</span>
         </a>
     </div>
 @endif

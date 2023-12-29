@@ -13,6 +13,7 @@ use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\WorkflowController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\FrequentUsedController;
 use App\Http\Controllers\authentications\LoginBasic;
 use App\Http\Controllers\authentications\RegisterBasic;
 
@@ -206,6 +207,7 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_view']], function () {
         Route::get('/forms', [FormsController::class, 'index'])->name('forms');
         Route::post('/forms', [FormsController::class, 'get_forms'])->name('forms-get');
+        Route::post('/forms/requests', [FormsController::class, 'get_forms_new_requests'])->name('forms-get-new');
         Route::get('/forms/form/{id}', [FormsController::class, 'get_form_single'])->name('form-get');
         Route::get('/forms/categories', [FormsController::class, 'get_category'])->name('forms-get-category');
         Route::get('/forms/review/form/{id}/{step_id}', [FormsController::class, 'review_form'])->name('review-form');
@@ -253,6 +255,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/requests', [RequestController::class, 'getAll'])->name('get-all-request');
         Route::post('/requests/filters', [RequestController::class, 'filters'])->name('requests-filtred');
         Route::post('/requests/filtered', [RequestController::class, 'filtered'])->name('filtered');
+
+        Route::get('/new_request', [RequestController::class, 'newRequests'])->name('new-requests');
     });
 
 
@@ -264,6 +268,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
     Route::post('/notification/read/{notif_id}', [NotificationController::class, 'read'])->name('read-notification');
+    Route::get('/frequent-used', [FrequentUsedController::class, 'index'])->name('frequent-used');
+    Route::post('/frequent-used', [FrequentUsedController::class, 'getTexts'])->name('frequent-getTexts');
+    Route::post('/frequent-used/delete', [FrequentUsedController::class, 'delete'])->name('frequent-delete');
 });
 
 Route::middleware('guest')->get('/login', [LoginBasic::class, 'index'])->name('login');

@@ -99,6 +99,11 @@ Breadcrumbs::for('requests', function ($trail) {
     $trail->parent('forms');
     $trail->push('Requests', route('requests'));
 });
+// Form requests
+Breadcrumbs::for('new-requests', function ($trail) {
+    $trail->parent('requests');
+    $trail->push('New Requests', route('new-requests'));
+});
 // Forms
 Breadcrumbs::for('forms', function ($trail) {
     $trail->push('Forms', route('forms'));
@@ -137,4 +142,9 @@ Breadcrumbs::for('add-category-from-edit-form', function ($trail, $formId) {
 // register-portal
 Breadcrumbs::for('register', function ($trail) {
     $trail->push('Register portal', route('register_portal'));
+});
+
+// frequent-used
+Breadcrumbs::for('frequent-used', function ($trail) {
+    $trail->push('Frequent Used', route('frequent-used'));
 });
