@@ -69,6 +69,7 @@
             <thead class="table-light">
                 <tr>
                     <th>ID</th>
+                    <th>Form Title</th>
                     <th>Created By</th>
                     <th>Created At</th>
                     <th>Affiliations</th>

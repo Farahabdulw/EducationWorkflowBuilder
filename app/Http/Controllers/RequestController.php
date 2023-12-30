@@ -10,12 +10,30 @@ use App\Models\College;
 use App\Models\Office;
 use App\Models\Committe;
 use App\Models\Workflow;
+use Illuminate\Support\Facades\Crypt;
+
 
 class RequestController extends Controller
 {
     public function index()
     {
         return view('content.pages.requests.index');
+    }
+    public function request($id)
+    {
+        $request = Workflow::find($id);
+        
+        if ($request) {
+            $authUser = auth()->user();
+            $creator = $request->creator;
+
+            $commonRoles = array_intersect($authUser->getRoleNames()->toArray(), $creator->getRoleNames()->toArray());
+            $form_id = $request->form->id;
+            if (!empty($commonRoles) || $authUser->hasRole('super-admin')) {
+                return view('content.pages.requests.request' , compact('form_id'));
+            }
+        }
+        return view('404');
     }
     public function newRequests()
     {
@@ -27,13 +45,18 @@ class RequestController extends Controller
         $user = auth()->user();
         if ($user->hasRole('super-admin')) {
             $workflows = Workflow::query()
-                ->with([
-                    'creator' => function ($query) {
-                        $query->select('id', 'first_name', 'last_name');
-                    }
-                ])
+                // ->with([
+                //     'creator' => function ($query) {
+                //         $query->select('id', 'first_name', 'last_name');
+                //     }
+                // ])
+                ->with(['creator:id,first_name,last_name' , 'form:id,name'])
                 ->orderBy('created_at' , 'desc')
                 ->get();
+            $workflows->each(function ($workflow) {
+                $workflow->form->uid = Crypt::encryptString($workflow->form->id);
+            });
+
         } else {
             if (!($user->can('forms_view')))
                 return response()->json(403);
@@ -42,9 +65,12 @@ class RequestController extends Controller
                 ->orWhereHas('creator', function ($query) use ($user) {
                     $query->role($user->roles);
                 })
-                ->with(['creator:id,first_name,last_name'])
+                ->with(['creator:id,first_name,last_name' , 'form:id,name'])
                 ->orderBy('created_at', 'desc')
                 ->get();
+            $workflows->each(function ($workflow) {
+                $workflow->form->uid = Crypt::encryptString($workflow->form->id);
+            });
         }
         return response()->json($workflows, 200);
     }

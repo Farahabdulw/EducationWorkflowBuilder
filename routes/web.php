@@ -212,7 +212,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/forms/categories', [FormsController::class, 'get_category'])->name('forms-get-category');
         Route::get('/forms/review/form/{id}/{step_id}', [FormsController::class, 'review_form'])->name('review-form');
         Route::post('/forms/review/progress/{id}', [FormsController::class, 'review_form_progress'])->name('progress-review-form');
-
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_add']], function () {
         Route::get('/form/add', [FormsController::class, 'create'])->name('forms-create');
@@ -252,10 +251,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_view']], function () {
         Route::get('/requests', [RequestController::class, 'index'])->name('requests');
+        Route::get('/request/{id}', [RequestController::class, 'request'])->name('request');
         Route::post('/requests', [RequestController::class, 'getAll'])->name('get-all-request');
         Route::post('/requests/filters', [RequestController::class, 'filters'])->name('requests-filtred');
         Route::post('/requests/filtered', [RequestController::class, 'filtered'])->name('filtered');
-
         Route::get('/new_request', [RequestController::class, 'newRequests'])->name('new-requests');
     });
 

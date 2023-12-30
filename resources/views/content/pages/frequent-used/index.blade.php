@@ -43,7 +43,8 @@
                 <thead class="table-light">
                     <tr>
                         <th>ID</th>
-                        <th>Text</th>
+                        <th>Text in Form</th>
+                        <th>Text in Document</th>
                         <th style="width:20%">ACTIONS</th>
                     </tr>
                 </thead>

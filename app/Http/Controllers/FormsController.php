@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use PhpOffice\PhpWord\IOFactory;
 use Barryvdh\Snappy\Facades\SnappyPdf;
+use App\Models\FrequentUsed;
 
 
 class FormsController extends Controller
@@ -20,8 +21,28 @@ class FormsController extends Controller
     {
         return view('content.pages.forms.index');
     }
-    public function create()
+    public function create(Request $request)
     {
+        if ($request->has('previous')){ 
+            $form_id = $request->input('previous');
+            try {
+                $id = Crypt::decryptString($form_id);
+            } catch (DecryptException $e) {
+                return view('404');
+            }
+            $form = Forms::with('categories')->find($id);
+            if($form){
+            $dataArray = json_decode($form->content, true);
+            foreach ($dataArray as &$item) {
+                if (isset($item['value'])) {
+                    $item['value'] = '';
+                }
+            }
+                $form->content = json_encode($dataArray);
+                return view('content.pages.forms.create' , compact('form'));
+            }
+
+        }
         return view('content.pages.forms.create');
     }
     public function edit($id)
@@ -230,6 +251,7 @@ class FormsController extends Controller
             'created_by' => auth()->user()->id,
             'content' => $request->get('formData'),
         ]);
+        $this->saveContentasFrequent($request->get('formData'));
         if ($request->hasFile('formFile')) {
             $file = $request->file('formFile');
             $fileName = "form1-".$file->extension();  
@@ -245,12 +267,37 @@ class FormsController extends Controller
             $pdfFileName = $form->id."-form". '.pdf';
             $PDFWriter->save(storage_path('app/private/'.$pdfFileName)); 
             $form->file =$pdfFileName; 
-            $form->save();
         }
+        elseif ($request->uid && $request->uid !=null) {
+            try {
+                $uid = Crypt::decryptString($request->uid);
+            } catch (DecryptException $e) {
+                return view('404');
+            }
+            $Preform = Forms::find($uid);
+            $form->file =$Preform->file; 
+        }
+        $form->save();
         $categories = json_decode($request->get('categories'));
         $form->categories()->sync($categories);
         return response()->json(['success' => true, 'message' => 'Form added successfully', 'id' => $form->id], 200);
     }
+    public function saveContentasFrequent($content){
+        $dataArray = json_decode($content, true);
+        $labels = [];
+        
+        foreach ($dataArray as &$item) 
+            if (isset($item['label'])) 
+                $labels[] = $item['label'];
+            
+        foreach ($labels as $text){
+            $existingRecord = FrequentUsed::where('text', $text)->first();
+            if(!$existingRecord)
+                FrequentUsed::create(['text' => $text]);
+        }
+        
+    }
+    
     public function get_forms(Request $request)
     {
         $user = auth()->user();
@@ -330,7 +377,7 @@ class FormsController extends Controller
             // Insert form data into the forms table
             $form->name = $request->get('title');
             $form->content = $request->get('formData');
-            
+            $this->saveContentasFrequent($form->content);
             if ($request->hasFile('formFile')) {
                 $file = $request->file('formFile');
                 $fileName = "form1-".$file->extension();  
@@ -382,8 +429,6 @@ class FormsController extends Controller
         return response()->json($uniqueUsers, 200);
 
     }
-
-
 
     public function download_form_file($id){
         $id = Crypt::decryptString($id);

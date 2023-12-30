@@ -20,6 +20,7 @@
     <!-- Page -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/cards-advance.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/forms/create.css') }}">
+
 @endsection
 
 @section('vendor-script')
@@ -39,7 +40,7 @@
 @endsection
 
 @section('page-script')
-    <script src="{{ asset('assets/js/forms/create.js') }}"></script>
+    <script src="{{ asset('assets/js/forms/create.js?time=' . time()) }}"></script>
     <script src="{{ asset('assets/js/forms/form-render.min.js') }}"></script>
     <script src="{{ asset('assets/js/forms/form-builder.min.js') }}"></script>
     <script src="{{ asset('assets/js/forms/control_plugins/mathematic.js') }}"></script>
@@ -57,12 +58,14 @@
 
             <div class="col-md-5 col-sm-12 mb-4">
                 <label for="title" class="form-label">Form Title</label>
-                <input type="title" class="form-control" id="title" placeholder="Vacation" required="">
+                <input type="title" class="form-control" id="title" value = "{{ $form?? [] ? $form->name : '' }}"
+                    placeholder="Vacation" required="">
             </div>
 
             <div class="col-md-5 col-sm-12 mb-4" data-select2-id="45">
                 <label for="categories" class="form-label">Form Type</label>
-                <select class="js-example-basic-multiple" id="categories" multiple="multiple">
+                <select class="js-example-basic-multiple" data-categories='{!! $form?? [] ? json_encode($form->categories->pluck('id')) : '[]' !!}' id="categories"
+                    multiple="multiple">
                 </select>
             </div>
 
@@ -72,10 +75,10 @@
 
             <div class="col-md-7 col-sm-12 mb-4" id="uploadedFileContainer">
                 <label for="formFile" class="form-label">Form File</label>
-                <div id="uploadedFileMessage">No document uploaded</div>
+                <div id="uploadedFileMessage">{{ $form?? [] ? $form->file : 'No document uploaded' }}</div>
             </div>
         </div>
-        <div id="fb-editor" class="px-4 pb-5 pt-0">
+        <div id="fb-editor" data-formJSON='{!! $form?? [] ? json_encode($form->content) : '' !!}' class="px-4 pb-5 pt-0">
 
         </div>
     </div>

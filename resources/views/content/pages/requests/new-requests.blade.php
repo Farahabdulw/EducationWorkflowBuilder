@@ -32,38 +32,6 @@
     {{ Breadcrumbs::render('new-requests') }}
 
     <div class="card">
-        <div class="row p-4">
-            <div class="col-12">
-                <div class="row g-3">
-                    <div class="col-12 col-sm-6 col-lg-4">
-                        <label class="form-label">Committees:</label>
-                        <select id="committees" class="select2-hidden-accessible select2" name="state">
-                        </select>
-                    </div>
-                    <div class="col-12 col-sm-6 col-lg-4">
-                        <label class="form-label">Offices:</label>
-                        <select id="offices" class="select2-hidden-accessible select2" name="state">
-                        </select>
-                    </div>
-                    <div class="col-12 col-sm-6 col-lg-4">
-                        <label class="form-label">Colleges:</label>
-                        <select id="colleges" class="select2-hidden-accessible select2" name="state">
-                        </select>
-                    </div>
-                    <div class="col-12 col-sm-6 col-lg-4">
-                        <label class="form-label">Departments:</label>
-                        <select id="departments" class="select2-hidden-accessible select2" name="state">
-                        </select>
-                    </div>
-                    <div class="col-12 col-sm-6 col-lg-4">
-                        <label class="form-label">Centers:</label>
-                        <select id="centers" class="select2-hidden-accessible select2" name="state">
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <table class="datatables-new-requests table">
             <thead class="table-light">
                 <tr>
