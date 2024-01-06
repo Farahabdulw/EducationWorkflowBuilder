@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/custome-form-style.css') }}" />
     {{-- <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" /> --}}
     {{-- <link rel="stylesheet" href="{{ asset('assets/vendor/libs/tagify/tagify.css') }}" /> --}}
 
@@ -33,14 +34,12 @@
     <script src="{{ asset('assets/js/forms/view.js') }}"></script>
     <script src="{{ asset('assets/js/forms/form-render.min.js') }}"></script>
     <script src="{{ asset('assets/js/forms/control_plugins/mathematic.js') }}"></script>
-
-
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 @endsection
 
 @section('content')
 
     <nav aria-label="breadcrumb">
-
         {{ Breadcrumbs::render('view-form', $formId) }}
     </nav>
 
@@ -94,11 +93,14 @@
                             <div class="card-header pb-3">
                                 <h5 class="card-title m-0">Forms Progress</h5>
                             </div>
+                            <button id="activate-sortable" class="btn btn-primary">Activate Sortable</button>
+
                             <div class="card-body">
                                 <ul class="timeline pb-0 mb-0">
 
                                 </ul>
                             </div>
+                            <button id="save-order-changes" class="btn btn-primary">Save</button>
                         </div>
                     </div>
                 </div>

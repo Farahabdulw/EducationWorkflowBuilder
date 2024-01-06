@@ -41,6 +41,7 @@ class FormsController extends Controller
                 $form->content = json_encode($dataArray);
                 return view('content.pages.forms.create' , compact('form'));
             }
+            
 
         }
         return view('content.pages.forms.create');
@@ -213,7 +214,6 @@ class FormsController extends Controller
             'name' => 'required',
             'description' => 'required',
         ]);
-
 
         if ($validator->fails()) {
             // Validation failed
