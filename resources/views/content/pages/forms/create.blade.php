@@ -37,6 +37,7 @@
     <script src="https://unpkg.com/pizzip@3.1.4/dist/pizzip.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
     <script src="https://unpkg.com/pizzip@3.1.4/dist/pizzip-utils.js"></script>
+    <script src="https://unpkg.com/@yaireo/dragsort"></script>
 @endsection
 
 @section('page-script')
@@ -58,13 +59,13 @@
 
             <div class="col-md-5 col-sm-12 mb-4">
                 <label for="title" class="form-label">Form Title</label>
-                <input type="title" class="form-control" id="title" value = "{{ $form?? [] ? $form->name : '' }}"
+                <input type="title" class="form-control" id="title" value = "{{ $form ?? [] ? $form->name : '' }}"
                     placeholder="Vacation" required="">
             </div>
 
             <div class="col-md-5 col-sm-12 mb-4" data-select2-id="45">
                 <label for="categories" class="form-label">Form Type</label>
-                <select class="js-example-basic-multiple" data-categories='{!! $form?? [] ? json_encode($form->categories->pluck('id')) : '[]' !!}' id="categories"
+                <select class="js-example-basic-multiple" data-categories='{!! $form ?? [] ? json_encode($form->categories->pluck('id')) : '[]' !!}' id="categories"
                     multiple="multiple">
                 </select>
             </div>
@@ -75,10 +76,10 @@
 
             <div class="col-md-7 col-sm-12 mb-4" id="uploadedFileContainer">
                 <label for="formFile" class="form-label">Form File</label>
-                <div id="uploadedFileMessage">{{ $form?? [] ? $form->file : 'No document uploaded' }}</div>
+                <div id="uploadedFileMessage">{{ $form ?? [] ? $form->file : 'No document uploaded' }}</div>
             </div>
         </div>
-        <div id="fb-editor" data-formJSON='{!! $form?? [] ? json_encode($form->content) : '' !!}' class="px-4 pb-5 pt-0">
+        <div id="fb-editor" data-formJSON='{!! $form ?? [] ? json_encode($form->content) : '' !!}' class="px-4 pb-5 pt-0">
 
         </div>
     </div>
@@ -108,11 +109,11 @@
                     <input name='tags' id="TagifyGroupsList" class='form-control'>
                 </div>
                 <div class="col-6 col-sm-12 mb-4" id="TagifyUserListArea">
-                    <label for="TagifyUserList"  class="form-label">Users List</label>
+                    <label for="TagifyUserList" class="form-label">Users List</label>
                     <input name='tags' id="TagifyUserList" class='form-control'>
                 </div>
-                
-                
+
+
                 <div class="col-6 col-sm-12">
                     <button type="submit" class="btn btn-primary waves-effect waves-light" id="WorkflowUsers">Start the
                         Workflow</button>
@@ -151,5 +152,3 @@
 
 
 @endsection
-
-

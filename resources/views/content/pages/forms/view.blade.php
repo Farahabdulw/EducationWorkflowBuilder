@@ -20,6 +20,8 @@
     <!-- Page -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/cards-advance.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/forms/create.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/forms/view.css') }}">
+
 @endsection
 
 @section('vendor-script')
@@ -31,7 +33,7 @@
 @endsection
 
 @section('page-script')
-    <script src="{{ asset('assets/js/forms/view.js') }}"></script>
+    <script src="{{ asset('assets/js/forms/view.js?time =' . time()) }}"></script>
     <script src="{{ asset('assets/js/forms/form-render.min.js') }}"></script>
     <script src="{{ asset('assets/js/forms/control_plugins/mathematic.js') }}"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -90,17 +92,17 @@
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="modal-body">
-                            <div class="card-header pb-3">
+                            <div class="card-header pb-3 d-flex justify-content-between">
                                 <h5 class="card-title m-0">Forms Progress</h5>
+                                <button id="activate-sortable" class="btn btn-primary">Change Order</button>
                             </div>
-                            <button id="activate-sortable" class="btn btn-primary">Activate Sortable</button>
 
                             <div class="card-body">
-                                <ul class="timeline pb-0 mb-0">
+                                <ul class="timeline pb-0 mb-0 ">
 
                                 </ul>
                             </div>
-                            <button id="save-order-changes" class="btn btn-primary">Save</button>
+                            <button id="save-order-changes" class="btn btn-primary d-none ">Save</button>
                         </div>
                     </div>
                 </div>
