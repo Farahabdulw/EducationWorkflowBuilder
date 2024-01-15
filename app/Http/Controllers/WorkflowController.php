@@ -84,8 +84,9 @@ class WorkflowController extends Controller
     }
     public function getWorkflowProgress(Request $request)
     {
-        $workflow = Workflow::find($request->id);
 
+        $workflow = Workflow::find($request->id);
+    
         if ($workflow) {
             $steps = Step::with(['workflow.form.creator', 'user'])
                 ->where('workflow_id', $workflow->id)
@@ -125,6 +126,16 @@ class WorkflowController extends Controller
             return response()->json(['error' => 'Workflow not found'], 404);
         }
     }
+
+    public function updateSortableWorkflow($id)
+    {
+        // Logic to update the resource with the given $id
+        dd($data);
+        return response()->json(['message' => 'Resource updated successfully']);
+    }
+
+
+
     public function getWorkflowMembers(Request $request)
     {
         try {
