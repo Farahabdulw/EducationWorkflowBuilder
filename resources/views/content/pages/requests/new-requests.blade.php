@@ -29,7 +29,7 @@
 @endsection
 
 @section('content')
-    {{ Breadcrumbs::render('new-requests') }}
+    {{ Breadcrumbs::render('requests-history') }}
 
     <div class="card">
         <table class="datatables-new-requests table">

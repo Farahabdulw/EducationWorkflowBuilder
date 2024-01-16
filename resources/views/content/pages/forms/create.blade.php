@@ -40,7 +40,7 @@
     <script src="https://unpkg.com/@yaireo/dragsort"></script>
 @endsection
 
-@section('page-script')
+@section('page-script') 
     <script src="{{ asset('assets/js/forms/create.js?time=' . time()) }}"></script>
     <script src="{{ asset('assets/js/forms/form-render.min.js') }}"></script>
     <script src="{{ asset('assets/js/forms/form-builder.min.js') }}"></script>

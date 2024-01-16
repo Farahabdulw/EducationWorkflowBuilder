@@ -7,7 +7,7 @@ use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\CenterController;
 use App\Http\Controllers\CourseController;
-use App\Http\Controllers\GroupsController; 
+use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\CommitteController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\WorkflowController;
@@ -223,12 +223,12 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/forms/form/{id}', [FormsController::class, 'get_form']);
         Route::post('/form/content/{id}', [FormsController::class, 'get_content'])->name('forms-get-conetent');
         Route::post('/forms/users', [FormsController::class, 'get_forms_users'])->name('forms-get-users');
-        
+
         Route::get('/download/form/{id}', [FormsController::class, 'download_form_file'])->name('download-form-file');
         Route::post('/workflow/create', [WorkflowController::class, 'create'])->name('workflow-create');
         Route::post('/forms/form/{id}/workflows', [WorkflowController::class, 'get'])->name('workflow-get');
         Route::post('/workflows/workflow/progress', [WorkflowController::class, 'getWorkflowProgress'])->name('workflow-get-progress');
-        Route::put('/workflows/workflow/progress/update/{id}', [WorkflowController::class, 'updateSortableWorkflow'])->name('workflow-update-progress');
+        Route::put('/workflows/workflow/order/update/{id}', [WorkflowController::class, 'update_order'])->name('workflow-update-order');
         Route::post('workflows/members', [WorkflowController::class, 'getWorkflowMembers'])->name('workflow-get-members');
         Route::post('/forms/review/approve', [WorkflowController::class, 'form_approve'])->name('form-approve');
         Route::post('/forms/review/reject', [WorkflowController::class, 'form_reject'])->name('form-reject');
@@ -256,7 +256,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/requests', [RequestController::class, 'getAll'])->name('get-all-request');
         Route::post('/requests/filters', [RequestController::class, 'filters'])->name('requests-filtred');
         Route::post('/requests/filtered', [RequestController::class, 'filtered'])->name('filtered');
-        Route::get('/new_request', [RequestController::class, 'newRequests'])->name('new-requests');
+        Route::get('/requests-history', [RequestController::class, 'newRequests'])->name('history');
     });
 
 
