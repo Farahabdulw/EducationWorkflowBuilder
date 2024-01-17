@@ -37,7 +37,8 @@ class WorkflowController extends Controller
                 'step' => $index + 1,
                 'status' => 0, // 0 => pending , 1 => inProgress , 2 => approved , 3 => rejected , 4 => forwarded
             ]);
-        };
+        }
+        ;
 
         $this->lunchWorkflow($workflow, $sender_id, $form_id);
         return response()->json(["successful" => true, "form" => $form_id], 200);
@@ -86,7 +87,7 @@ class WorkflowController extends Controller
     {
 
         $workflow = Workflow::find($request->id);
-    
+
         if ($workflow) {
             $steps = Step::with(['workflow.form.creator', 'user'])
                 ->where('workflow_id', $workflow->id)
@@ -127,14 +128,58 @@ class WorkflowController extends Controller
         }
     }
 
-    public function updateSortableWorkflow($id)
+    public function update_order($id)
     {
-        // Logic to update the resource with the given $id
-        dd($data);
-        return response()->json(['message' => 'Resource updated successfully']);
+        $previousOrder = explode(' ', request('previousOrder', ''));
+        $newOrder = request('newOrder', []);
+        $firstStep = [$previousOrder[0], $previousOrder[0] == $newOrder[0]];
+
+        if ($previousOrder === $newOrder)
+            return response()->json(['success' => true, 'message' => 'Order has not changed'], 200);
+
+        $updatedUsers = [];
+        foreach ($previousOrder as $index => $stepId) {
+            $previousStepId = $newOrder[$index];
+
+            if ($previousStepId) {
+                $previousStep = Step::find($previousStepId);
+
+                if ($previousStep) {
+                    $updatedUsers[$stepId] = $previousStep->user_id;
+                }
+            }
+        }
+        foreach ($updatedUsers as $stepId => $userId) {
+            Step::find($stepId)->update(['user_id' => $userId]);
+        }
+        $workflow = Workflow::find($id);
+        $step = $workflow->steps()->whereIn('id', array_keys($updatedUsers))->orderBy('step', 'desc')->first();
+
+        if ($step) {
+            $nextStep = $workflow->steps()->where('step', '>', $step->step)->whereNull('forwarded_from')->orderBy('step')->first();
+
+            if ($nextStep) {
+                Step::find($nextStep->id)->update([
+                    'status' => 1,
+                ]);
+
+                // Notify the next recipient
+                $nextRecipient = User::find($nextStep->user_id);
+                $message = "You received a form that needs your action";
+                $nextRecipient->notify(new FormReceived($workflow->creator, $message, $workflow->form->id, $nextStep->id));
+            }
+        }
+        if (!$firstStep[1]) {
+            $step = Step::find($firstStep[0]);
+
+            $user = User::find($step->user_id);
+            $message = "You received a form that needs your action";
+            $user->notify(new FormReceived($workflow->creator, $message, $workflow->form->id, $step->id));
+
+        }
+
+        return response()->json(['success' => true, 'userNotified' => !$firstStep[1], 'message' => 'Resource updated successfully'], 200);
     }
-
-
 
     public function getWorkflowMembers(Request $request)
     {
@@ -229,9 +274,6 @@ class WorkflowController extends Controller
     }
     public function nextStep(Step $step)
     {
-        
-
-
         $workflow = $step->workflow;
 
         if ($step->forwarded_from) {
@@ -252,12 +294,12 @@ class WorkflowController extends Controller
             $message = 'Your workflow is over!';
 
             $workflow->creator->notify(new FormCompletion($workflow, $message));
-            if($workflow->form->file){
+            if ($workflow->form->file) {
 
                 $usersInWorkflow = $workflow->steps->pluck('user_id');
                 $users = User::whereIn('id', $usersInWorkflow)->get();
                 foreach ($users as $user) {
-                    $user->notify(new FormCompletionFile($workflow , "The workflow for form No.".$workflow->form->id ." is done here's the PDF file"));
+                    $user->notify(new FormCompletionFile($workflow, "The workflow for form No." . $workflow->form->id . " is done here's the PDF file"));
                 }
             }
             return;
@@ -292,7 +334,7 @@ class WorkflowController extends Controller
 
             // Update the workflow status to "rejected"
             $workflow = $step->workflow;
-            $workflow->status =3;
+            $workflow->status = 3;
             $workflow->save();
 
             // Notify the workflow creator

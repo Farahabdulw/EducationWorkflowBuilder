@@ -175,6 +175,7 @@ Route::middleware(['auth'])->group(function () {
     // Courses UI Routes
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_view']], function () {
         Route::get('/courses', [CourseController::class, 'index'])->name('courses-list');
+        Route::get('/course/view/{id}', [CourseController::class, 'view_course'])->name('course-view');
         Route::post('/courses', [CourseController::class, 'get_courses'])->name('courses-get');
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_add']], function () {
@@ -228,7 +229,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/workflow/create', [WorkflowController::class, 'create'])->name('workflow-create');
         Route::post('/forms/form/{id}/workflows', [WorkflowController::class, 'get'])->name('workflow-get');
         Route::post('/workflows/workflow/progress', [WorkflowController::class, 'getWorkflowProgress'])->name('workflow-get-progress');
-        Route::put('/workflows/workflow/order/update/{id}', [WorkflowController::class, 'update_order'])->name('workflow-update-order');
+        Route::post('/workflows/workflow/order/update/{id}', [WorkflowController::class, 'update_order'])->name('workflow-update-order');
         Route::post('workflows/members', [WorkflowController::class, 'getWorkflowMembers'])->name('workflow-get-members');
         Route::post('/forms/review/approve', [WorkflowController::class, 'form_approve'])->name('form-approve');
         Route::post('/forms/review/reject', [WorkflowController::class, 'form_reject'])->name('form-reject');

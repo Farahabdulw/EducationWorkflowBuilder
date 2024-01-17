@@ -38,7 +38,7 @@
                     <th>ID</th>
                     <th>Title</th>
                     <th>Categories</th>
-                    <th style="width:10%">Auction</th>
+                    <th style="width:10%">Action</th>
                 </tr>
             </thead>
         </table>

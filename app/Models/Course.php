@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Department;
+use App\Models\College;
 use App\Models\courseModels\CoursePrerequisites;
 use App\Models\courseModels\CourseCorequisites;
 use App\Models\courseModels\CourseMainObjective;
@@ -28,6 +29,10 @@ class Course extends Model
     public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class, 'department_id');
+    }
+    public function college(): BelongsTo
+    {
+        return $this->belongsTo(College::class, 'college_id');
     }
     protected $fillable = [
         'title',
@@ -53,55 +58,55 @@ class Course extends Model
         'other_references',
     ];
 
-    public function preRequisites() 
+    public function preRequisites()
     {
         return $this->hasMany(CoursePrerequisites::class);
     }
-    public function coRequisites() 
+    public function coRequisites()
     {
         return $this->hasMany(CourseCorequisites::class);
     }
-    public function mainObjective() 
+    public function mainObjective()
     {
         return $this->hasMany(CourseMainObjective::class);
     }
-    public function teachingMode() 
+    public function teachingMode()
     {
         return $this->hasMany(CourseTeachingMode::class);
     }
-    public function contactHours() 
+    public function contactHours()
     {
         return $this->hasMany(CourseContactHours::class);
     }
-    public function knowledge() 
+    public function knowledge()
     {
         return $this->hasMany(CourseKnowledge::class);
     }
-    public function skills() 
+    public function skills()
     {
         return $this->hasMany(CourseSkills::class);
     }
-    public function values() 
+    public function values()
     {
         return $this->hasMany(CourseValues::class);
     }
-    public function content() 
+    public function content()
     {
         return $this->hasMany(CourseContent::class);
     }
-    public function studentsAssessment() 
+    public function studentsAssessment()
     {
         return $this->hasMany(CourseStudentsAssessment::class);
     }
-    public function facilitiesAndEquipment() 
+    public function facilitiesAndEquipment()
     {
         return $this->hasMany(CourseFacilitiesAndEquipment::class);
     }
-    public function assessmentQuality() 
+    public function assessmentQuality()
     {
         return $this->hasMany(CourseAssessmentQuality::class);
     }
-    public function students() 
+    public function students()
     {
         return $this->hasMany(CourseStudents::class);
     }

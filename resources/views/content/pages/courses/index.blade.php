@@ -35,12 +35,11 @@
     {{ Breadcrumbs::render('courses') }}
 
     <div class="card">
-        <div class="table-responsive">
+        <div class="table-responsive pb-2">
 
             <table class="datatables-courses table">
                 <thead class="table-light">
                     <tr>
-                        <th></th>
                         <th></th>
                         <th>COURSE TITLE</th>
                         <th>COURSE CODE</th>

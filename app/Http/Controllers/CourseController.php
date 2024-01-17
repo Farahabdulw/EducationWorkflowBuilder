@@ -44,8 +44,9 @@ class CourseController extends Controller
     {
         if (auth()->user()->can('edit_courses') || auth()->user()->hasRole('super-admin')) {
             $course = Course::with([
-                'department' ,
-                'preRequisites' ,
+                'department',
+                'college',
+                'preRequisites',
                 'coRequisites',
                 'mainObjective',
                 'teachingMode',
@@ -65,14 +66,36 @@ class CourseController extends Controller
         return view('403');
 
     }
-    
+
     public function course(int $id)
     {
         if (auth()->user()->can('edit_courses') || auth()->user()->hasRole('super-admin')) {
-            $course = Course::select( 'department_id')->find($id);
+            $course = Course::select('department_id')->find($id);
 
         }
         return response()->json($course, 200);
+    }
+    public function view_course($id)
+    {
+        $course = Course::with([
+            'department',
+            'college',
+            'preRequisites',
+            'coRequisites',
+            'mainObjective',
+            'teachingMode',
+            'contactHours',
+            'knowledge',
+            'skills',
+            'values',
+            'content',
+            'studentsAssessment',
+            'facilitiesAndEquipment',
+            'assessmentQuality',
+            'students'
+        ])->find($id);
+        // dd('course', $course);
+        return view('content.pages.courses.view', compact('course'));
     }
     public function add_course(Request $request)
     {
@@ -100,9 +123,9 @@ class CourseController extends Controller
         $currentUser = auth()->user();
         try {
             DB::beginTransaction();
-        
+
             $lastRevisionData = [
-                'date' => now(), 
+                'date' => now(),
                 'by' => $currentUser->first_name . ' ' . $currentUser->last_name,
             ];
 
@@ -126,19 +149,19 @@ class CourseController extends Controller
                 'type' => json_encode($request->get('courseCategories') ?? []),
                 'enrollment' => json_encode($request->get('enrollmentOption') ?? []),
 
-                'essential_references' => $request->get('essentialReferences') ?? null ,
-                'supportive_references' => $request->get('supportiveReferences') ?? null ,
-                'electronic_references' => $request->get('electronicMaterials') ?? null ,
-                'other_references' => $request->get('otherLearningMaterials') ?? null ,
-                'version' => "1" ,
+                'essential_references' => $request->get('essentialReferences') ?? null,
+                'supportive_references' => $request->get('supportiveReferences') ?? null,
+                'electronic_references' => $request->get('electronicMaterials') ?? null,
+                'other_references' => $request->get('otherLearningMaterials') ?? null,
+                'version' => "1",
                 'last_revision' => json_encode($lastRevisionData),
             ]);
 
-            if ($course){
-                $this->createRecords($request , $course);
+            if ($course) {
+                $this->createRecords($request, $course);
                 DB::commit();
-                return response()->json(['success' => true, 'message' => 'Course added successfully' , "course"=> $course], 200);
-            }else{
+                return response()->json(['success' => true, 'message' => 'Course added successfully', "course" => $course], 200);
+            } else {
                 DB::rollBack();
                 return response()->json([
                     'success' => false,
@@ -147,14 +170,15 @@ class CourseController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollBack();
-        
+
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
     }
-    public function mapping(Request $request){
+    public function mapping(Request $request)
+    {
         return view('content.pages.courses.mapping');
     }
-   
+
 
     public function export(Request $request)
     {
@@ -192,7 +216,7 @@ class CourseController extends Controller
             'Content-Disposition' => 'attachment; filename="master mapping sheet.xlsx"',
         ]);
     }
-// public function import(Request $request){
+    // public function import(Request $request){
     //     if ($request->hasFile('fileToImport')) {
     //         $file = $request->file('fileToImport');
     //         $validFileTypes = ['xlsx', 'xls'];
@@ -200,21 +224,21 @@ class CourseController extends Controller
 
     //         if (!in_array($extension, $validFileTypes)) 
     //             return response()->json(['error' => 'Invalid file type. Only Excel files are accepted.'], 400);
-            
+
     //         $spreadsheet = IOFactory::load($file->getPathname());
 
     //         // Get all sheets in the workbook
     //         $allSheets = $spreadsheet->getAllSheets();
-    
+
     //         // Skip the first sheet and process the rest
     //         foreach ($allSheets as $index => $sheet) {
     //             if ($index === 0) continue;
-                
+
     //             $this->processSheet($sheet);
     //         }
-    
+
     //         return response()->json(['success' => 'File uploaded and processed successfully.']);
-            
+
     //     }
 
     //     return response()->json(['error' => 'No file was uploaded.'], 400);
@@ -259,19 +283,19 @@ class CourseController extends Controller
             ], 422);
         }
         $currentUser = auth()->user();
-        $course->version = $course->version - - 1; 
+        $course->version = $course->version - -1;
         $lastRevisionData = [
-            'date' => now(), 
+            'date' => now(),
             'by' => $currentUser->first_name . ' ' . $currentUser->last_name,
         ];
-        
+
         $course->title = $request->title;
         $course->code = $request->code;
         $course->program = $request->program;
         $course->department_id = $request->department;
         $course->college_id = $request->college;
         $course->institution = $request->institution;
-        
+
         $course->credit = $request->creditHours;
         $course->tatorial = $request->tatorialHours;
         $course->description = $request->description ?? " ";
@@ -294,7 +318,8 @@ class CourseController extends Controller
 
         return response()->json(['message' => 'Course updated successfully', 'course' => $course], 200);
     }
-    public function deleteExistingRecords($id){
+    public function deleteExistingRecords($id)
+    {
         CoursePrerequisites::where('course_id', $id)->delete();
         CourseCorequisites::where('course_id', $id)->delete();
         CourseMainObjective::where('course_id', $id)->delete();
@@ -308,7 +333,8 @@ class CourseController extends Controller
         CourseFacilitiesAndEquipment::where('course_id', $id)->delete();
         CourseAssessmentQuality::where('course_id', $id)->delete();
     }
-    public function createRecords($request , $course){
+    public function createRecords($request, $course)
+    {
 
         if ($request->has('preRequirements')) {
             $preRequirements = $request->get('preRequirements');
@@ -473,7 +499,7 @@ class CourseController extends Controller
             // Assuming $courses is the collection of all courses
             $courses = Course::whereIn('id', $groupsAff->toArray())
                 ->with([
-                    'department' ,
+                    'department',
                     'coRequisites',
                     'mainObjective',
                     'teachingMode',
@@ -522,38 +548,39 @@ class CourseController extends Controller
     {
         $query = $request->input('q');
         list($entity, $query) = explode('~*~', $query);
-    
+
         $suggestions = Course::select($entity)
             ->where($entity, 'like', '%' . $query . '%')
             ->groupBy($entity)
-            ->get(); 
-    
+            ->get();
+
         return response()->json($suggestions);
     }
     public function identification_suggestions(Request $request)
     {
         $query = $request->input('q');
         list($entity, $searchTerm) = explode('~*~', $query);
-    
+
         $courses = Course::whereHas($entity, function ($queryBuilder) use ($searchTerm) {
             $queryBuilder->where('name', 'like', '%' . $searchTerm . '%');
         })
             ->get();
         $suggestions = [];
-    
+
         foreach ($courses as $course) {
             $relatedEntities = $course->{$entity};
-    
+
             if ($relatedEntities && $relatedEntities->isNotEmpty()) {
                 foreach ($relatedEntities as $relatedEntity) {
                     $suggestions[] = [$entity => $relatedEntity->name];
                 }
             }
         }
-    
+
         return response()->json($suggestions);
     }
-    public function teachingMode_suggestions(Request $request){
+    public function teachingMode_suggestions(Request $request)
+    {
         $query = $request->input('q');
         list($entity, $searchTerm) = explode('~*~', $query);
         $courses = Course::whereHas("teachingMode", function ($queryBuilder) use ($searchTerm) {
@@ -561,10 +588,10 @@ class CourseController extends Controller
         })
             ->get();
         $suggestions = [];
-    
+
         foreach ($courses as $course) {
             $relatedEntities = $course->teachingMode;
-    
+
             if ($relatedEntities && $relatedEntities->isNotEmpty()) {
                 foreach ($relatedEntities as $relatedEntity) {
                     $suggestions[] = [$entity => $relatedEntity->mode_of_instruction];
@@ -573,18 +600,19 @@ class CourseController extends Controller
         }
         return response()->json($suggestions);
     }
-    public function contactHours_suggestions(Request $request){
+    public function contactHours_suggestions(Request $request)
+    {
         $query = $request->input('q');
         list($entity, $searchTerm) = explode('~*~', $query);
-        $courses = Course::whereHas("contactHours", function ($queryBuilder) use ($searchTerm , $entity) {
+        $courses = Course::whereHas("contactHours", function ($queryBuilder) use ($searchTerm, $entity) {
             $queryBuilder->where($entity, 'like', '%' . $searchTerm . '%');
         })
             ->get();
         $suggestions = [];
-    
+
         foreach ($courses as $course) {
             $relatedEntities = $course->contactHours;
-    
+
             if ($relatedEntities && $relatedEntities->isNotEmpty()) {
                 foreach ($relatedEntities as $relatedEntity) {
                     $suggestions[] = [$entity => $relatedEntity->{$entity}];
@@ -593,18 +621,19 @@ class CourseController extends Controller
         }
         return response()->json($suggestions);
     }
-    public function framework_suggestions(Request $request , $section){
+    public function framework_suggestions(Request $request, $section)
+    {
         $query = $request->input('q');
         list($entity, $searchTerm) = explode('~*~', $query);
-        $courses = Course::whereHas($section, function ($queryBuilder) use ($searchTerm , $entity) {
+        $courses = Course::whereHas($section, function ($queryBuilder) use ($searchTerm, $entity) {
             $queryBuilder->where($entity, 'like', '%' . $searchTerm . '%');
         })
             ->get();
         $suggestions = [];
-    
+
         foreach ($courses as $course) {
             $relatedEntities = $course->{$section};
-    
+
             if ($relatedEntities && $relatedEntities->isNotEmpty()) {
                 foreach ($relatedEntities as $relatedEntity) {
                     $suggestions[] = [$entity => $relatedEntity->{$entity}];
@@ -613,7 +642,8 @@ class CourseController extends Controller
         }
         return response()->json($suggestions);
     }
-    public function register(Request $request){
+    public function register(Request $request)
+    {
 
         $students = $request->get('students');
         foreach ($students as $students) {
@@ -623,7 +653,7 @@ class CourseController extends Controller
                 'name' => $students['name'],
             ]);
         }
-        return response()->json(['success' => true, 'message' => 'Course added successfully' ], 200);
+        return response()->json(['success' => true, 'message' => 'Course added successfully'], 200);
     }
 
 }

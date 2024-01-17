@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/custome-form-style.css') }}" />
-    {{-- <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" /> --}}
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
     {{-- <link rel="stylesheet" href="{{ asset('assets/vendor/libs/tagify/tagify.css') }}" /> --}}
 
 
@@ -28,8 +28,7 @@
     <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
 
     {{-- <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}" /> --}}
-    {{-- </script> --}}
+    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}" ></script> 
 @endsection
 
 @section('page-script')
