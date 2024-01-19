@@ -177,6 +177,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/courses', [CourseController::class, 'index'])->name('courses-list');
         Route::get('/course/view/{id}', [CourseController::class, 'view_course'])->name('course-view');
         Route::post('/courses', [CourseController::class, 'get_courses'])->name('courses-get');
+        Route::get('/course/export/{id}', [CourseController::class, 'export_course'])->name('export-course-single');
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_add']], function () {
         Route::get('/course/add', [CourseController::class, 'create'])->name('courses-add');
@@ -192,7 +193,7 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_edit|courses_view']], function () {
         Route::get('/course/{id}', [CourseController::class, 'get_course'])->name('course-get');
         Route::post('/export/courses', [CourseController::class, 'export'])->name('export-course');
-        Route::get('/downlaod/mapping/courses', [CourseController::class, 'downloadCourses'])->name('downlaod-export-course');
+        Route::get('/downlaod/mapping/courses', [CourseController::class, 'downloadCourses'])->name('');
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_edit']], function () {
         Route::get('/course/edit/{id}', [CourseController::class, 'edit'])->name('course-edit');

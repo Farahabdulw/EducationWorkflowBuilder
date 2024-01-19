@@ -23,7 +23,9 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MappingExport;
-
+use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\PhpWord;
+use Carbon\Carbon;
 
 class CourseController extends Controller
 {
@@ -178,7 +180,6 @@ class CourseController extends Controller
     {
         return view('content.pages.courses.mapping');
     }
-
 
     public function export(Request $request)
     {
@@ -463,6 +464,7 @@ class CourseController extends Controller
             }
         }
     }
+
     public function get_courses()
     {
         if (auth()->user()->hasRole('super-admin')) {
@@ -513,16 +515,41 @@ class CourseController extends Controller
                     'assessmentQuality',
                     'students'
                 ])->get();
-
         }
+
+        // $maxClosLengths = array_fill_keys(range(1, 7), 1);
+
+        // foreach ($courses as $course) {
+        //     dd($course->plos);
+        //     if ($course->plos && is_array($course->plos)) {
+        //         foreach ($course->plos as $plo) {
+        //             if (isset($plo->clos) && is_array($plo->clos)) {
+        //                 $maxClosLengths[$plo->id] = max(
+        //                     isset($maxClosLengths[$plo->id]) ? $maxClosLengths[$plo->id] : 0,
+        //                     count($plo->clos)
+        //                 );
+        //             }
+        //         }
+        //     }
+        // }
+
+
+        // $filePath = 'exports/courses.xlsx';
+        // Excel::store(new MappingExport($courses, $maxClosLengths), $filePath);
+
+        // $fileUrl = Storage::url($filePath);
+
         $responseObject = [
             'courses' => $courses,
             'canEdit' => $canEdit,
             'canDelete' => $canDelete,
             'canAdd' => $canAdd,
+            // 'file_url' => $fileUrl
         ];
+
         return response()->json($responseObject, 200);
     }
+
     public function get_course($id)
     {
         $course = Course::with('department')->find($id);
@@ -654,6 +681,70 @@ class CourseController extends Controller
             ]);
         }
         return response()->json(['success' => true, 'message' => 'Course added successfully'], 200);
+    }
+
+
+    public $course;
+    public $phpWord;
+    public function export_course($id)
+    {
+        $this->phpWord = new PhpWord();
+
+        $this->course = Course::with([
+            'department',
+            'college',
+            'preRequisites',
+            'coRequisites',
+            'mainObjective',
+            'teachingMode',
+            'contactHours',
+            'knowledge',
+            'skills',
+            'values',
+            'content',
+            'studentsAssessment',
+            'facilitiesAndEquipment',
+            'assessmentQuality',
+            'students'
+        ])->find($id);
+
+        if (!$this->course) {
+            dd('not found', $id);
+        }
+
+        $this->phpWord = IOFactory::load(storage_path('app/private/course-template.docx'));
+
+        // $this->PopulateFirstPage();x
+
+        $objWriter = IOFactory::createWriter($this->phpWord, 'Word2016');
+        $fileName = "app/private/course" . -$this->course->id . ".docx";
+        $objWriter->save(storage_path($fileName));
+        return response()->download(storage_path($fileName));
+    }
+    private function PopulateFirstPage()
+    {
+        $lastRevisionDate = Carbon::parse(json_decode($this->course->last_revision)->date)->format('Y/m/d');
+
+        $this->replaceTextInContentControlElement('Enter Course Title.', $this->course->title);
+        $this->replaceTextInContentControlElement('Enter Course Code.', $this->course->code);
+        $this->replaceTextInContentControlElement('Enter Program Name.', $this->course->program);
+        $this->replaceTextInContentControlElement('Enter Department Name .', $this->course->department->name);
+        $this->replaceTextInContentControlElement('Enter College Name.', $this->course->college->name);
+        $this->replaceTextInContentControlElement('Enter Institution Name.', $this->course->institution);
+        $this->replaceTextInContentControlElement('Course Specification Version Number ', $this->course->version);
+        $this->replaceTextInContentControlElement('Pick Revision Date.', $lastRevisionDate);
+    }
+    private function replaceTextInContentControlElement($search, $replace)
+    {
+        foreach ($this->phpWord->getSections() as $section) {
+            foreach ($section->getElements() as $element) {
+                if ($element instanceof Control) {
+                    if (strpos($element->getText(), $search) !== false) {
+                        $element->setText(str_replace($search, $replace, $element->getText()));
+                    }
+                }
+            }
+        }
     }
 
 }

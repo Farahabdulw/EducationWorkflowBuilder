@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/typeahead-js/typeahead.css') }}" />
     <style>
-        .dark-style tr[name="instructionalFramwork-group"],
-        .dark-style tr[name="instructionalFramwork-group"]:hover {
+        .dark-style tr.group,
+        .dark-style tr.group:hover {
             background-color: rgba(134, 146, 208, .1) !important;
         }
     </style>
@@ -55,6 +55,7 @@
                 <span class="text-muted fw-light">View Course</span>
             </h4>
             <p class="text-muted version">Version : 1</p>
+
         </div>
         <div class="d-flex flex-column align-items-end pt-3 pb-2">
             <p class="text-muted mb-0">Last Revision:</p>
@@ -109,10 +110,8 @@
                     <div class="input-group">
                         <span class="input-group-text creditHours">Credit Hours</span>
                         <span class="input-group-text creditHours">{{ $course->credit }}</span>
-                        {{-- <input type="number" aria-label="credit Hours" id="creditHours" min=0 class="form-control"> --}}
                         <span class="input-group-text tatorialHours">Tatorial Hours</span>
                         <span class="input-group-text tatorialHours">{{ $course->tatorial }}</span>
-                        {{-- <input type="number" aria-label="tatorial Hours" id="tatorialHours" min=0 class="form-control"> --}}
                     </div>
                 </div>
             </div>
@@ -120,95 +119,27 @@
             <div class="mt-2 border rounded p-3">
                 <div class="col-12 d-lg-flex courseCategories">
                     <div class="col-lg-2 col-md-12 col-sm-12 pb-md-2 pb-sm-2">Course Categories</div>
-                    <label class="col-lg-2 col-md-4 col-sm-6 pb-md-2 pb-sm-2 switch switch-lg">
-                        <input type="checkbox" class="switch-input">
-                        <span class="switch-toggle-slider">
-                            <span class="switch-on">
-                                <i class="ti ti-check"></i>
-                            </span>
-                            <span class="switch-off">
-                                <i class="ti ti-x"></i>
-                            </span>
-                        </span>
-                        <span class="switch-label">University</span>
-                    </label>
-                    <label class="col-lg-2 col-md-4 col-sm-6 pb-md-2 pb-sm-2 switch switch-lg">
-                        <input type="checkbox" class="switch-input">
-                        <span class="switch-toggle-slider">
-                            <span class="switch-on">
-                                <i class="ti ti-check"></i>
-                            </span>
-                            <span class="switch-off">
-                                <i class="ti ti-x"></i>
-                            </span>
-                        </span>
-                        <span class="switch-label">College</span>
-                    </label>
-                    <label class="col-lg-2 col-md-4 col-sm-6 pb-md-2 pb-sm-2 switch switch-lg">
-                        <input type="checkbox" class="switch-input">
-                        <span class="switch-toggle-slider">
-                            <span class="switch-on">
-                                <i class="ti ti-check"></i>
-                            </span>
-                            <span class="switch-off">
-                                <i class="ti ti-x"></i>
-                            </span>
-                        </span>
-                        <span class="switch-label">Department</span>
-                    </label>
-                    <label class="col-lg-2 col-md-4 col-sm-6 pb-md-2 pb-sm-2 switch switch-lg">
-                        <input type="checkbox" class="switch-input">
-                        <span class="switch-toggle-slider">
-                            <span class="switch-on">
-                                <i class="ti ti-check"></i>
-                            </span>
-                            <span class="switch-off">
-                                <i class="ti ti-x"></i>
-                            </span>
-                        </span>
-                        <span class="switch-label">Track</span>
-                    </label>
-                    <label class="col-lg-2 col-md-4 col-sm-6 pb-md-2 pb-sm-2 switch switch-lg">
-                        <input type="checkbox" class="switch-input">
-                        <span class="switch-toggle-slider">
-                            <span class="switch-on">
-                                <i class="ti ti-check"></i>
-                            </span>
-                            <span class="switch-off">
-                                <i class="ti ti-x"></i>
-                            </span>
-                        </span>
-                        <span class="switch-label">Others</span>
-                    </label>
+                    @php
+                        $type = json_decode($course->type, true);
+                    @endphp
+                    @foreach (['university', 'college', 'department', 'track', 'others'] as $category)
+                        @php
+                            $isChecked = isset($type[$category]) && $type[$category] === 'true';
+                        @endphp
+                        <label class="col-lg-2 col-md-4 col-sm-6 pb-md-2 pb-sm-2 switch switch-lg">
+                            <span class="switch-label tf-icons ti ti-{{ $isChecked ? 'check' : 'x' }}"></span>
+                            <span class="switch-label">{{ ucfirst($category) }}</span>
+                        </label>
+                    @endforeach
                 </div>
                 <div class="col-12 pt-2 d-lg-flex">
                     <div class="col-lg-2 col-md-12 col-sm-12 pb-md-2 pb-sm-2">enrollment option</div>
-
+                    @php
+                        $enrollment = json_decode($course->enrollment, true);
+                    @endphp
                     <label class="col-lg-2 col-md-12 col-sm-12 pb-md-2 pb-sm-2 switch switch-lg">
-                        <input type="checkbox" class="switch-input courseType" checked id="requiredCheckbox"
-                            name="subject-stat">
-                        <span class="switch-toggle-slider">
-                            <span class="switch-on">
-                                <i class="ti ti-check"></i>
-                            </span>
-                            <span class="switch-off">
-                                <i class="ti ti-x"></i>
-                            </span>
-                        </span>
-                        <span class="switch-label">Required</span>
-                    </label>
-                    <label class="col-lg-2 col-md-12 col-sm-12 pb-md-2 pb-sm-2 switch switch-lg">
-                        <input type="checkbox" class="switch-input courseType " id="electiveCheckbox"
-                            name="subject-stat">
-                        <span class="switch-toggle-slider">
-                            <span class="switch-on">
-                                <i class="ti ti-check"></i>
-                            </span>
-                            <span class="switch-off">
-                                <i class="ti ti-x"></i>
-                            </span>
-                        </span>
-                        <span class="switch-label">Elective</span>
+                        <span
+                            class="switch-label">{{ isset($enrollment['required']) && $enrollment['required'] === 'true' ? 'Required' : 'Elective' }}</span>
                     </label>
                 </div>
             </div>
@@ -217,40 +148,36 @@
                 <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                     <div class="input-group">
                         <span class="input-group-text">Course be Offered to</span>
-                        <input type="text" aria-label="level" id="level" class="form-control coruseLevel">
+                        <span class="input-group-text">{{ $course->level }}</span>
                     </div>
                 </div>
             </div>
             <div class="col-12 d-flex flex-column pt-2">
                 <label for="description" class="form-label description">Course Description</label>
                 <textarea id="description" rows="3" class="form-control"
-                    style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 83px;"></textarea>
+                    style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 83px;">{{ $course->description }}</textarea>
             </div>
             <div class="d-lg-flex justify-content-between">
                 <div class="col-lg-6 col-md-12 pe-1 col-sm-12 pt-2 table-responsive">
                     <table id="preRequirements" class="table table-striped">
                         <thead>
                             <tr>
-                                <th style="width: 10%">No.</th>
+                                <th style="width:20%">No.</th>
                                 <th data-name="PreRequirment"> Course Pre-requirements </th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                            <tr class="noData">
-                                <td class="text-center" colspan="3"> No pre-requirements were added</td>
-                            </tr>
-                            <tr class="preRequirements">
-                                <td>
-                                    <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
-                                        <i class="fa fa-add"></i>
-                                    </button>
-                                </td>
-                                <td colspan="2">
-                                    <input type="text" class="form-control preRequirements-inp"
-                                        name="preRequirements-inp">
-                                </td>
-                            </tr>
+                            @forelse ($course->preRequisites as $index => $prerequisite)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $prerequisite['name'] }}</td>
+                                </tr>
+                            @empty
+                                <tr class="noData">
+                                    <td class="text-center" colspan="3">No prerequisites were added</td>
+                                </tr>
+                            @endforelse
+
                         </tbody>
                     </table>
                 </div>
@@ -258,25 +185,21 @@
                     <table id="coRequisites" class="table table-striped">
                         <thead>
                             <tr>
-                                <th style="width:10%">NO.</th>
+                                <th style="width:20%">NO.</th>
                                 <th data-name="CoRequirment"> Course Co-requisites</th>
-                                <th> </th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                            <tr class="noData">
-                                <td class="text-center" colspan="3"> No co-requisites were added</td>
-                            </tr>
-                            <tr class="coRequisites">
-                                <td>
-                                    <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
-                                        <i class="fa fa-add"></i>
-                                    </button>
-                                </td>
-                                <td colspan="2">
-                                    <input type="text" class="form-control coRequisites-inp" name="coRequisites-inp">
-                                </td>
-                            </tr>
+                            @forelse ($course->coRequisites as $index => $corequisite)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $corequisite['name'] }}</td>
+                                </tr>
+                            @empty
+                                <tr class="noData">
+                                    <td class="text-center" colspan="3">No co-requisites were added</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -286,26 +209,22 @@
                 <table id="courseMainObjective" class="table table-striped">
                     <thead>
                         <tr>
-                            <th style="width:10%">NO</th>
+                            <th style="width:20%">NO</th>
                             <th data-name="mainObjective"> Course Main Objective </th>
-                            <th> </th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                        <tr class="noData">
-                            <td class="text-center" colspan="3"> No main objectives were added</td>
-                        </tr>
-                        <tr class="courseMainObjective">
-                            <td>
-                                <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
-                                    <i class="fa fa-add"></i>
-                                </button>
-                            </td>
-                            <td colspan="2">
-                                <input type="text" class="form-control courseMainObjective-inp"
-                                    name="courseMainObjective">
-                            </td>
-                        </tr>
+
+                        @forelse ($course->mainObjective as $index => $mainObjective)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $mainObjective['name'] }}</td>
+                            </tr>
+                        @empty
+                            <tr class="noData">
+                                <td class="text-center" colspan="3">No main objectives were added</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -324,30 +243,21 @@
                             <th data-name="modeOfInstruction"> Mode of Instruction </th>
                             <th data-name="contactHour"> Contact Hours </th>
                             <th data-name="percentage"> Percentage </th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                        <tr class="noData">
-                            <td colspan="5" class="text-center"> No records were added</td>
-                        </tr>
-                        <tr class="teachingMode">
-                            <td>
-                                <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
-                                    <i class="fa fa-add"></i>
-                                </button>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control teachingMode-inp" name="modeInstruction">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control teachingMode-inp" name="contactHours">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control teachingMode-inp" max=100 min=0
-                                    name="percentage">
-                            </td>
-                        </tr>
+                        @forelse ($course->teachingMode as $index => $tMode)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $tMode['mode_of_instruction'] }}</td>
+                                <td>{{ $tMode['contact_hours'] }}</td>
+                                <td>{{ $tMode['percentage'] }}</td>
+                            </tr>
+                        @empty
+                            <tr class="noData">
+                                <td class="text-center" colspan="5">No records were added</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -365,26 +275,20 @@
                             <th style="width:10%"> NO </th>
                             <th data-name="activity"> Activity </th>
                             <th data-name="contactHour"> Contact Hours </th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                        <tr class="noData">
-                            <td colspan="4" class="text-center"> No records were added</td>
-                        </tr>
-                        <tr class="contactHours">
-                            <td>
-                                <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
-                                    <i class="fa fa-add"></i>
-                                </button>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control contactHours-inp" name="activity">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control contactHours-inp" name="contactHours">
-                            </td>
-                        </tr>
+                        @forelse ($course->contactHours as $index => $cHours)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $cHours['activity'] }}</td>
+                                <td>{{ $cHours['hours'] }}</td>
+                            </tr>
+                        @empty
+                            <tr class="noData">
+                                <td class="text-center" colspan="4">No records were added</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -404,99 +308,61 @@
                             <th data-name="CLOcode"> Code of CLOs aligned with program </th>
                             <th data-name="teachingStrategie"> Teaching Strategies </th>
                             <th data-name="assessmentMethod"> Assessment Methods </th>
-                            <th> </th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                        <tr name="instructionalFramwork-group" data-name="knowledge" class="instructionalFramwork">
-                            <td> 1.0 </td>
-                            <td colspan="6">Knowledge and understanding</td>
+                        <tr class="group">
+                            <td colspan="5">Knowledge</td>
                         </tr>
-
-                        <tr class="instructionalFramwork" name="add-record">
-                            <td>
-                                <button type="button" data-group = "1"
-                                    class="btn btn-label-primary actionBtn add-new-record-btn">
-                                    <i class="fa fa-add"></i>
-                                </button>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control instructionalFramwork-inp"
-                                    name="courseLearningOutcomes-knowledge">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control instructionalFramwork-inp"
-                                    name="codeCLOs-knowledge">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control instructionalFramwork-inp"
-                                    name="teachingStrategies-knowledge">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control instructionalFramwork-inp"
-                                    name="assessmentMethods-knowledge">
-                            </td>
+                        @forelse ($course->knowledge as $index => $know)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $know['learning_outcome'] }}</td>
+                                <td>{{ $know['CLO_code'] }}</td>
+                                <td>{{ $know['teaching_strategies'] }}</td>
+                                <td>{{ $know['assessment_methods'] }}</td>
+                            </tr>
+                        @empty
+                            <tr class="noData">
+                                <td class="text-center" colspan="5">No records were added</td>
+                            </tr>
+                        @endforelse
+                        <tr class="group">
+                            <td colspan="5">Skills</td>
                         </tr>
                     </tbody>
                     <tbody class="table-border-bottom-0">
-                        <tr name="instructionalFramwork-group" data-name="skills" class="instructionalFramwork">
-                            <td> 2.0 </td>
-                            <td colspan="6">Skills</td>
-                        </tr>
-                        <tr class="instructionalFramwork" name="add-record">
-                            <td>
-                                <button type="button" data-group = "2"
-                                    class="btn btn-label-primary actionBtn add-new-record-btn">
-                                    <i class="fa fa-add"></i>
-                                </button>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control instructionalFramwork-inp"
-                                    name="courseLearningOutcomes-skills">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control instructionalFramwork-inp"
-                                    name="codeCLOs-skills">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control instructionalFramwork-inp"
-                                    name="teachingStrategies-skills">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control instructionalFramwork-inp"
-                                    name="assessmentMethods-skills">
-                            </td>
+                        @forelse ($course->skills as $index => $skill)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $skill['learning_outcome'] }}</td>
+                                <td>{{ $skill['CLO_code'] }}</td>
+                                <td>{{ $skill['teaching_strategies'] }}</td>
+                                <td>{{ $skill['assessment_methods'] }}</td>
+                            </tr>
+                        @empty
+                            <tr class="noData">
+                                <td class="text-center" colspan="5">No records were added</td>
+                            </tr>
+                        @endforelse
+                        <tr class="group">
+                            <td colspan="5">Values</td>
                         </tr>
                     </tbody>
                     <tbody class="table-border-bottom-0">
-                        <tr name="instructionalFramwork-group" data-name="values" class="instructionalFramwork">
-                            <td> 3.0 </td>
-                            <td colspan="6">Values, autonomy responsibility</td>
-                        </tr>
-                        <tr class="instructionalFramwork" name="add-record">
-                            <td>
-                                <button type="button" data-group = "3"
-                                    class="btn btn-label-primary actionBtn add-new-record-btn">
-                                    <i class="fa fa-add"></i>
-                                </button>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control instructionalFramwork-inp"
-                                    name="courseLearningOutcomes-values">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control instructionalFramwork-inp"
-                                    name="codeCLOs-values">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control instructionalFramwork-inp"
-                                    name="teachingStrategies-values">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control instructionalFramwork-inp"
-                                    name="assessmentMethods-values">
-                            </td>
-                        </tr>
+                        @forelse ($course->values as $index => $value)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $value['learning_outcome'] }}</td>
+                                <td>{{ $value['CLO_code'] }}</td>
+                                <td>{{ $value['teaching_strategies'] }}</td>
+                                <td>{{ $value['assessment_methods'] }}</td>
+                            </tr>
+                        @empty
+                            <tr class="noData">
+                                <td class="text-center" colspan="5">No records were added</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -514,28 +380,20 @@
                             <th style="width:10%"> NO </th>
                             <th data-name="topic"> List of Topics </th>
                             <th data-name="contactHour"> Contact Hours </th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-
-                        <tr class="noData text-center">
-                            <td colspan="4">No topics were added</td>
-                        </tr>
-                        <tr class="courseContent">
-                            <td>
-                                <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
-                                    <i class="fa fa-add"></i>
-                                </button>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control courseContent-inp" name="topic-courseContent">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control courseContent-inp"
-                                    name="contactHours-courseContent">
-                            </td>
-                        </tr>
+                        @forelse ($course->content as $index => $cont)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $cont['topic'] }}</td>
+                                <td>{{ $cont['contact_hours'] }}</td>
+                            </tr>
+                        @empty
+                            <tr class="noData">
+                                <td class="text-center" colspan="3">No records were added</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -554,34 +412,22 @@
                             <th data-name="assessmentActivity"> Assessment Activities </th>
                             <th data-name="assessmentTiming"> Assessment timing (in weeks) </th>
                             <th data-name="assessmentpercentage"> Percentage of Total Assessment Score </th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
 
-                        <tr class="noData text-center">
-                            <td colspan="5">No assessments were added</td>
-                        </tr>
-
-                        <tr class="studentsAssessmentActivities">
-                            <td>
-                                <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
-                                    <i class="fa fa-add"></i>
-                                </button>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control studentsAssessmentActivities-inp"
-                                    name="assessmentActivity">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control studentsAssessmentActivities-inp"
-                                    name="assessmentTiming">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control studentsAssessmentActivities-inp"
-                                    name="assessmentScore">
-                            </td>
-                        </tr>
+                        @forelse ($course->studentsAssessment as $index => $StdAssessment)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $StdAssessment['assessment_activity'] }}</td>
+                                <td>{{ $StdAssessment['assessment_timing'] }}</td>
+                                <td>{{ $StdAssessment['percentage'] }}</td>
+                            </tr>
+                        @empty
+                            <tr class="noData">
+                                <td class="text-center" colspan="4">No records were added</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -597,8 +443,7 @@
                     <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                         <div class="input-group">
                             <span class="input-group-text">Essential References</span>
-                            <input type="text" aria-label="essentialReferences"
-                                class="form-control essentialReferences">
+                            <span class="input-group-text">{{ $course->essential_references }}</span>
                         </div>
                     </div>
                 </div>
@@ -606,8 +451,7 @@
                     <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                         <div class="input-group">
                             <span class="input-group-text">Supportive References</span>
-                            <input type="text" aria-label="supportiveReferences"
-                                class="form-control supportiveReferences">
+                            <span class="input-group-text">{{ $course->supportive_references }}</span>
                         </div>
                     </div>
                 </div>
@@ -615,8 +459,7 @@
                     <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                         <div class="input-group">
                             <span class="input-group-text">Electronic Materials</span>
-                            <input type="text" aria-label="electronicMaterials"
-                                class="form-control electronicMaterials">
+                            <span class="input-group-text">{{ $course->electronic_references }}</span>
                         </div>
                     </div>
                 </div>
@@ -624,8 +467,7 @@
                     <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                         <div class="input-group">
                             <span class="input-group-text">Other Learning Materials</span>
-                            <input type="text" aria-label="otherLearningMaterials"
-                                class="form-control otherLearningMaterials">
+                            <span class="input-group-text">{{ $course->other_references }}</span>
                         </div>
                     </div>
                 </div>
@@ -644,26 +486,20 @@
                             <th style="width:10%"> NO </th>
                             <th data-name="item"> Items </th>
                             <th data-name="resource"> Resources </th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                        <tr class="noData text-center">
-                            <td colspan="4">No resources were added</td>
-                        </tr>
-                        <tr class="facilitiesEquipment">
-                            <td>
-                                <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
-                                    <i class="fa fa-add"></i>
-                                </button>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control facilitiesEquipment-inp" name="items">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control facilitiesEquipment-inp" name="resources">
-                            </td>
-                        </tr>
+                        @forelse ($course->facilitiesAndEquipment as $index => $StdAssessment)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $StdAssessment['items'] }}</td>
+                                <td>{{ $StdAssessment['resource'] }}</td>
+                            </tr>
+                        @empty
+                            <tr class="noData">
+                                <td class="text-center" colspan="3">No records were added</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -682,31 +518,21 @@
                             <th data-name="assessmentArea"> Assessment Areas/Issues </th>
                             <th data-name="assessor"> Assessor </th>
                             <th data-name="assessmentMethod"> Assessment Methods </th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                        <tr class="noData text-center">
-                            <td colspan="5">No Assessments were added</td>
-                        </tr>
-                        <tr class="assessmentCourseQualitys">
-                            <td>
-                                <button type="button" class="btn btn-label-primary actionBtn add-new-record-btn">
-                                    <i class="fa fa-add"></i>
-                                </button>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control assessmentCourseQualitys-inp"
-                                    name="assessmentAreas">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control assessmentCourseQualitys-inp" name="Assessor">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control assessmentCourseQualitys-inp"
-                                    name="assessmentMethods">
-                            </td>
-                        </tr>
+                        @forelse ($course->assessmentQuality as $index => $AssessmentQ)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $AssessmentQ['assessment_area'] }}</td>
+                                <td>{{ $AssessmentQ['assessor'] }}</td>
+                                <td>{{ $AssessmentQ['assessment_method'] }}</td>
+                            </tr>
+                        @empty
+                            <tr class="noData">
+                                <td class="text-center" colspan="4">No records were added</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -722,8 +548,7 @@
                     <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                         <div class="input-group">
                             <span class="input-group-text">COUNCIL / COMMITTEE</span>
-                            <input type="text" aria-label="council Or Committe"
-                                class="form-control councilOrCommitte">
+                            <span class="input-group-text">{{ $course->approved_by }}</span>
                         </div>
                     </div>
                 </div>
@@ -731,7 +556,7 @@
                     <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                         <div class="input-group">
                             <span class="input-group-text">REFERENCE NO.</span>
-                            <input type="text" aria-label="referenceNumber" class="form-control referenceNumber">
+                            <span class="input-group-text">{{ $course->approval_number }}</span>
                         </div>
                     </div>
                 </div>
@@ -739,7 +564,7 @@
                     <div class=" col-md-7 col-lg-7 col-sm-12 pt-2">
                         <div class="input-group">
                             <span class="input-group-text">DATE</span>
-                            <input type="date" aria-label="level" class="form-control date">
+                            <span class="input-group-text">{{ $course->approval_date }}</span>
                         </div>
                     </div>
                 </div>
@@ -747,9 +572,9 @@
         </div>
     </div>
     <div class="col-12">
-        <div class="d-flex flex-row pt-3 col-md-6 col-lg-4 col-sm-12">
-            <button type="submit" id="formSubmition" class="btn btn-primary waves-effect waves-light">Add
-                Course</button>
+        <div class="d-flex flex-row pt-3 col-md-6 col-lg-4 col-sm-12 gap-2">
+            <a href="/course/export/{{ $course->id }}" class="btn btn-success waves-effect waves-light">Export</a>
+            <a href="/course/edit/{{ $course->id }}" class="btn btn-primary waves-effect waves-light">Edit</a>
         </div>
     </div>
 
