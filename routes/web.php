@@ -7,6 +7,7 @@ use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\CenterController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\ExportCourseController;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\CommitteController;
 use App\Http\Controllers\OfficeController;
@@ -177,7 +178,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/courses', [CourseController::class, 'index'])->name('courses-list');
         Route::get('/course/view/{id}', [CourseController::class, 'view_course'])->name('course-view');
         Route::post('/courses', [CourseController::class, 'get_courses'])->name('courses-get');
-        Route::get('/course/export/{id}', [CourseController::class, 'export_course'])->name('export-course-single');
+        Route::get('/course/export/{id}', [ExportCourseController::class, 'export_course'])->name('export-course-single');
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_add']], function () {
         Route::get('/course/add', [CourseController::class, 'create'])->name('courses-add');
