@@ -18,6 +18,8 @@ use App\Http\Controllers\FrequentUsedController;
 use App\Http\Controllers\authentications\LoginBasic;
 use App\Http\Controllers\authentications\RegisterBasic;
 
+use App\Http\Controllers\PdfController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -212,9 +214,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/forms', [FormsController::class, 'get_forms'])->name('forms-get');
         Route::post('/forms/requests', [FormsController::class, 'get_forms_new_requests'])->name('forms-get-new');
         Route::get('/forms/form/{id}', [FormsController::class, 'get_form_single'])->name('form-get');
+        Route::get('/forms/form/{id}/document', [FormsController::class, 'form_file'])->name('form-file-get');
         Route::get('/forms/categories', [FormsController::class, 'get_category'])->name('forms-get-category');
         Route::get('/forms/review/form/{id}/{step_id}', [FormsController::class, 'review_form'])->name('review-form');
         Route::post('/forms/review/progress/{id}', [FormsController::class, 'review_form_progress'])->name('progress-review-form');
+        Route::post('/create-form-document', [PdfController::class, 'generate_document'])->name('generate-document-form');
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_add']], function () {
         Route::get('/form/add', [FormsController::class, 'create'])->name('forms-create');
@@ -262,12 +266,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/requests-history', [RequestController::class, 'newRequests'])->name('history');
     });
 
-
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_add']], function () {
         Route::get('/register-portal', [CourseController::class, 'register_portal'])->name('register_portal');
         Route::post('/course/register', [CourseController::class, 'register'])->name('register-course');
-
     });
+
 
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
     Route::post('/notification/read/{notif_id}', [NotificationController::class, 'read'])->name('read-notification');
@@ -282,3 +285,4 @@ Route::post('/logout', [LoginBasic::class, 'logout'])->name('logout');
 Route::get('/register', [RegisterBasic::class, 'index'])->name('register');
 
 // Route::get('/login', [LoginBasic::class, 'index'])->name('login.basic');
+Route::get('/testing', [PdfController::class, 'test'])->name('test');

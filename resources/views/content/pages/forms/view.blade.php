@@ -28,7 +28,7 @@
     <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
 
     {{-- <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script> --}}
-    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}" ></script> 
+    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
 @endsection
 
 @section('page-script')
@@ -43,7 +43,9 @@
     <nav aria-label="breadcrumb">
         {{ Breadcrumbs::render('view-form', $formId) }}
     </nav>
-
+    @if ($redirectToPdf == true)
+        <input type="hidden" id="formId" value="{{ $formId }}">
+    @endif
     <div class="card" id="savedForm">
         <div class="card-header">
             <h5>View Form</h5>
@@ -61,7 +63,8 @@
                 @endforeach
             </div>
         </div>
-        <div id="fb-render" data-form="{{ $form->content }}" class="row row-bordered px-4 pb-5 pt-0">
+        <div id="fb-render" data-form="{{ $form->content }}"
+            class="{{ $redirectToPdf ? 'redirect' : '' }} row row-bordered px-4 pb-5 pt-0">
         </div>
     </div>
 

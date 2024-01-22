@@ -23,7 +23,7 @@ class FormsController extends Controller
     }
     public function create(Request $request)
     {
-        if ($request->has('previous')){ 
+        if ($request->has('previous')) {
             $form_id = $request->input('previous');
             try {
                 $id = Crypt::decryptString($form_id);
@@ -31,17 +31,17 @@ class FormsController extends Controller
                 return view('404');
             }
             $form = Forms::with('categories')->find($id);
-            if($form){
-            $dataArray = json_decode($form->content, true);
-            foreach ($dataArray as &$item) {
-                if (isset($item['value'])) {
-                    $item['value'] = '';
+            if ($form) {
+                $dataArray = json_decode($form->content, true);
+                foreach ($dataArray as &$item) {
+                    if (isset($item['value'])) {
+                        $item['value'] = '';
+                    }
                 }
-            }
                 $form->content = json_encode($dataArray);
-                return view('content.pages.forms.create' , compact('form'));
+                return view('content.pages.forms.create', compact('form'));
             }
-            
+
 
         }
         return view('content.pages.forms.create');
@@ -58,7 +58,21 @@ class FormsController extends Controller
     {
         return view('content.pages.forms.category');
     }
-   
+    public function form_file($id)
+    {
+        $form = Forms::find($id);
+
+        if (!$form) {
+            return view('404');
+        }
+        $filePath = storage_path('app/private/forms/form-' . $form->id . ".pdf");
+        if (file_exists($filePath)) {
+            return response()->file($filePath, ['Content-Type' => 'application/pdf'], 200);
+        } else {
+            return view('content.pages.forms.view', ['form' => $form, 'formId' => $form->id, 'redirectToPdf' => true]);
+        }
+    }
+
     public function review_form($id, $step_id)
     {
         try {
@@ -116,7 +130,7 @@ class FormsController extends Controller
                 return view('403');
 
     }
-    public function get_form_single($id)
+    public function get_form_single($id, $redirectToPdf = false)
     {
         $form = Forms::find($id);
 
@@ -127,7 +141,7 @@ class FormsController extends Controller
         $userRoles = auth()->user()->roles->pluck('name')->toArray();
 
         if (auth()->user()->hasRole($userRoles)) {
-            return view('content.pages.forms.view', ['form' => $form, 'formId' => $form->id]);
+            return view('content.pages.forms.view', ['form' => $form, 'formId' => $form->id, 'redirectToPdf' => $redirectToPdf]);
         } else {
             return view('403');
         }
@@ -170,7 +184,7 @@ class FormsController extends Controller
                                     'id' => $step->workflow->form->creator->id,
                                     'first_name' => $step->workflow->form->creator->first_name,
                                     'last_name' => $step->workflow->form->creator->last_name,
-                                ], 
+                                ],
                             ],
                         ],
                     ];
@@ -254,50 +268,48 @@ class FormsController extends Controller
         $this->saveContentasFrequent($request->get('formData'));
         if ($request->hasFile('formFile')) {
             $file = $request->file('formFile');
-            $fileName = "form1-".$file->extension();  
+            $fileName = "form1-" . $file->extension();
             $file->move(public_path('uploads'), $fileName);
-    
+
             $domPdfPath = base_path('vendor/dompdf/dompdf');
-    
+
             \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
-            \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF'); 
-            $Content = \PhpOffice\PhpWord\IOFactory::load(public_path('uploads/'.$fileName)); 
-            $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content,'PDF');
-    
-            $pdfFileName = $form->id."-form". '.pdf';
-            $PDFWriter->save(storage_path('app/private/'.$pdfFileName)); 
-            $form->file =$pdfFileName; 
-        }
-        elseif ($request->uid && $request->uid !=null) {
+            \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+            $Content = \PhpOffice\PhpWord\IOFactory::load(public_path('uploads/' . $fileName));
+            $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content, 'PDF');
+
+            $pdfFileName = $form->id . "-form" . '.pdf';
+            $PDFWriter->save(storage_path('app/private/' . $pdfFileName));
+            $form->file = $pdfFileName;
+        } elseif ($request->uid && $request->uid != null) {
             try {
                 $uid = Crypt::decryptString($request->uid);
             } catch (DecryptException $e) {
                 return view('404');
             }
             $Preform = Forms::find($uid);
-            $form->file =$Preform->file; 
+            $form->file = $Preform->file;
         }
         $form->save();
         $categories = json_decode($request->get('categories'));
         $form->categories()->sync($categories);
         return response()->json(['success' => true, 'message' => 'Form added successfully', 'id' => $form->id], 200);
     }
-    public function saveContentasFrequent($content){
+    public function saveContentasFrequent($content)
+    {
         $dataArray = json_decode($content, true);
         $labels = [];
-        
-        foreach ($dataArray as &$item) 
-            if (isset($item['label'])) 
-                $labels[] = $item['label'];
-            
-        foreach ($labels as $text){
+
+        foreach ($dataArray as &$item)
+            if (isset($item['label']))
+                $labels[] = $item['label']; foreach ($labels as $text) {
             $existingRecord = FrequentUsed::where('text', $text)->first();
-            if(!$existingRecord)
+            if (!$existingRecord)
                 FrequentUsed::create(['text' => $text]);
         }
-        
+
     }
-    
+
     public function get_forms(Request $request)
     {
         $user = auth()->user();
@@ -306,8 +318,8 @@ class FormsController extends Controller
             $canDelete = true;
             $canAdd = true;
             $forms = Forms::with('categories')
-            ->orderBy('created_at', 'desc')
-            ->get();
+                ->orderBy('created_at', 'desc')
+                ->get();
         } else {
             $authUser = $user;
             $canEdit = $user->can('forms_edit');
@@ -321,9 +333,9 @@ class FormsController extends Controller
             })->unique()->toArray();
 
             $forms = Forms::whereIn('id', $formIds)
-            ->orderBy('created_at', 'desc')
-            ->with('categories')
-            ->get();
+                ->orderBy('created_at', 'desc')
+                ->with('categories')
+                ->get();
         }
         $responseObject = [
             'forms' => $forms,
@@ -337,11 +349,13 @@ class FormsController extends Controller
     public function get_forms_new_requests(Request $request)
     {
         $user = auth()->user();
-        $forms = Forms::with(['categories' => function ($query) {
-            $query->select('categories.id', 'categories.name');
-        }])
-        ->orderBy('created_at', 'desc')
-        ->get(['id', 'name']);
+        $forms = Forms::with([
+            'categories' => function ($query) {
+                $query->select('categories.id', 'categories.name');
+            }
+        ])
+            ->orderBy('created_at', 'desc')
+            ->get(['id', 'name']);
         foreach ($forms as $form) {
             $encryptedId = Crypt::encryptString($form->id);
             $form->uid = $encryptedId;
@@ -380,19 +394,19 @@ class FormsController extends Controller
             $this->saveContentasFrequent($form->content);
             if ($request->hasFile('formFile')) {
                 $file = $request->file('formFile');
-                $fileName = "form1-".$file->extension();  
+                $fileName = "form1-" . $file->extension();
                 $file->move(public_path('uploads'), $fileName);
-        
+
                 $domPdfPath = base_path('vendor/dompdf/dompdf');
-        
+
                 \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
-                \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF'); 
-                $Content = \PhpOffice\PhpWord\IOFactory::load(public_path('uploads/'.$fileName)); 
-                $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content,'PDF');
-        
-                $pdfFileName = $form->id."-form". '.pdf';
-                $PDFWriter->save(storage_path('app/private/'.$pdfFileName)); 
-                $form->file =$pdfFileName; 
+                \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+                $Content = \PhpOffice\PhpWord\IOFactory::load(public_path('uploads/' . $fileName));
+                $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content, 'PDF');
+
+                $pdfFileName = $form->id . "-form" . '.pdf';
+                $PDFWriter->save(storage_path('app/private/' . $pdfFileName));
+                $form->file = $pdfFileName;
             }
 
             $form->save();
@@ -430,18 +444,19 @@ class FormsController extends Controller
 
     }
 
-    public function download_form_file($id){
+    public function download_form_file($id)
+    {
         $id = Crypt::decryptString($id);
         $form = Forms::find($id);
         if (!$form) {
             return view('404');
         }
 
-    $filePath = storage_path('app/private/'.$form->file);
+        $filePath = storage_path('app/private/' . $form->file);
 
-    if (file_exists($filePath)) 
-        return response()->download($filePath, $form->file);
-    else 
-        return view('404');
+        if (file_exists($filePath))
+            return response()->download($filePath, $form->file);
+        else
+            return view('404');
     }
 }
