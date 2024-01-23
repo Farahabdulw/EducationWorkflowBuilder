@@ -62,9 +62,11 @@ class FormsController extends Controller
     {
         $form = Forms::find($id);
 
-        if (!$form) {
+        if (!$form)
             return view('404');
-        }
+        if ($form->file && $form->file != '')
+            return response()->file(storage_path('app/private/' . $form->file));
+
         $filePath = storage_path('app/private/forms/form-' . $form->id . ".pdf");
         if (file_exists($filePath)) {
             return response()->file($filePath, ['Content-Type' => 'application/pdf'], 200);
