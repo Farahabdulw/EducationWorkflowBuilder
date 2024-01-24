@@ -27,7 +27,7 @@
         }
 
         .rendered-form>div {
-            border-bottom: 1px solid darkgray;
+            border: 1px  solid darkgray;
             padding-top: 1rem;
             padding-bottom: 1rem;
         }
@@ -53,6 +53,13 @@
         li::marker {
             color: rgb(77, 20, 86);
         }
+
+        * {
+            font-family: 'DejaVu Sans', sans-serif;
+            direction: rtl;
+            unicode-bidi: embed;
+        }
+
     </style>
 </head>
 

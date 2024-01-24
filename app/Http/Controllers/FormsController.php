@@ -11,7 +11,11 @@ use App\Models\Step;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use PhpOffice\PhpWord\IOFactory;
-use Barryvdh\Snappy\Facades\SnappyPdf;
+
+use Google_Client;
+use Google_Service_Drive;
+use Google_Service_Drive_DriveFile;
+
 use App\Models\FrequentUsed;
 
 
@@ -270,18 +274,53 @@ class FormsController extends Controller
         $this->saveContentasFrequent($request->get('formData'));
         if ($request->hasFile('formFile')) {
             $file = $request->file('formFile');
-            $fileName = "form1-" . $file->extension();
+            $fileName = "form1." . $file->extension();
             $file->move(public_path('uploads'), $fileName);
 
-            $domPdfPath = base_path('vendor/dompdf/dompdf');
+            $credentialsPath = storage_path('app/private/credentials.json');
+            $client = new Google_Client();
+            $client->setAuthConfig($credentialsPath);
+            $client->addScope(Google_Service_Drive::DRIVE);
+            $client->addScope(Google_Service_Drive::DRIVE_FILE);
+            $driveService = new Google_Service_Drive($client);
 
-            \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
-            \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
-            $Content = \PhpOffice\PhpWord\IOFactory::load(public_path('uploads/' . $fileName));
-            $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content, 'PDF');
+            $target_file = public_path('uploads/' . $fileName);
+            $fileMetadata = new Google_Service_Drive_DriveFile(
+                array(
+                    'name' => 'toBeConverted.docx',
+                    'mimeType' => 'application/vnd.google-apps.document'
+                )
+            );
+            $content = file_get_contents($target_file);
 
+            $file = $driveService->files->create(
+                $fileMetadata,
+                array(
+                    'data' => $content,
+                    'fields' => 'id'
+                )
+            );
+
+            $file_name = str_replace('.docx', '.pdf', 'form.docx');
             $pdfFileName = $form->id . "-form" . '.pdf';
-            $PDFWriter->save(storage_path('app/private/' . $pdfFileName));
+
+            $filePath = storage_path('app/private/' . $pdfFileName);
+            $attempt = 1;
+            do {
+                usleep(500000);
+                $content = $driveService->files->export($file->id, 'application/pdf', array('alt' => 'media'));
+
+                file_put_contents($filePath, $content->getBody()->getContents());
+
+                if (filesize($filePath))
+                    break;
+                else
+                    $attempt++;
+                if ($attempt > 5)
+                    die('converstion didnt work');
+            } while (true);
+            $driveService->files->delete($file->id);
+
             $form->file = $pdfFileName;
         } elseif ($request->uid && $request->uid != null) {
             try {
@@ -293,6 +332,7 @@ class FormsController extends Controller
             $form->file = $Preform->file;
         }
         $form->save();
+
         $categories = json_decode($request->get('categories'));
         $form->categories()->sync($categories);
         return response()->json(['success' => true, 'message' => 'Form added successfully', 'id' => $form->id], 200);
@@ -396,19 +436,58 @@ class FormsController extends Controller
             $this->saveContentasFrequent($form->content);
             if ($request->hasFile('formFile')) {
                 $file = $request->file('formFile');
-                $fileName = "form1-" . $file->extension();
+                $fileName = "form1." . $file->extension();
                 $file->move(public_path('uploads'), $fileName);
 
-                $domPdfPath = base_path('vendor/dompdf/dompdf');
+                $credentialsPath = storage_path('app/private/credentials.json');
+                $client = new Google_Client();
+                $client->setAuthConfig($credentialsPath);
+                $client->addScope(Google_Service_Drive::DRIVE);
+                $client->addScope(Google_Service_Drive::DRIVE_FILE);
+                $driveService = new Google_Service_Drive($client);
 
-                \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
-                \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
-                $Content = \PhpOffice\PhpWord\IOFactory::load(public_path('uploads/' . $fileName));
-                $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content, 'PDF');
+                $target_file = public_path('uploads/' . $fileName);
+                $fileMetadata = new Google_Service_Drive_DriveFile(
+                    array(
+                        'name' => 'toBeConverted.docx',
+                        'mimeType' => 'application/vnd.google-apps.document'
+                    )
+                );
+                $content = file_get_contents($target_file);
 
+                $file = $driveService->files->create(
+                    $fileMetadata,
+                    array(
+                        'data' => $content,
+                        'fields' => 'id'
+                    )
+                );
+
+                $file_name = str_replace('.docx', '.pdf', 'form.docx');
                 $pdfFileName = $form->id . "-form" . '.pdf';
-                $PDFWriter->save(storage_path('app/private/' . $pdfFileName));
+
+                $filePath = storage_path('app/private/' . $pdfFileName);
+                $attempt = 1;
+                do {
+                    usleep(500000);
+                    $content = $driveService->files->export($file->id, 'application/pdf', array('alt' => 'media'));
+
+                    file_put_contents($filePath, $content->getBody()->getContents());
+
+                    if (filesize($filePath))
+                        break;
+                    else
+                        $attempt++;
+                    if ($attempt > 5)
+                        die('converstion didnt work');
+                } while (true);
+                $driveService->files->delete($file->id);
+
                 $form->file = $pdfFileName;
+            }
+            $filePath = storage_path('app/private/forms/form-' . $form->id . ".pdf");
+            if (file_exists($filePath)) {
+                unlink($filePath);
             }
 
             $form->save();
