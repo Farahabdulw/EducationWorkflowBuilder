@@ -87,7 +87,7 @@ return array(
          * that determine if a resouce may be loaded. Full support is not guaranteed
          * for the protocols/wrappers specified
          * by this array.
-         *
+         * 
          * @var array
          */
         'allowed_protocols' => [
@@ -186,7 +186,7 @@ return array(
          * Used if no suitable fonts can be found. This must exist in the font folder.
          * @var string
          */
-        "default_font" => "serif",
+        "default_font" => "arisal",
 
         /**
          * Image DPI setting

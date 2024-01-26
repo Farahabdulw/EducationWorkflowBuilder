@@ -43,9 +43,6 @@
     <nav aria-label="breadcrumb">
         {{ Breadcrumbs::render('view-form', $formId) }}
     </nav>
-    @if ($redirectToPdf == true)
-        <input type="hidden" id="formId" value="{{ $formId }}">
-    @endif
     <div class="card" id="savedForm">
         <div class="card-header">
             <h5>View Form</h5>
@@ -64,7 +61,7 @@
             </div>
         </div>
         <div id="fb-render" data-form="{{ $form->content }}"
-            class="{{ $redirectToPdf ? 'redirect' : '' }} row row-bordered px-4 pb-5 pt-0">
+            class="row row-bordered px-4 pb-5 pt-0">
         </div>
     </div>
 

@@ -59,13 +59,13 @@
 
             <div class="col-md-5 col-sm-12 mb-4">
                 <label for="title" class="form-label">Form Title</label>
-                <input type="title" class="form-control" id="title" value = "{{ $form ?? [] ? $form->name : '' }}"
+                <input type="title" class="form-control" id="title"{{ $form ?? [] ? 'disabled' : '' }} value = "{{ $form ?? [] ? $form->name : '' }}"
                     placeholder="Vacation" required="">
             </div>
 
             <div class="col-md-5 col-sm-12 mb-4" data-select2-id="45">
                 <label for="categories" class="form-label">Form Type</label>
-                <select class="js-example-basic-multiple" data-categories='{!! $form ?? [] ? json_encode($form->categories->pluck('id')) : '[]' !!}' id="categories"
+                <select class="js-example-basic-multiple" {{ $form ?? [] ? 'disabled' : '' }} data-categories='{!! $form ?? [] ? json_encode($form->categories->pluck('id')) : '[]' !!}' id="categories"
                     multiple="multiple">
                 </select>
             </div>

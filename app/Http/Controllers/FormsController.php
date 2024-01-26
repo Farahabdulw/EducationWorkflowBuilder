@@ -75,7 +75,7 @@ class FormsController extends Controller
         if (file_exists($filePath)) {
             return response()->file($filePath, ['Content-Type' => 'application/pdf'], 200);
         } else {
-            return view('content.pages.forms.view', ['form' => $form, 'formId' => $form->id, 'redirectToPdf' => true]);
+            return view('content.pages.forms.pdf', ['form' => $form, 'formId' => $form->id, 'redirectToPdf' => true]);
         }
     }
 
@@ -147,7 +147,7 @@ class FormsController extends Controller
         $userRoles = auth()->user()->roles->pluck('name')->toArray();
 
         if (auth()->user()->hasRole($userRoles)) {
-            return view('content.pages.forms.view', ['form' => $form, 'formId' => $form->id, 'redirectToPdf' => $redirectToPdf]);
+            return view('content.pages.forms.view', ['form' => $form, 'formId' => $form->id]);
         } else {
             return view('403');
         }

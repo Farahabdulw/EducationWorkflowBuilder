@@ -27,7 +27,7 @@
         }
 
         .rendered-form>div {
-            border: 1px  solid darkgray;
+            border: 1px solid darkgray;
             padding-top: 1rem;
             padding-bottom: 1rem;
         }
@@ -46,8 +46,13 @@
             display: block;
             padding: .8rem .5rem;
             margin: .4rem 0;
-            width: 300px;
+            width: 100%;
+            padding: 1rem;
             border: 1px solid rgb(65, 65, 65);
+        }
+
+        #title {
+            background-color: #685dd8;
         }
 
         li::marker {
@@ -56,10 +61,11 @@
 
         * {
             font-family: 'DejaVu Sans', sans-serif;
-            direction: rtl;
             unicode-bidi: embed;
         }
-
+        body{
+            background-color: #685dd8;
+        }
     </style>
 </head>
 
@@ -68,7 +74,7 @@
         {{ $form->name }}
     </div>
 
-    <div style="padding:3rem">
+    <div style="padding:3rem" class="d-flec w-100 justify-content-center">
         {!! $content !!}
     </div>
 </body>
