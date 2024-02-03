@@ -22,7 +22,7 @@ class RequestController extends Controller
     public function request($id)
     {
         $request = Workflow::find($id);
-        
+
         if ($request) {
             $authUser = auth()->user();
             $creator = $request->creator;
@@ -30,7 +30,7 @@ class RequestController extends Controller
             $commonRoles = array_intersect($authUser->getRoleNames()->toArray(), $creator->getRoleNames()->toArray());
             $form_id = $request->form->id;
             if (!empty($commonRoles) || $authUser->hasRole('super-admin')) {
-                return view('content.pages.requests.request' , compact('form_id'));
+                return view('content.pages.requests.request', compact('form_id'));
             }
         }
         return view('404');
@@ -39,7 +39,7 @@ class RequestController extends Controller
     {
         return view('content.pages.requests.new-requests');
     }
-    
+
     public function getAll()
     {
         $user = auth()->user();
@@ -50,8 +50,8 @@ class RequestController extends Controller
                 //         $query->select('id', 'first_name', 'last_name');
                 //     }
                 // ])
-                ->with(['creator:id,first_name,last_name' , 'form:id,name'])
-                ->orderBy('created_at' , 'desc')
+                ->with(['creator:id,first_name,last_name', 'form:id,name'])
+                ->orderBy('created_at', 'desc')
                 ->get();
             $workflows->each(function ($workflow) {
                 $workflow->form->uid = Crypt::encryptString($workflow->form->id);
@@ -65,7 +65,7 @@ class RequestController extends Controller
                 ->orWhereHas('creator', function ($query) use ($user) {
                     $query->role($user->roles);
                 })
-                ->with(['creator:id,first_name,last_name' , 'form:id,name'])
+                ->with(['creator:id,first_name,last_name', 'form:id,name'])
                 ->orderBy('created_at', 'desc')
                 ->get();
             $workflows->each(function ($workflow) {
@@ -89,8 +89,7 @@ class RequestController extends Controller
         $data = $request->selection;
         $entity = $data['entity'];
         $selection = $data['selection'];
-
-        $workflows = Workflow::whereHas('creator.groups', function ($query) {
+        $workflows = Workflow::with(['creator:id,first_name,last_name', 'form:id,name'])->whereHas('creator.groups', function ($query) {
             $query->select('affiliations')->whereNotNull('affiliations');
         })->get();
 

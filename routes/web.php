@@ -216,8 +216,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/forms/form/{id}', [FormsController::class, 'get_form_single'])->name('form-get');
         Route::get('/forms/form/{id}/document', [FormsController::class, 'form_file'])->name('form-file-get');
         Route::get('/forms/categories', [FormsController::class, 'get_category'])->name('forms-get-category');
+        Route::post('/forms/category', [FormsController::class, 'get_categorys_forms'])->name('category-get-forms');
         Route::get('/forms/review/form/{id}/{step_id}', [FormsController::class, 'review_form'])->name('review-form');
         Route::post('/forms/review/progress/{id}', [FormsController::class, 'review_form_progress'])->name('progress-review-form');
+        Route::get('/form/submit-form/{id}', [FormsController::class, 'form_summation'])->name('submit-form-view');
+
         Route::post('/create-form-document', [PdfController::class, 'generate_document'])->name('generate-document-form');
     });
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_add']], function () {
@@ -237,6 +240,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/workflows/workflow/progress', [WorkflowController::class, 'getWorkflowProgress'])->name('workflow-get-progress');
         Route::post('/workflows/workflow/order/update/{id}', [WorkflowController::class, 'update_order'])->name('workflow-update-order');
         Route::post('workflows/members', [WorkflowController::class, 'getWorkflowMembers'])->name('workflow-get-members');
+        Route::post('workflows/workflow/{id}', [WorkflowController::class, 'get_workflow'])->name('workflow-get-single');
         Route::post('/forms/review/approve', [WorkflowController::class, 'form_approve'])->name('form-approve');
         Route::post('/forms/review/reject', [WorkflowController::class, 'form_reject'])->name('form-reject');
         Route::post('/forms/review/forward', [WorkflowController::class, 'form_forward'])->name('form-forward');

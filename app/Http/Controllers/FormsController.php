@@ -11,6 +11,7 @@ use App\Models\Step;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use PhpOffice\PhpWord\IOFactory;
+use App\Models\Groups;
 
 use Google_Client;
 use Google_Service_Drive;
@@ -61,6 +62,26 @@ class FormsController extends Controller
     public function create_category()
     {
         return view('content.pages.forms.category');
+    }
+    public function form_summation($id)
+    {
+        $id = Crypt::decryptString($id);
+        $form = Forms::find($id);
+        $userRoles = $form->creator->roles->pluck('name')->toArray();
+        $groups = auth()->user()->roles->pluck('name')->toArray();
+        $affiliations = Groups::whereIn('name', $userRoles)->pluck('affiliations')->toArray();
+        $centers = [];
+        foreach ($affiliations as $affiliation) {
+            $aff = json_decode($affiliation, true);
+
+            if (isset($aff['centers']))
+                $centers = array_merge($centers, $aff['centers']);
+        }
+        if (!$form || !auth()->user()->hasRole($userRoles) && !auth()->hasRole('super-admin'))
+            return view('404');
+        else
+            return view('content.pages.forms.submit', compact('form', 'centers'));
+
     }
     public function form_file($id)
     {
@@ -144,7 +165,7 @@ class FormsController extends Controller
             return view('404');
         }
 
-        $userRoles = auth()->user()->roles->pluck('name')->toArray();
+        $userRoles = $form->creator->roles->pluck('name')->toArray();
 
         if (auth()->user()->hasRole($userRoles)) {
             return view('content.pages.forms.view', ['form' => $form, 'formId' => $form->id]);
@@ -388,28 +409,78 @@ class FormsController extends Controller
         return response()->json($responseObject, 200);
 
     }
+    public function get_categorys_forms(Request $request)
+    {
+        $category = $request->id;
+        $user = auth()->user();
+        if ($user->hasRole('super-admin')) {
+            $forms = Forms::with('categories')
+                ->whereHas('categories', function ($query) use ($category) {
+                    $query->where('categories.id', $category);
+                })->orderBy('created_at', 'desc')
+                ->get();
+        } else {
+            $authUser = $user;
+
+            $authUserRoles = $authUser->getRoleNames();
+            $users = User::role($authUserRoles)->get();
+            $formIds = $users->flatMap(function ($user) {
+                return $user->forms->pluck('id');
+            })->unique()->toArray();
+
+            $forms = Forms::whereIn('id', $formIds)
+                ->orderBy('created_at', 'desc')
+                ->with('categories')
+                ->whereHas('categories', function ($query) use ($category) {
+                    $query->where('id', $category);
+                })
+                ->get();
+        }
+
+        return response()->json($forms, 200);
+    }
     public function get_forms_new_requests(Request $request)
     {
         $user = auth()->user();
+
         $forms = Forms::with([
             'categories' => function ($query) {
                 $query->select('categories.id', 'categories.name');
+            },
+            'workflows' => function ($query) {
+                $query->select('workflows.id', 'workflows.created_at', 'forms_id')
+                    ->orderByDesc('created_at')
+                    ->take(1);
             }
         ])
             ->orderBy('created_at', 'desc')
             ->get(['id', 'name']);
+
         foreach ($forms as $form) {
-            $encryptedId = Crypt::encryptString($form->id);
-            $form->uid = $encryptedId;
+            $encryptedFormId = Crypt::encryptString($form->id);
+            $form->uid = $encryptedFormId;
             $form->makeHidden(['id']);
 
+            foreach ($form->workflows as $workflow) {
+                $encryptedWorkflowId = Crypt::encryptString($workflow->id);
+                $workflow->uid = $encryptedWorkflowId;
+                $workflow->makeHidden(['id']);
+            }
         }
 
         return response()->json(['forms' => $forms], 200);
-
     }
+
+
     public function get_form(Request $request, $id)
     {
+        if (strlen($id) === 200) {
+            try {
+                $id = Crypt::decryptString($id);
+            } catch (DecryptException $e) {
+                return response()->json(['error' => 'Invalid encrypted ID'], 400);
+            }
+        }
         $form = Forms::with('categories', 'creator')->find($id);
         if ($form)
             return response()->json($form, 200);

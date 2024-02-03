@@ -25,7 +25,7 @@
 @endsection
 
 @section('page-script')
-    <script src="{{ asset('assets/js/requests/newRequests.js') }}"></script>
+    <script src="{{ asset('assets/js/requests/newRequests.js?time=' . time()) }}"></script>
 @endsection
 
 @section('content')

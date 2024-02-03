@@ -20,7 +20,7 @@ class WorkflowController extends Controller
     {
         $users = $request->users;
         $form_id = $request->form;
-        $sender_id = $request->sender_id;
+        $sender_id = $request->input('sender_id') ?? auth()->user()->id;
         $affiliations = $request->affiliations;
         $workflow = Workflow::create([
             "forms_id" => $form_id,
@@ -38,7 +38,7 @@ class WorkflowController extends Controller
                 'status' => 0, // 0 => pending , 1 => inProgress , 2 => approved , 3 => rejected , 4 => forwarded
             ]);
         }
-        ;
+
 
         $this->lunchWorkflow($workflow, $sender_id, $form_id);
         return response()->json(["successful" => true, "form" => $form_id], 200);
@@ -60,7 +60,7 @@ class WorkflowController extends Controller
         // Notify the recipient
         $recipient->notify(new FormReceived($sender_id, $message, $form_id, $firstStep->id));
     }
-    public function get($id, Request $request)
+    public function get($id)
     {
 
         $form = Forms::find($id);
@@ -69,7 +69,7 @@ class WorkflowController extends Controller
             return view('404');
         }
 
-        $userRoles = auth()->user()->roles->pluck('name')->toArray();
+        $userRoles = $form->creator->roles->pluck('name')->toArray();
 
         if (auth()->user()->hasRole($userRoles) || auth()->user()->hasRole('super-admin')) {
             $workflows = Workflow::query()
@@ -82,6 +82,43 @@ class WorkflowController extends Controller
         } else {
             return response()->json(403);
         }
+    }
+    public function get_workflow($id)
+    {
+        if (strlen($id) === 200) {
+            try {
+                $id = Crypt::decryptString($id);
+            } catch (DecryptException $e) {
+                return response()->json(['error' => 'Invalid encrypted ID'], 400);
+            }
+        }
+        try {
+            $workflows = Workflow::query()
+                ->with(
+                    [
+                        'creator' => function ($query) {
+                            $query->select('id', 'first_name', 'last_name');
+                        },
+                        'form' => function ($query) {
+                            $query->select('id', 'content');
+                        },
+                        'steps' => function ($query) {
+
+                            $query->with([
+                                'user' => function ($query) {
+                                    $query->select('id', 'first_name', 'last_name');
+                                }
+                            ]);
+
+                        }
+                    ]
+                )->findOrFail($id);
+
+            return response()->json($workflows, 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Workflow not found'], 404);
+        }
+
     }
     public function getWorkflowProgress(Request $request)
     {

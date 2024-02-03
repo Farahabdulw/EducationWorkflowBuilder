@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Models\Category;
+use App\Models\Workflow;
 
 class Forms extends Model
 {
@@ -18,9 +19,13 @@ class Forms extends Model
     {
         return $this->belongsToMany(Category::class, 'category_form');
     }
-    public function creator() : BelongsTo
+    public function creator(): BelongsTo
     {
-        return $this->belongsTo(User::class , 'created_by');
+        return $this->belongsTo(User::class, 'created_by');
+    }
+    public function workflows()
+    {
+        return $this->hasMany(Workflow::class);
     }
     protected $fillable = [
         'name',

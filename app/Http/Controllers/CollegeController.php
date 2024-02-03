@@ -68,14 +68,13 @@ class CollegeController extends Controller
                 return $affiliationsArray['colleges'] ?? [];
             })->flatten();
 
-            // Assuming $colleges is the collection of all colleges
             $colleges = College::whereIn('id', $groupsAff->toArray())
-            // ->with([
-            //     'committee' => function ($query) {
-            //         $query->select('id', 'name');
-            //     }
-            // ])
-            ->get();
+                // ->with([
+                //     'committee' => function ($query) {
+                //         $query->select('id', 'name');
+                //     }
+                // ])
+                ->get();
         }
         $responseObject = [
             'colleges' => $colleges,
@@ -118,6 +117,6 @@ class CollegeController extends Controller
         $college->description = $request->description;
         $college->save();
 
-        return response()->json(['message' => 'College updated successfully' , 'college' =>$college], 200);
+        return response()->json(['message' => 'College updated successfully', 'college' => $college], 200);
     }
 }
