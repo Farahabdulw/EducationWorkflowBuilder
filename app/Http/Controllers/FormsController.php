@@ -51,6 +51,29 @@ class FormsController extends Controller
         }
         return view('content.pages.forms.create');
     }
+    public function clone_form(Request $request)
+    {
+        $request->validate([
+            'preF_id' => 'required',
+        ]);
+        $this->saveContentasFrequent($request->get('formData'));
+        // Find the form to clone
+        $formToClone = Forms::findOrFail($request->get('preF_id'));
+
+        $form = Forms::create([
+            'name' => $formToClone->name,
+            'created_by' => auth()->user()->id,
+            'file' => $formToClone->file,
+            'content' => $request->get('formData')
+        ]);
+
+        $categories = $formToClone->categories()->pluck('category_id')->toArray();
+        $form->categories()->sync($categories);
+
+        $form->save();
+
+        return response()->json(['success' => true, 'message' => 'Form saved successfully', 'id' => $form->id], 200);
+    }
     public function edit($id)
     {
         $form = Forms::find($id);
@@ -99,7 +122,6 @@ class FormsController extends Controller
             return view('content.pages.forms.pdf', ['form' => $form, 'formId' => $form->id, 'redirectToPdf' => true]);
         }
     }
-
     public function review_form($id, $step_id)
     {
         try {

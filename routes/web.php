@@ -234,6 +234,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/form/content/{id}', [FormsController::class, 'get_content'])->name('forms-get-conetent');
         Route::post('/forms/users', [FormsController::class, 'get_forms_users'])->name('forms-get-users');
 
+        Route::post('/forms/repeat', [FormsController::class, 'clone_form'])->name('forms-clone');
+
         Route::get('/download/form/{id}', [FormsController::class, 'download_form_file'])->name('download-form-file');
         Route::post('/workflow/create', [WorkflowController::class, 'create'])->name('workflow-create');
         Route::post('/forms/form/{id}/workflows', [WorkflowController::class, 'get'])->name('workflow-get');
