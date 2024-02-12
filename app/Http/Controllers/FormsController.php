@@ -92,7 +92,7 @@ class FormsController extends Controller
         $form = Forms::find($id);
         $userRoles = $form->creator->roles->pluck('name')->toArray();
         $groups = auth()->user()->roles->pluck('name')->toArray();
-        $affiliations = Groups::whereIn('name', $userRoles)->pluck('affiliations')->toArray();
+        $affiliations = Groups::whereIn('name', $groups)->pluck('affiliations')->toArray();
         $centers = [];
         foreach ($affiliations as $affiliation) {
             $aff = json_decode($affiliation, true);
@@ -100,7 +100,7 @@ class FormsController extends Controller
             if (isset($aff['centers']))
                 $centers = array_merge($centers, $aff['centers']);
         }
-        if (!$form || !auth()->user()->hasRole($userRoles) && !auth()->hasRole('super-admin'))
+        if (!$form || !auth()->user()->hasRole($userRoles) && !auth()->user()->hasRole('super-admin'))
             return view('404');
         else
             return view('content.pages.forms.submit', compact('form', 'centers'));
@@ -387,7 +387,8 @@ class FormsController extends Controller
 
         foreach ($dataArray as &$item)
             if (isset($item['label']))
-                $labels[] = $item['label']; foreach ($labels as $text) {
+                $labels[] = $item['label'];
+        foreach ($labels as $text) {
             $existingRecord = FrequentUsed::where('text', $text)->first();
             if (!$existingRecord)
                 FrequentUsed::create(['text' => $text]);
@@ -465,16 +466,20 @@ class FormsController extends Controller
     {
         $user = auth()->user();
 
+
         $forms = Forms::with([
             'categories' => function ($query) {
                 $query->select('categories.id', 'categories.name');
             },
             'workflows' => function ($query) {
-                $query->select('workflows.id', 'workflows.created_at', 'forms_id')
+                $query->select('workflows.id', 'workflows.created_at', 'workflows.forms_id')
                     ->orderByDesc('created_at')
-                    ->take(1);
+                    ->whereNotNull('forms_id');
             }
         ])
+            ->whereHas('workflows', function ($query) {
+                $query->whereNotNull('workflows.id');
+            })
             ->orderBy('created_at', 'desc')
             ->get(['id', 'name']);
 
@@ -483,12 +488,17 @@ class FormsController extends Controller
             $form->uid = $encryptedFormId;
             $form->makeHidden(['id']);
 
-            foreach ($form->workflows as $workflow) {
+            if (isset($form->workflows[0])) {
+                $workflow = $form->workflows[0];
                 $encryptedWorkflowId = Crypt::encryptString($workflow->id);
                 $workflow->uid = $encryptedWorkflowId;
                 $workflow->makeHidden(['id']);
+                $form->workflows = [$workflow];
+            } else {
+                $form->workflows = [];
             }
         }
+
 
         return response()->json(['forms' => $forms], 200);
     }
