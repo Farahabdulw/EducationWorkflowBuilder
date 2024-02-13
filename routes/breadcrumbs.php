@@ -133,9 +133,9 @@ Breadcrumbs::for('edit-form', function ($trail, $formId) {
 });
 
 // Submit Form
-Breadcrumbs::for('submit-form', function ($trail, $formId) {
+Breadcrumbs::for('submit-form', function ($trail) {
     $trail->parent('forms');
-    $trail->push('Submit Form', route('submit-form-view', $formId));
+    $trail->push('Submit Form', route('submit-form-view'));
 });
 
 // Add Category (from Add Form page)

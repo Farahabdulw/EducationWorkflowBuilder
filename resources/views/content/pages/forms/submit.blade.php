@@ -12,8 +12,6 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/tagify/tagify.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
-
-
 @endsection
 
 @section('page-style')
@@ -35,7 +33,7 @@
 @endsection
 
 @section('content')
-    {{ Breadcrumbs::render('submit-form', $form->id) }}
+    {{ Breadcrumbs::render('submit-form') }}
     <div class="card">
         <div class="card-header page-header">
             <h5>Submit Form</h5>
@@ -56,7 +54,7 @@
     </div>
     <div class="card collapse mt-3" id="formContent">
         <div class="card-header page-header">
-            <h5>{{ $form->name }}</h5>
+            <h5 class="formName"></h5>
         </div>
         <div class="card-body row browser-default-validation d-flex align-items-end form-div">
             <div id="fb-editor"></div>

@@ -139,6 +139,7 @@ class WorkflowController extends Controller
                     'review' => $step->review,
                     'forwarded_from' => $step->forwarded_from,
                     'created_at' => $step->created_at,
+                    'updated_at' => $step->updated_at,
                     'workflow_id' => $step->workflow_id,
                     'user' => [
                         'id' => $step->user->id,

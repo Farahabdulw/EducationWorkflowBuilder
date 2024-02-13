@@ -69,11 +69,6 @@ class CollegeController extends Controller
             })->flatten();
 
             $colleges = College::whereIn('id', $groupsAff->toArray())
-                // ->with([
-                //     'committee' => function ($query) {
-                //         $query->select('id', 'name');
-                //     }
-                // ])
                 ->get();
         }
         $responseObject = [

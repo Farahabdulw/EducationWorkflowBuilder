@@ -86,11 +86,8 @@ class FormsController extends Controller
     {
         return view('content.pages.forms.category');
     }
-    public function form_summation($id)
+    public function form_summation(Request $request)
     {
-        $id = Crypt::decryptString($id);
-        $form = Forms::find($id);
-        $userRoles = $form->creator->roles->pluck('name')->toArray();
         $groups = auth()->user()->roles->pluck('name')->toArray();
         $affiliations = Groups::whereIn('name', $groups)->pluck('affiliations')->toArray();
         $centers = [];
@@ -100,11 +97,7 @@ class FormsController extends Controller
             if (isset($aff['centers']))
                 $centers = array_merge($centers, $aff['centers']);
         }
-        if (!$form || !auth()->user()->hasRole($userRoles) && !auth()->user()->hasRole('super-admin'))
-            return view('404');
-        else
-            return view('content.pages.forms.submit', compact('form', 'centers'));
-
+        return view('content.pages.forms.submit', compact('centers'));
     }
     public function form_file($id)
     {
@@ -395,7 +388,6 @@ class FormsController extends Controller
         }
 
     }
-
     public function get_forms(Request $request)
     {
         $user = auth()->user();
@@ -462,47 +454,6 @@ class FormsController extends Controller
 
         return response()->json($forms, 200);
     }
-    public function get_forms_new_requests(Request $request)
-    {
-        $user = auth()->user();
-
-
-        $forms = Forms::with([
-            'categories' => function ($query) {
-                $query->select('categories.id', 'categories.name');
-            },
-            'workflows' => function ($query) {
-                $query->select('workflows.id', 'workflows.created_at', 'workflows.forms_id')
-                    ->orderByDesc('created_at')
-                    ->whereNotNull('forms_id');
-            }
-        ])
-            ->whereHas('workflows', function ($query) {
-                $query->whereNotNull('workflows.id');
-            })
-            ->orderBy('created_at', 'desc')
-            ->get(['id', 'name']);
-
-        foreach ($forms as $form) {
-            $encryptedFormId = Crypt::encryptString($form->id);
-            $form->uid = $encryptedFormId;
-            $form->makeHidden(['id']);
-
-            if (isset($form->workflows[0])) {
-                $workflow = $form->workflows[0];
-                $encryptedWorkflowId = Crypt::encryptString($workflow->id);
-                $workflow->uid = $encryptedWorkflowId;
-                $workflow->makeHidden(['id']);
-                $form->workflows = [$workflow];
-            } else {
-                $form->workflows = [];
-            }
-        }
-
-
-        return response()->json(['forms' => $forms], 200);
-    }
-
 
     public function get_form(Request $request, $id)
     {
@@ -627,7 +578,6 @@ class FormsController extends Controller
         return response()->json($uniqueUsers, 200);
 
     }
-
     public function download_form_file($id)
     {
         $id = Crypt::decryptString($id);

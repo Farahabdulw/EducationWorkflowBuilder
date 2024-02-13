@@ -46,8 +46,8 @@
       "name": "New Requests",
       "icon": "menu-icon tf-icons ti ti-folder-filled",
       "permission": "forms",
-      "slug": "history",
-      "url": "/requests-history"
+      "slug": "submit-form-view",
+      "url": "/form/submit-form"
     },
     {
       "name": "Forms",
