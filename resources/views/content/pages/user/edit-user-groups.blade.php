@@ -30,10 +30,7 @@
 @endsection
 
 @section('page-script')
-    <script src="{{ asset('assets/js/userGroups/create.js') }}"></script>
-    @if (request()->is('edit/users/groups*'))
-        <script defer src="{{ asset('assets/js/userGroups/edit.js') }}"></script>
-    @endif
+    <script defer src="{{ asset('assets/js/userGroups/edit.js') }}"></script>
 @endsection
 
 @section('content')
@@ -43,19 +40,11 @@
         $groupId = isset($matches[1]) ? $matches[1] : null;
     @endphp
 
-    @if (Str::contains(url()->current(), 'edit'))
-        {{ Breadcrumbs::render('edit-group', $groupId) }}
-    @else
-        {{ Breadcrumbs::render('add-group') }}
-    @endif
+    {{ Breadcrumbs::render('edit-group', $groupId) }}
 
     <div class="card">
         <div class="card-header">
-            @if (Str::contains(url()->current(), 'edit'))
-                <h5>Edit a users group</h5>
-            @else
-                <h5>Create a new users group</h5>
-            @endif
+            <h5>Edit Users Group</h5>
         </div>
         {{-- Hidden input to store the Permissions in to send to the back-end  --}}
 

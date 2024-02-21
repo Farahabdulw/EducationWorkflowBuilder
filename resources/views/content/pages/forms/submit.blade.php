@@ -45,7 +45,7 @@
                     @forelse ($centers as $center)
                         <option value="{{ $center['id'] }}">{{ $center['name'] }}</option>
                     @empty
-                        <option>You dont have any centers</option>
+                        <option value="None">You dont have any centers</option>
                     @endforelse
                 </select>
             </div>

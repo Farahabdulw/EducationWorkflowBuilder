@@ -245,8 +245,8 @@ class GroupsController extends Controller
                 }
             }
         }
-
-        return response()->json(['success' => true, 'message' => 'Groups permissions updated successfully'], 200);
+        $group = Groups::find($request->id);
+        return response()->json(['success' => true, 'message' => 'Groups permissions updated successfully', "group" => $group], 200);
     }
     public function delete(Request $request)
     {

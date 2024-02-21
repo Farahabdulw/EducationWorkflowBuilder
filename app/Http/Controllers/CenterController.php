@@ -44,9 +44,10 @@ class CenterController extends Controller
         ]);
 
         // Return a success response
-        if ($center)
+        if ($center) {
+            $this->addToGroupsAffiliations($center->id, $center->name);
             return response()->json(['success' => true, 'message' => 'Center added successfully'], 200);
-        else
+        } else
             return response()->json([
                 'success' => false,
                 'error' => $center,
@@ -118,6 +119,24 @@ class CenterController extends Controller
         $center->description = $request->description;
         $center->save();
 
-        return response()->json(['message' => 'Center updated successfully' , 'center' =>$center], 200);
+        return response()->json(['message' => 'Center updated successfully', 'center' => $center], 200);
+    }
+    public function addToGroupsAffiliations($affiliationId, $affiliationName, $type = 'centers')
+    {
+        $roles = auth()->user()->roles->pluck('name')->toArray();
+        $groups = \App\Models\Groups::whereIn('name', $roles)->get();
+
+        foreach ($groups as $group) {
+            $affiliations = json_decode($group->affiliations, true);
+
+            if (!isset($affiliations[$type])) {
+                $affiliations[$type] = [];
+            }
+
+            $affiliations[$type][] = ["id" => $affiliationId, "name" => $affiliationName];
+
+            $group->affiliations = json_encode($affiliations);
+            $group->save();
+        }
     }
 }

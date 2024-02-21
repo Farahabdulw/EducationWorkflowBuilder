@@ -45,9 +45,10 @@ class CommitteController extends Controller
         ]);
 
         // Return a success response
-        if ($committe)
+        if ($committe) {
+            $this->addToGroupsAffiliations($committe->id, $committe->name);
             return response()->json(['success' => true, 'message' => 'Committe added successfully'], 200);
-        else
+        } else
             return response()->json([
                 'success' => false,
                 'error' => $committe,
@@ -61,10 +62,10 @@ class CommitteController extends Controller
             $canAdd = true;
             $committees = Committe::query()
                 ->with([
-                    'chairpersonUser' => function ($query) {
-                        $query->select('id', 'first_name', 'last_name');
-                    }
-                ])->get();
+                        'chairpersonUser' => function ($query) {
+                            $query->select('id', 'first_name', 'last_name');
+                        }
+                    ])->get();
         } else {
             $authUser = auth()->user();
             $authUserRoles = $authUser->roles;
@@ -133,7 +134,25 @@ class CommitteController extends Controller
         $committee->description = $request->description;
         $committee->save();
 
-        return response()->json(['message' => 'committee updated successfully' , 'committee' => $committee], 200);
+        return response()->json(['message' => 'committee updated successfully', 'committee' => $committee], 200);
+    }
+    public function addToGroupsAffiliations($affiliationId, $affiliationName, $type = 'committees')
+    {
+        $roles = auth()->user()->roles->pluck('name')->toArray();
+        $groups = \App\Models\Groups::whereIn('name', $roles)->get();
+
+        foreach ($groups as $group) {
+            $affiliations = json_decode($group->affiliations, true);
+
+            if (!isset($affiliations[$type])) {
+                $affiliations[$type] = [];
+            }
+
+            $affiliations[$type][] = ["id" => $affiliationId, "name" => $affiliationName];
+
+            $group->affiliations = json_encode($affiliations);
+            $group->save();
+        }
     }
 
 }

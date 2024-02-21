@@ -44,6 +44,14 @@ class LoginBasic extends Controller
       ], 422);
     }
   }
+  public function emptyPage()
+  {
+    if (auth()->user()->hasRole('super-admin') || auth()->user()->can('offices_view')) {
+      return redirect()->route('offices-list');
+    } else {
+      return view('content.pages.empty');
+    }
+  }
   public function logout()
   {
     Auth::logout();

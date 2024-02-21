@@ -44,9 +44,10 @@ class DepartmentController extends Controller
         ]);
 
         // Return a success response
-        if ($department)
+        if ($department) {
+            $this->addToGroupsAffiliations($department->id, $department->name, 'departments');
             return response()->json(['success' => true, 'message' => 'Department been added successfully'], 200);
-        else
+        } else
             return response()->json([
                 'success' => false,
                 'error' => $department,
@@ -119,6 +120,24 @@ class DepartmentController extends Controller
         $department->description = $request->description;
         $department->save();
 
-        return response()->json(['message' => 'Department updated successfully' ,'department' =>$department], 200);
+        return response()->json(['message' => 'Department updated successfully', 'department' => $department], 200);
+    }
+    public function addToGroupsAffiliations($affiliationId, $affiliationName, $type = 'offices')
+    {
+        $roles = auth()->user()->roles->pluck('name')->toArray();
+        $groups = \App\Models\Groups::whereIn('name', $roles)->get();
+
+        foreach ($groups as $group) {
+            $affiliations = json_decode($group->affiliations, true);
+
+            if (!isset($affiliations[$type])) {
+                $affiliations[$type] = [];
+            }
+
+            $affiliations[$type][] = ["id" => $affiliationId, "name" => $affiliationName];
+
+            $group->affiliations = json_encode($affiliations);
+            $group->save();
+        }
     }
 }

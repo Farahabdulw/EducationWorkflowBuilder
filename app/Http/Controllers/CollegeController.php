@@ -42,9 +42,10 @@ class CollegeController extends Controller
         ]);
 
         // Return a success response
-        if ($college)
+        if ($college) {
+            $this->addToGroupsAffiliations($college->id, $college->name);
             return response()->json(['success' => true, 'message' => 'College added successfully'], 200);
-        else
+        } else
             return response()->json([
                 'success' => false,
                 'error' => $college,
@@ -58,6 +59,7 @@ class CollegeController extends Controller
             $canAdd = true;
             $colleges = College::get();
         } else {
+            dd(1);
             $authUser = auth()->user();
             $canEdit = auth()->user()->can('colleges_edit');
             $canDelete = auth()->user()->can('colleges_delete');
@@ -113,5 +115,23 @@ class CollegeController extends Controller
         $college->save();
 
         return response()->json(['message' => 'College updated successfully', 'college' => $college], 200);
+    }
+    public function addToGroupsAffiliations($affiliationId, $affiliationName, $type = 'colleges')
+    {
+        $roles = auth()->user()->roles->pluck('name')->toArray();
+        $groups = \App\Models\Groups::whereIn('name', $roles)->get();
+
+        foreach ($groups as $group) {
+            $affiliations = json_decode($group->affiliations, true);
+
+            if (!isset($affiliations[$type])) {
+                $affiliations[$type] = [];
+            }
+
+            $affiliations[$type][] = ["id" => $affiliationId, "name" => $affiliationName];
+
+            $group->affiliations = json_encode($affiliations);
+            $group->save();
+        }
     }
 }

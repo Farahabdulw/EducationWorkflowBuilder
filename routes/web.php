@@ -32,7 +32,7 @@ use App\Http\Controllers\PdfController;
 */
 Route::middleware(['auth'])->group(function () {
     // Main Page Route
-    Route::get('/', [OfficeController::class, 'index'])->name('offices');
+    Route::get('/', [LoginBasic::class, 'emptyPage'])->name('empty-page');
     Route::get('/currnt_user', [UserController::class, 'get_current_user'])->name('user-current-get');
 
     // Users UI Routes
@@ -182,6 +182,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/courses', [CourseController::class, 'get_courses'])->name('courses-get');
         Route::get('/course/export/{id}', [ExportCourseController::class, 'export_course'])->name('export-course-single');
     });
+
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_add']], function () {
         Route::get('/course/add', [CourseController::class, 'create'])->name('courses-add');
         Route::post('/course/add', [CourseController::class, 'add_course'])->name('courses-save');
@@ -193,16 +194,19 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/suggestions/course/framework/{section}', [CourseController::class, 'framework_suggestions'])->name('courses-framework-suggestions');
         Route::get('/mapping-clo-with-plo', [CourseController::class, 'mapping'])->name('mapping');
     });
+
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_edit|courses_view']], function () {
         Route::get('/course/{id}', [CourseController::class, 'get_course'])->name('course-get');
         Route::post('/export/courses', [CourseController::class, 'export'])->name('export-course');
         Route::get('/downlaod/mapping/courses', [CourseController::class, 'downloadCourses'])->name('');
     });
+
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_edit']], function () {
         Route::get('/course/edit/{id}', [CourseController::class, 'edit'])->name('course-edit');
         Route::post('/course/update/{id}', [CourseController::class, 'update_course'])->name('course-update');
         Route::post('/course/edit/{id}', [CourseController::class, 'course'])->name('get-course');
     });
+
     Route::group(['middleware' => ['role_or_permission:super-admin|courses_delete']], function () {
         Route::post('/course/delete', [CourseController::class, 'delete'])->name('course-delete');
     });
@@ -223,6 +227,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('/create-form-document', [PdfController::class, 'generate_document'])->name('generate-document-form');
     });
+
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_add']], function () {
         Route::get('/form/add', [FormsController::class, 'create'])->name('forms-create');
         Route::post('/forms/add', [FormsController::class, 'add'])->name('forms-add');
@@ -259,6 +264,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/forms/edit/category/{id}', [FormsController::class, 'edit_category'])->name('forms-edit-category');
         Route::post('/forms/delete/category/{id}', [FormsController::class, 'delete_category'])->name('forms-delete-category');
     });
+
     Route::group(['middleware' => ['role_or_permission:super-admin|forms_delete']], function () {
         Route::post('/form/delete', [FormsController::class, 'delete'])->name('form-delete');
     });
@@ -277,7 +283,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/register-portal', [CourseController::class, 'register_portal'])->name('register_portal');
         Route::post('/course/register', [CourseController::class, 'register'])->name('register-course');
     });
-
 
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
     Route::post('/notification/read/{notif_id}', [NotificationController::class, 'read'])->name('read-notification');

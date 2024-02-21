@@ -11,6 +11,7 @@ use App\Models\Office;
 use App\Models\Forms;
 use App\Models\Committe;
 use App\Models\Workflow;
+use App\Models\Groups;
 use Illuminate\Support\Facades\Crypt;
 
 
@@ -42,20 +43,13 @@ class RequestController extends Controller
     }
     public function get_requests_forms(Request $request)
     {
-        # get all groups and json_decode the affilations column 
-        # itterate each group and look for the groups that have center.id and college as the given center and college
-        # get all the users from these groups 
-        # get all the forms they submitited with there workflows
-        # filter out the forms to be by category id like the given 
 
         $user = auth()->user();
         $center = $request->center;
         $college = $request->college;
         $category = $request->type;
-        // Retrieve user's groups with affiliations
         $groups = $user->groups;
 
-        // Filter forms based on center and college from user's groups
         $forms = collect();
 
         foreach ($groups as $group) {
@@ -148,12 +142,33 @@ class RequestController extends Controller
     }
     public function filters()
     {
-        $filters = [];
-        $filters['committees'] = Committe::select('id', 'name')->get();
-        $filters['offices'] = Office::select('id', 'name')->get();
-        $filters['Colleges'] = College::select('id', 'name')->get();
-        $filters['Departments'] = Department::select('id', 'name')->get();
-        $filters['Centers'] = Center::select('id', 'name')->get();
+        $groups = auth()->user()->roles->pluck('name')->toArray();
+        $affiliations = Groups::whereIn('name', $groups)->pluck('affiliations')->toArray();
+
+        $decodedAffiliations = array_map('json_decode', $affiliations);
+
+        $filters = [
+            'committees' => [],
+            'offices' => [],
+            'Colleges' => [],
+            'Departments' => [],
+            'Centers' => [],
+        ];
+
+        foreach ($decodedAffiliations as $affiliation) {
+            $filters['committees'] = array_merge($filters['committees'], $affiliation->committees ?? []);
+            $filters['offices'] = array_merge($filters['offices'], $affiliation->offices ?? []);
+            $filters['Colleges'] = array_merge($filters['Colleges'], $affiliation->colleges ?? []);
+            $filters['Departments'] = array_merge($filters['Departments'], $affiliation->departments ?? []);
+            $filters['Centers'] = array_merge($filters['Centers'], $affiliation->centers ?? []);
+        }
+
+        $filters['committees'] = array_values(array_unique($filters['committees'], SORT_REGULAR));
+        $filters['offices'] = array_values(array_unique($filters['offices'], SORT_REGULAR));
+        $filters['Colleges'] = array_values(array_unique($filters['Colleges'], SORT_REGULAR));
+        $filters['Departments'] = array_values(array_unique($filters['Departments'], SORT_REGULAR));
+        $filters['Centers'] = array_values(array_unique($filters['Centers'], SORT_REGULAR));
+
         return response()->json($filters, 200);
     }
     public function filtered(Request $request)
@@ -161,27 +176,33 @@ class RequestController extends Controller
         $data = $request->selection;
         $entity = $data['entity'];
         $selection = $data['selection'];
-        $workflows = Workflow::with(['creator:id,first_name,last_name', 'form:id,name'])->whereHas('creator.groups', function ($query) {
-            $query->select('affiliations')->whereNotNull('affiliations');
-        })->get();
 
-        $filteredWorkflows = $workflows->filter(function ($workflow) use ($entity, $selection) {
-            foreach ($workflow->creator->groups as $group) {
-                $affiliations = json_decode($group->affiliations, true);
+        // Retrieve the user's groups and affiliations
+        $user = auth()->user();
+        $groups = $user->groups;
 
-                if (isset($affiliations[$entity])) {
-                    foreach ($affiliations[$entity] as $item) {
-                        if (isset($item['name']) && $item['name'] === $selection) {
-                            return true;
-                        }
+        $filteredWorkflows = [];
+
+        // Loop through each group and check affiliations
+        foreach ($groups as $group) {
+            $affiliations = json_decode($group->affiliations, true);
+
+            if (isset($affiliations[$entity])) {
+                foreach ($affiliations[$entity] as $item) {
+                    if (isset($item['name']) && $item['name'] === $selection) {
+                        // If the affiliations match, retrieve workflows for the creator
+                        $workflows = Workflow::whereHas('creator', function ($query) use ($group) {
+                            $query->where('id', $group->user_id);
+                        })->with(['creator:id,first_name,last_name', 'form:id,name'])->get();
+
+                        // Merge the workflows into the result array
+                        $filteredWorkflows = array_merge($filteredWorkflows, $workflows->toArray());
                     }
                 }
             }
-
-            return false;
-        })->values()->toArray();
-
+        }
 
         return response()->json($filteredWorkflows, 200);
     }
+
 }

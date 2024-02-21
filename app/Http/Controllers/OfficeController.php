@@ -68,9 +68,11 @@ class OfficeController extends Controller
         ]);
 
         // Return a success response
-        if ($office)
+        if ($office) {
+            $this->addToGroupsAffiliations($office->id, $office->name, 'offices');
             return response()->json(['success' => true, 'message' => 'Office added successfully'], 200);
-        else
+
+        } else
             return response()->json([
                 'success' => false,
                 'error' => $office,
@@ -109,7 +111,26 @@ class OfficeController extends Controller
         $office->description = $request->description;
         $office->save();
 
-        return response()->json(['message' => 'Office updated successfully' , 'office' =>$office], 200);
+        return response()->json(['message' => 'Office updated successfully', 'office' => $office], 200);
+    }
+
+    public function addToGroupsAffiliations($affiliationId, $affiliationName, $type = 'offices')
+    {
+        $roles = auth()->user()->roles->pluck('name')->toArray();
+        $groups = \App\Models\Groups::whereIn('name', $roles)->get();
+
+        foreach ($groups as $group) {
+            $affiliations = json_decode($group->affiliations, true);
+
+            if (!isset($affiliations[$type])) {
+                $affiliations[$type] = [];
+            }
+
+            $affiliations[$type][] = ["id" => $affiliationId, "name" => $affiliationName];
+
+            $group->affiliations = json_encode($affiliations);
+            $group->save();
+        }
     }
 
 
